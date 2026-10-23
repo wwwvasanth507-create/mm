@@ -13,6 +13,20 @@
       "description": "Ravana Tandavam from Ramayana composed by A.R. Rahman",
       "language": "Tamil",
       "isExplicit": false
+    },
+    {
+      "id": "song-anthaathi",
+      "title": "Anthaathi",
+      "artist": "Govind Vasantha, Chinmayi Sripaada, Bhadra Rajin, M. Nassar",
+      "album": "96",
+      "genre": "Melody",
+      "year": 2018,
+      "duration": 434,
+      "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Anthaathi-MassTamilan.com.mp3",
+      "thumbnailUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/96-Original-Motion-Picture-Soundtrack-Tamil-2018-20250905072505-500x500.webp",
+      "description": "Anthaathi from 96 composed by Govind Vasantha",
+      "language": "Tamil",
+      "isExplicit": false
     }
   ],
   "playlists": [
@@ -22,6 +36,14 @@
       "description": "High energy devotional and epic compositions",
       "coverUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/ramayana%20new%20poster.jpg",
       "trackIds": ["song-ravana-tandavam"],
+      "createdAt": "2026-10-23"
+    },
+    {
+      "id": "playlist-romantic-melodies",
+      "name": "Romantic & Soulful Melodies",
+      "description": "Heartwarming soundtracks and nostalgic melodies",
+      "coverUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/96-Original-Motion-Picture-Soundtrack-Tamil-2018-20250905072505-500x500.webp",
+      "trackIds": ["song-anthaathi"],
       "createdAt": "2026-10-23"
     }
   ]
