@@ -52,14 +52,8 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
   const [activeTab, setActiveTab] = useState<'visualizer' | 'lyrics' | 'queue'>('visualizer');
   const lyricsContainerRef = useRef<HTMLDivElement>(null);
 
-  if (!isOpen || !currentTrack) return null;
-
-  const artwork = resolveArtworkUrl(currentTrack);
-  const liked = isFavourite(currentTrack.id);
-  const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
-
   // Find active lyrics line
-  const lyricsList = Array.isArray(currentTrack.lyrics) ? currentTrack.lyrics : [];
+  const lyricsList = Array.isArray(currentTrack?.lyrics) ? currentTrack.lyrics : [];
   let currentLyricsIndex = -1;
   if (lyricsList.length > 0) {
     for (let i = 0; i < lyricsList.length; i++) {
@@ -73,16 +67,35 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
 
   // Auto-scroll lyrics into view smoothly
   useEffect(() => {
-    if (activeTab === 'lyrics' && currentLyricsIndex >= 0 && lyricsContainerRef.current) {
+    if (isOpen && activeTab === 'lyrics' && currentLyricsIndex >= 0 && lyricsContainerRef.current) {
       const activeEl = lyricsContainerRef.current.children[currentLyricsIndex] as HTMLElement;
       if (activeEl) {
         activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
-  }, [currentLyricsIndex, activeTab]);
+  }, [currentLyricsIndex, activeTab, isOpen]);
+
+  // Escape key listener to close modal
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  // Early return ONLY after all React hooks have unconditionally executed
+  if (!isOpen || !currentTrack) return null;
+
+  const artwork = resolveArtworkUrl(currentTrack);
+  const liked = isFavourite(currentTrack.id);
+  const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-[#0c0c10] flex flex-col text-white animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[60] overflow-hidden bg-[#0c0c10] flex flex-col text-white animate-in fade-in duration-300">
       {/* Blurred dynamic glowing ambient background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-40">
         <img

@@ -212,16 +212,18 @@ export const PlayerBar: React.FC<PlayerBarProps> = ({
 
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-6">
           {/* Left: Track Details */}
-          <div className="flex items-center gap-3 min-w-0 w-1/4">
+          <div
+            onClick={onOpenNowPlaying}
+            className="flex items-center gap-3 min-w-0 w-1/4 cursor-pointer group select-none p-1.5 -ml-1.5 rounded-xl hover:bg-white/5 transition-colors"
+            title="Click to open full player"
+          >
             <div
-              onClick={onOpenNowPlaying}
-              className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 cursor-pointer group bg-neutral-900 shadow-md"
-              title="Expand Now Playing"
+              className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform bg-neutral-900 shadow-md"
             >
               <img
                 src={artwork}
                 alt={currentTrack.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                 <Maximize2 className="w-4 h-4 text-white" />
@@ -231,8 +233,7 @@ export const PlayerBar: React.FC<PlayerBarProps> = ({
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
                 <h4
-                  onClick={onOpenNowPlaying}
-                  className="text-sm font-semibold truncate cursor-pointer hover:underline text-white"
+                  className="text-sm font-semibold truncate group-hover:underline text-white"
                 >
                   {currentTrack.title}
                 </h4>
@@ -242,14 +243,17 @@ export const PlayerBar: React.FC<PlayerBarProps> = ({
                   </span>
                 )}
               </div>
-              <p className="text-xs text-gray-400 truncate mt-0.5">
+              <p className="text-xs text-gray-400 truncate mt-0.5 group-hover:text-gray-300">
                 {currentTrack.artist} {currentTrack.year ? `• ${currentTrack.year}` : ''}
               </p>
             </div>
 
             <button
-              onClick={() => toggleFavourite(currentTrack.id)}
-              className={`p-1.5 rounded-full transition-colors ${
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFavourite(currentTrack.id);
+              }}
+              className={`p-1.5 rounded-full transition-colors flex-shrink-0 ${
                 liked
                   ? 'text-[var(--accent-primary)]'
                   : 'text-gray-400 hover:text-white'
