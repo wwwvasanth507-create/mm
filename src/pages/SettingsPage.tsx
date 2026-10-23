@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import {
   Settings,
   CheckCircle2,
@@ -12,6 +13,9 @@ import {
   Palette,
   HardDrive,
   FileCode2,
+  Plus,
+  Copy,
+  Check,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 import {
@@ -23,6 +27,7 @@ import {
 } from '@/services/musicService';
 
 export const SettingsPage: React.FC = () => {
+  const { onOpenAddSongModal } = useOutletContext<{ onOpenAddSongModal?: () => void }>() || {};
   const {
     activeAccent,
     setActiveAccent,
@@ -31,6 +36,7 @@ export const SettingsPage: React.FC = () => {
     clearHistory,
   } = useAudio();
 
+  const [copiedCatalog, setCopiedCatalog] = useState(false);
   const allTracks = getAllTracks();
 
   // Audio Stream URL Diagnostic State
@@ -56,6 +62,31 @@ export const SettingsPage: React.FC = () => {
     } finally {
       setIsTesting(false);
     }
+  };
+
+  // Export Catalog as music.json for Git Commits
+  const handleExportMusicJson = () => {
+    const data = {
+      songs: getAllTracks(),
+      playlists: getUserPlaylists(),
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'music.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleCopyMusicJson = () => {
+    const data = {
+      songs: getAllTracks(),
+      playlists: getUserPlaylists(),
+    };
+    navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+    setCopiedCatalog(true);
+    setTimeout(() => setCopiedCatalog(false), 2000);
   };
 
   // Export User Library (Playlists + Favourites)
@@ -150,6 +181,33 @@ export const SettingsPage: React.FC = () => {
   "isExplicit": false
 }`}
         </pre>
+
+        {/* Action Controls for Catalog */}
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <button
+            onClick={() => onOpenAddSongModal?.()}
+            className="px-5 py-2.5 rounded-full bg-[var(--accent-primary)] hover:brightness-110 active:scale-95 text-white font-bold text-xs inline-flex items-center gap-2 shadow-[0_0_16px_var(--accent-glow)] transition-all"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Song to Catalog</span>
+          </button>
+
+          <button
+            onClick={handleExportMusicJson}
+            className="px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs inline-flex items-center gap-1.5 transition-colors"
+          >
+            <Download className="w-4 h-4 text-emerald-400" />
+            <span>Download music.json</span>
+          </button>
+
+          <button
+            onClick={handleCopyMusicJson}
+            className="px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs inline-flex items-center gap-1.5 transition-colors"
+          >
+            {copiedCatalog ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+            <span>{copiedCatalog ? 'Copied to Clipboard!' : 'Copy music.json'}</span>
+          </button>
+        </div>
       </section>
 
       {/* Generic Audio Stream URL Diagnostic Tester */}

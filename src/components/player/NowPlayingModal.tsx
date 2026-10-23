@@ -93,33 +93,33 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-black/40 to-black/60" />
       </div>
 
+      {/* Mobile Top Drag Indicator Bar */}
+      <div className="md:hidden pt-[calc(0.5rem+env(safe-area-inset-top,0px))] pb-1 flex justify-center z-20">
+        <div className="w-10 h-1 rounded-full bg-white/25" />
+      </div>
+
       {/* Top Header */}
-      <header className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-white/10 backdrop-blur-md">
+      <header className="relative z-10 flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-4 border-b border-white/10 backdrop-blur-md">
         <button
           onClick={onClose}
-          className="p-2 rounded-full hover:bg-white/10 transition-colors text-gray-300 hover:text-white"
+          className="p-1.5 sm:p-2 rounded-full hover:bg-white/10 transition-colors text-gray-300 hover:text-white"
           title="Minimize player"
         >
-          <ChevronDown className="w-6 h-6" />
+          <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
 
-        <div className="text-center min-w-0 px-4">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400">
-            Playing From {currentTrack.album}
+        <div className="text-center min-w-0 px-2 flex-1">
+          <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-widest text-gray-400 truncate">
+            {currentTrack.album}
           </p>
           <div className="flex items-center justify-center gap-1.5 mt-0.5">
             {currentTrack.language && (
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-white border border-white/15 font-mono">
+              <span className="text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-white border border-white/15 font-mono">
                 {currentTrack.language}
               </span>
             )}
-            {currentTrack.year && (
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-gray-300 font-mono">
-                {currentTrack.year}
-              </span>
-            )}
             {currentTrack.genre && (
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--accent-primary)]/20 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30 font-mono">
+              <span className="hidden sm:inline-block text-[10px] px-2 py-0.5 rounded-full bg-[var(--accent-primary)]/20 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30 font-mono">
                 {currentTrack.genre}
               </span>
             )}
@@ -127,52 +127,52 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
         </div>
 
         {/* Tab Switcher Pills */}
-        <div className="flex items-center gap-1 bg-white/10 p-1 rounded-xl backdrop-blur-md">
+        <div className="flex items-center gap-1 bg-white/10 p-0.5 sm:p-1 rounded-xl backdrop-blur-md flex-shrink-0">
           <button
             onClick={() => setActiveTab('visualizer')}
-            className={`p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ${
+            className={`p-1.5 sm:p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 ${
               activeTab === 'visualizer'
                 ? 'bg-white/20 text-white shadow-sm'
                 : 'text-gray-400 hover:text-white'
             }`}
             title="Cover & Visualizer"
           >
-            <Sparkles className="w-4 h-4" />
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">Visuals</span>
           </button>
           <button
             onClick={() => setActiveTab('lyrics')}
-            className={`p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ${
+            className={`p-1.5 sm:p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 ${
               activeTab === 'lyrics'
                 ? 'bg-white/20 text-white shadow-sm'
                 : 'text-gray-400 hover:text-white'
             }`}
             title="Lyrics"
           >
-            <Mic2 className="w-4 h-4" />
+            <Mic2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">Lyrics</span>
           </button>
           <button
             onClick={() => setActiveTab('queue')}
-            className={`p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ${
+            className={`p-1.5 sm:p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 ${
               activeTab === 'queue'
                 ? 'bg-white/20 text-white shadow-sm'
                 : 'text-gray-400 hover:text-white'
             }`}
             title="Queue"
           >
-            <ListMusic className="w-4 h-4" />
+            <ListMusic className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">Queue</span>
           </button>
         </div>
       </header>
 
       {/* Main Body */}
-      <div className="relative z-10 flex-1 overflow-y-auto flex flex-col items-center justify-center p-6 md:p-8">
+      <div className="relative z-10 flex-1 overflow-y-auto flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
         {activeTab === 'visualizer' && (
           <div className="w-full max-w-md flex flex-col items-center text-center">
             {/* Artwork Card with Vinyl Glow */}
-            <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-3xl overflow-hidden shadow-2xl mb-8 border border-white/10 group">
+            <div className="relative w-[56vw] max-w-[240px] sm:max-w-[300px] md:max-w-[360px] aspect-square max-h-[32vh] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl mb-4 sm:mb-6 border border-white/10 group">
               <img
                 src={artwork}
                 alt={currentTrack.title}
@@ -310,10 +310,10 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
       </div>
 
       {/* Persistent Bottom Controls Drawer in Full Modal */}
-      <div className="relative z-10 w-full max-w-2xl mx-auto px-6 pb-8 pt-4">
+      <div className="relative z-10 w-full max-w-2xl mx-auto px-4 sm:px-6 pb-[calc(1.25rem+env(safe-area-inset-bottom,0px))] pt-2 sm:pt-4">
         {/* Scrubber Progress Bar */}
-        <div className="w-full mb-6">
-          <div className="relative group w-full flex items-center">
+        <div className="w-full mb-3 sm:mb-6">
+          <div className="relative group w-full flex items-center py-2 cursor-pointer">
             <input
               type="range"
               min={0}
@@ -321,62 +321,62 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
               step={0.5}
               value={currentTime}
               onChange={(e) => seek(parseFloat(e.target.value))}
-              className="w-full h-2 rounded-full cursor-pointer"
+              className="w-full h-1.5 sm:h-2 rounded-full cursor-pointer"
               style={{
                 background: `linear-gradient(to right, var(--accent-primary) 0%, var(--accent-primary) ${progressPercent}%, rgba(255,255,255,0.2) ${progressPercent}%, rgba(255,255,255,0.2) 100%)`,
               }}
             />
           </div>
 
-          <div className="flex items-center justify-between text-xs text-gray-400 font-mono mt-2">
+          <div className="flex items-center justify-between text-[11px] sm:text-xs text-gray-400 font-mono">
             <span>{formatTime(currentTime)}</span>
             <span>-{formatTime(Math.max(0, duration - currentTime))}</span>
           </div>
         </div>
 
         {/* Player Buttons */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4 sm:mb-6 px-2 sm:px-4">
           <button
             onClick={toggleShuffle}
-            className={`p-3 rounded-full transition-colors ${
+            className={`p-2.5 sm:p-3 rounded-full transition-colors ${
               shuffle ? 'text-[var(--accent-primary)]' : 'text-gray-400 hover:text-white'
             }`}
             title={`Shuffle: ${shuffle ? 'On' : 'Off'}`}
           >
-            <Shuffle className="w-5 h-5" />
+            <Shuffle className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
           <button
             onClick={previousTrack}
-            className="p-3 rounded-full text-gray-300 hover:text-white hover:bg-white/10 active:scale-95 transition-all"
+            className="p-2.5 sm:p-3 rounded-full text-gray-300 hover:text-white hover:bg-white/10 active:scale-95 transition-all"
             title="Previous track"
           >
-            <SkipBack className="w-7 h-7" />
+            <SkipBack className="w-6 h-6 sm:w-7 sm:h-7" />
           </button>
 
           <button
             onClick={togglePlay}
-            className="w-16 h-16 rounded-full bg-[var(--accent-primary)] hover:brightness-110 active:scale-95 flex items-center justify-center text-white shadow-[0_0_32px_rgba(250,45,72,0.5)] transition-all"
+            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[var(--accent-primary)] hover:brightness-110 active:scale-95 flex items-center justify-center text-white shadow-[0_0_32px_rgba(250,45,72,0.5)] transition-all"
             title={isPlaying ? 'Pause' : 'Play'}
           >
             {isPlaying ? (
-              <Pause className="w-8 h-8 fill-white text-white" />
+              <Pause className="w-7 h-7 sm:w-8 sm:h-8 fill-white text-white" />
             ) : (
-              <Play className="w-8 h-8 fill-white text-white ml-1" />
+              <Play className="w-7 h-7 sm:w-8 sm:h-8 fill-white text-white ml-1" />
             )}
           </button>
 
           <button
             onClick={nextTrack}
-            className="p-3 rounded-full text-gray-300 hover:text-white hover:bg-white/10 active:scale-95 transition-all"
+            className="p-2.5 sm:p-3 rounded-full text-gray-300 hover:text-white hover:bg-white/10 active:scale-95 transition-all"
             title="Next track"
           >
-            <SkipForward className="w-7 h-7" />
+            <SkipForward className="w-6 h-6 sm:w-7 sm:h-7" />
           </button>
 
           <button
             onClick={cycleRepeatMode}
-            className={`p-3 rounded-full transition-colors ${
+            className={`p-2.5 sm:p-3 rounded-full transition-colors ${
               repeatMode !== 'off'
                 ? 'text-[var(--accent-primary)]'
                 : 'text-gray-400 hover:text-white'
@@ -384,23 +384,23 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
             title={`Repeat: ${repeatMode}`}
           >
             {repeatMode === 'one' ? (
-              <Repeat1 className="w-5 h-5" />
+              <Repeat1 className="w-4 h-4 sm:w-5 sm:h-5" />
             ) : (
-              <Repeat className="w-5 h-5" />
+              <Repeat className="w-4 h-4 sm:w-5 sm:h-5" />
             )}
           </button>
         </div>
 
         {/* Volume Slider */}
-        <div className="flex items-center justify-center gap-3 max-w-sm mx-auto">
+        <div className="flex items-center justify-center gap-3 max-w-sm mx-auto px-4">
           <button
             onClick={toggleMute}
-            className="p-2 text-gray-400 hover:text-white transition-colors"
+            className="p-1.5 text-gray-400 hover:text-white transition-colors"
           >
             {isMuted || volume === 0 ? (
-              <VolumeX className="w-5 h-5 text-gray-500" />
+              <VolumeX className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
             ) : (
-              <Volume2 className="w-5 h-5" />
+              <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
             )}
           </button>
           <input
@@ -410,7 +410,7 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
             step={0.01}
             value={isMuted ? 0 : volume}
             onChange={(e) => setVolume(parseFloat(e.target.value))}
-            className="w-full h-1.5 rounded-full"
+            className="w-full h-1 sm:h-1.5 rounded-full cursor-pointer"
             style={{
               background: `linear-gradient(to right, #ffffff 0%, #ffffff ${
                 isMuted ? 0 : volume * 100

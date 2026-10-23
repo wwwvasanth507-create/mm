@@ -7,6 +7,7 @@ import {
   Search,
   ArrowUpDown,
   Globe,
+  Plus,
 } from 'lucide-react';
 import { getAllTracks } from '@/services/musicService';
 import { TrackRow } from '@/components/common/TrackRow';
@@ -16,9 +17,18 @@ import { useAudio } from '@/context/AudioContext';
 type SortOption = 'title' | 'artist' | 'year' | 'duration';
 
 export const SongsPage: React.FC = () => {
-  const allTracks = getAllTracks();
+  const [allTracks, setAllTracks] = useState(() => getAllTracks());
   const { playTrack } = useAudio();
-  const { onOpenPlaylistModal } = useOutletContext<{ onOpenPlaylistModal: (track: Track) => void }>();
+  const { onOpenPlaylistModal, onOpenAddSongModal } = useOutletContext<{
+    onOpenPlaylistModal: (track: Track) => void;
+    onOpenAddSongModal?: () => void;
+  }>();
+
+  React.useEffect(() => {
+    const handleUpdate = () => setAllTracks(getAllTracks());
+    window.addEventListener('wavemusic_tracks_updated', handleUpdate);
+    return () => window.removeEventListener('wavemusic_tracks_updated', handleUpdate);
+  }, []);
 
   const [query, setQuery] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState<string>('all');
@@ -87,7 +97,15 @@ export const SongsPage: React.FC = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+          <button
+            onClick={() => onOpenAddSongModal?.()}
+            className="px-4 py-2.5 rounded-full bg-[var(--accent-primary)]/15 hover:bg-[var(--accent-primary)]/25 border border-[var(--accent-primary)]/30 text-[var(--accent-primary)] hover:text-white font-semibold text-xs flex items-center gap-1.5 transition-all"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Song</span>
+          </button>
+
           <button
             onClick={handlePlayAll}
             disabled={filteredTracks.length === 0}
@@ -178,9 +196,16 @@ export const SongsPage: React.FC = () => {
         {filteredTracks.length === 0 ? (
           <div className="py-16 text-center text-gray-400 text-sm">
             {allTracks.length === 0 ? (
-              <div>
-                <p>No songs added to catalog yet.</p>
-                <p className="text-xs text-gray-500 mt-1">Open <code className="text-[var(--accent-primary)] font-mono">src/data/music.json</code> to add your tracks.</p>
+              <div className="space-y-3">
+                <p className="text-base font-semibold text-white">No songs added to catalog yet.</p>
+                <p className="text-xs text-gray-400">Open <code className="text-[var(--accent-primary)] font-mono">src/data/music.json</code> or add songs directly below:</p>
+                <button
+                  onClick={() => onOpenAddSongModal?.()}
+                  className="mt-2 px-5 py-2.5 rounded-full bg-[var(--accent-primary)] hover:brightness-110 active:scale-95 text-white font-bold text-xs inline-flex items-center gap-2 shadow-[0_0_16px_var(--accent-glow)] transition-all"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Add First Song</span>
+                </button>
               </div>
             ) : (
               <div>

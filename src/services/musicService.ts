@@ -73,19 +73,64 @@ export function resolveArtworkUrl(item?: {
 }
 
 /**
- * Song Queries
+ * User-Added Tracks (Local Storage)
+ */
+export function getUserTracks(): Track[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.USER_TRACKS);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveUserTrack(track: Track): Track[] {
+  const current = getUserTracks();
+  const existsIndex = current.findIndex((t) => t.id === track.id);
+  let updated: Track[];
+  if (existsIndex >= 0) {
+    updated = [...current];
+    updated[existsIndex] = track;
+  } else {
+    updated = [track, ...current];
+  }
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(STORAGE_KEYS.USER_TRACKS, JSON.stringify(updated));
+    window.dispatchEvent(new CustomEvent('wavemusic_tracks_updated'));
+  }
+  return updated;
+}
+
+export function deleteUserTrack(trackId: string): Track[] {
+  const current = getUserTracks();
+  const updated = current.filter((t) => t.id !== trackId);
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(STORAGE_KEYS.USER_TRACKS, JSON.stringify(updated));
+    window.dispatchEvent(new CustomEvent('wavemusic_tracks_updated'));
+  }
+  return updated;
+}
+
+/**
+ * Returns complete combined catalog:
+ * user-added tracks + tracks from music.json
  */
 export function getAllTracks(): Track[] {
-  return normalizedTracks;
+  const userTracks = getUserTracks();
+  const userTrackIds = new Set(userTracks.map((t) => t.id));
+  const staticTracks = normalizedTracks.filter((t) => !userTrackIds.has(t.id));
+  return [...userTracks, ...staticTracks];
 }
 
 export function getTrackById(id: string): Track | undefined {
-  return normalizedTracks.find((t) => t.id === id);
+  return getAllTracks().find((t) => t.id === id);
 }
 
 export function getTracksByIds(ids: string[]): Track[] {
+  const all = getAllTracks();
   return ids
-    .map((id) => normalizedTracks.find((t) => t.id === id))
+    .map((id) => all.find((t) => t.id === id))
     .filter((t): t is Track => t !== undefined);
 }
 
@@ -95,8 +140,9 @@ export function getTracksByIds(ids: string[]): Track[] {
  */
 export function getAllAlbums(): Album[] {
   const albumMap = new Map<string, Album>();
+  const tracks = getAllTracks();
 
-  for (const track of normalizedTracks) {
+  for (const track of tracks) {
     const albumTitle = track.album?.trim() || 'Singles';
     const albumId = `album-${slugify(albumTitle)}`;
 
@@ -134,8 +180,9 @@ export function getAlbumById(id: string): Album | undefined {
  */
 export function getAllArtists(): Artist[] {
   const artistMap = new Map<string, Artist>();
+  const tracks = getAllTracks();
 
-  for (const track of normalizedTracks) {
+  for (const track of tracks) {
     const artistName = track.artist?.trim() || 'Unknown Artist';
     const artistId = `artist-${slugify(artistName)}`;
     const albumId = `album-${slugify(track.album || 'Singles')}`;
@@ -337,8 +384,9 @@ export function getPlaybackHistory(): PlaybackHistoryItem[] {
 }
 
 export function addToPlaybackHistory(track: Track): PlaybackHistoryItem[] {
+  if (!track || !track.id) return getPlaybackHistory();
   const history = getPlaybackHistory();
-  const filtered = history.filter((item) => item.track.id !== track.id);
+  const filtered = history.filter((item) => item?.track?.id && item.track.id !== track.id);
   const updated: PlaybackHistoryItem[] = [
     { track, playedAt: Date.now() },
     ...filtered,

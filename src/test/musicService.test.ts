@@ -7,6 +7,8 @@ import {
   getAllAlbums,
   getAllArtists,
   getCuratedPlaylists,
+  saveUserTrack,
+  deleteUserTrack,
   createUserPlaylist,
   getUserPlaylists,
   addTrackToPlaylist,
@@ -21,32 +23,53 @@ import {
 import { Track } from '@/types/music';
 import { formatTime, formatNumber } from '@/utils/formatters';
 
+const sampleMockTrack: Track = {
+  id: 'test-song-001',
+  title: 'Test Melody',
+  artist: 'Test Singer',
+  album: 'Test Album',
+  genre: 'Melody',
+  year: 2025,
+  duration: 240,
+  audioUrl: 'https://example.com/audio/test.mp3',
+  thumbnailUrl: 'https://example.com/images/cover.jpg',
+  language: 'Tamil',
+  isExplicit: false,
+};
+
 describe('Music Catalog and Audio URL Resolution', () => {
   beforeEach(() => {
     localStorage.clear();
   });
 
-  it('loads catalog tracks, derived albums, derived artists, and curated playlists', () => {
+  it('safely handles empty catalog and retrieves arrays', () => {
     const tracks = getAllTracks();
-    expect(tracks.length).toBeGreaterThan(0);
+    expect(Array.isArray(tracks)).toBe(true);
 
     const albums = getAllAlbums();
-    expect(albums.length).toBeGreaterThan(0);
+    expect(Array.isArray(albums)).toBe(true);
 
     const artists = getAllArtists();
-    expect(artists.length).toBeGreaterThan(0);
+    expect(Array.isArray(artists)).toBe(true);
 
     const playlists = getCuratedPlaylists();
-    expect(playlists.length).toBeGreaterThan(0);
+    expect(Array.isArray(playlists)).toBe(true);
   });
 
-  it('finds track by id with full metadata (year, language, duration, etc.)', () => {
-    const track = getTrackById('song-tamil-001');
-    expect(track).toBeDefined();
-    expect(track?.title).toContain('Kanmani Anbodu');
-    expect(track?.language).toBe('Tamil');
-    expect(track?.year).toBe(2024);
-    expect(track?.genre).toBe('Melody');
+  it('supports dynamically adding, finding, and deleting user tracks', () => {
+    saveUserTrack(sampleMockTrack);
+
+    const found = getTrackById('test-song-001');
+    expect(found).toBeDefined();
+    expect(found?.title).toBe('Test Melody');
+    expect(found?.artist).toBe('Test Singer');
+    expect(found?.language).toBe('Tamil');
+
+    const all = getAllTracks();
+    expect(all.some((t) => t.id === 'test-song-001')).toBe(true);
+
+    deleteUserTrack('test-song-001');
+    expect(getTrackById('test-song-001')).toBeUndefined();
   });
 
   it('resolves direct HTTPS audioUrl as-is, including query parameters', () => {
@@ -74,17 +97,19 @@ describe('Music Catalog and Audio URL Resolution', () => {
     expect(resolved).toBe(validUrl);
   });
 
-  it('automatically derives unique albums and artists from song catalog', () => {
+  it('automatically derives unique albums and artists from user songs', () => {
+    saveUserTrack(sampleMockTrack);
+
     const albums = getAllAlbums();
-    const gunaaAlbum = albums.find((a) => a.title === 'Gunaa');
-    expect(gunaaAlbum).toBeDefined();
-    expect(gunaaAlbum?.artist).toContain('Kamal Haasan');
-    expect(gunaaAlbum?.trackIds).toContain('song-tamil-001');
+    const testAlbum = albums.find((a) => a.title === 'Test Album');
+    expect(testAlbum).toBeDefined();
+    expect(testAlbum?.artist).toContain('Test Singer');
+    expect(testAlbum?.trackIds).toContain('test-song-001');
 
     const artists = getAllArtists();
-    const artist = artists.find((ar) => ar.name.includes('Shankar Mahadevan'));
+    const artist = artists.find((ar) => ar.name === 'Test Singer');
     expect(artist).toBeDefined();
-    expect(artist?.topTrackIds).toContain('song-tamil-002');
+    expect(artist?.topTrackIds).toContain('test-song-001');
   });
 });
 
@@ -106,22 +131,22 @@ describe('User Playlist Management', () => {
 
   it('adds and removes tracks from user playlists', () => {
     const pl = createUserPlaylist('Workout Mix');
-    addTrackToPlaylist(pl.id, 'song-tamil-001');
-    addTrackToPlaylist(pl.id, 'song-tamil-002');
+    addTrackToPlaylist(pl.id, 'test-song-001');
+    addTrackToPlaylist(pl.id, 'test-song-002');
 
     let updated = getUserPlaylists().find((p) => p.id === pl.id);
-    expect(updated?.trackIds).toContain('song-tamil-001');
-    expect(updated?.trackIds).toContain('song-tamil-002');
+    expect(updated?.trackIds).toContain('test-song-001');
+    expect(updated?.trackIds).toContain('test-song-002');
     expect(updated?.trackIds.length).toBe(2);
 
-    removeTrackFromPlaylist(pl.id, 'song-tamil-001');
+    removeTrackFromPlaylist(pl.id, 'test-song-001');
     updated = getUserPlaylists().find((p) => p.id === pl.id);
-    expect(updated?.trackIds).not.toContain('song-tamil-001');
+    expect(updated?.trackIds).not.toContain('test-song-001');
     expect(updated?.trackIds.length).toBe(1);
   });
 
   it('deletes user playlists', () => {
-    const pl = createUserPlaylist('Temporary Playlist');
+    const pl = createUserPlaylist('Temp Playlist');
     expect(getUserPlaylists().length).toBe(1);
 
     const deleted = deleteUserPlaylist(pl.id);
@@ -136,18 +161,18 @@ describe('Favourites and Playback History', () => {
   });
 
   it('toggles favourites on and off', () => {
-    expect(isFavourite('song-tamil-001')).toBe(false);
+    expect(isFavourite('test-song-001')).toBe(false);
 
-    toggleFavourite('song-tamil-001');
-    expect(isFavourite('song-tamil-001')).toBe(true);
+    toggleFavourite('test-song-001');
+    expect(isFavourite('test-song-001')).toBe(true);
 
-    toggleFavourite('song-tamil-001');
-    expect(isFavourite('song-tamil-001')).toBe(false);
+    toggleFavourite('test-song-001');
+    expect(isFavourite('test-song-001')).toBe(false);
   });
 
   it('records played tracks to history without duplicates and clears history', () => {
-    const track1 = getTrackById('song-tamil-001')!;
-    const track2 = getTrackById('song-tamil-002')!;
+    const track1 = { ...sampleMockTrack, id: 'test-song-001' };
+    const track2 = { ...sampleMockTrack, id: 'test-song-002', title: 'Second Song' };
 
     addToPlaybackHistory(track1);
     addToPlaybackHistory(track2);

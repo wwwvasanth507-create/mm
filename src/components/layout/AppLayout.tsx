@@ -24,10 +24,11 @@ import { NowPlayingModal } from '@/components/player/NowPlayingModal';
 import { PlaylistModal } from '@/components/modals/PlaylistModal';
 import { AddToPlaylistModal } from '@/components/modals/AddToPlaylistModal';
 import { ShortcutsModal } from '@/components/modals/ShortcutsModal';
+import { AddSongModal } from '@/components/modals/AddSongModal';
 
 export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
-  const { userPlaylists, activeAccent, setActiveAccent } = useAudio();
+  const { userPlaylists, activeAccent, setActiveAccent, currentTrack } = useAudio();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [isQueueOpen, setIsQueueOpen] = useState(false);
@@ -35,6 +36,7 @@ export const AppLayout: React.FC = () => {
   const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
   const [addToPlaylistTrack, setAddToPlaylistTrack] = useState<Track | null>(null);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+  const [isAddSongOpen, setIsAddSongOpen] = useState(false);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,9 +52,16 @@ export const AppLayout: React.FC = () => {
         : 'text-gray-400 hover:text-white hover:bg-white/5'
     }`;
 
+  const mobileNavLinkClass = ({ isActive }: { isActive: boolean }) =>
+    `flex flex-col items-center justify-center gap-1 py-1.5 px-3 rounded-xl transition-all ${
+      isActive
+        ? 'text-[var(--accent-primary)] font-bold scale-105'
+        : 'text-gray-400 hover:text-gray-200'
+    }`;
+
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#0a0a0c] text-white">
-      {/* Desktop Sidebar */}
+      {/* Desktop Sidebar (>= 768px) */}
       <aside className="hidden md:flex flex-col w-64 lg:w-72 h-full bg-[#101015] border-r border-white/5 flex-shrink-0 select-none">
         {/* Brand Header */}
         <div className="p-5 flex items-center justify-between border-b border-white/5">
@@ -69,6 +78,14 @@ export const AppLayout: React.FC = () => {
               </span>
             </div>
           </NavLink>
+
+          <button
+            onClick={() => setIsAddSongOpen(true)}
+            className="p-1.5 rounded-lg bg-[var(--accent-primary)]/20 hover:bg-[var(--accent-primary)]/30 text-[var(--accent-primary)] transition-colors"
+            title="Add Song Manually"
+          >
+            <Plus className="w-4 h-4" />
+          </button>
         </div>
 
         {/* Scrollable Navigation Sections */}
@@ -156,21 +173,21 @@ export const AppLayout: React.FC = () => {
 
         {/* Bottom Status & Settings */}
         <div className="p-4 border-t border-white/5 space-y-2">
-          <NavLink
-            to="/songs"
-            className="flex items-center justify-between p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-colors group"
+          <button
+            onClick={() => setIsAddSongOpen(true)}
+            className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--accent-primary)]/10 hover:bg-[var(--accent-primary)]/20 border border-[var(--accent-primary)]/20 transition-colors group text-left"
           >
             <div className="flex items-center gap-2">
-              <Music className="w-4 h-4 text-[var(--accent-primary)]" />
+              <Plus className="w-4 h-4 text-[var(--accent-primary)]" />
               <div className="min-w-0">
-                <p className="text-xs font-semibold text-white truncate">Manual Music Catalog</p>
-                <p className="text-[10px] text-gray-400">src/data/music.json</p>
+                <p className="text-xs font-semibold text-white truncate">Add Song Manually</p>
+                <p className="text-[10px] text-gray-400">Stream any audio URL</p>
               </div>
             </div>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono font-semibold">
-              Ready
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--accent-primary)]/20 text-[var(--accent-primary)] font-mono font-semibold">
+              + New
             </span>
-          </NavLink>
+          </button>
 
           <NavLink to="/settings" className={navLinkClass}>
             <Settings className="w-4 h-4" />
@@ -182,11 +199,23 @@ export const AppLayout: React.FC = () => {
       {/* Main App Content Viewport */}
       <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden relative">
         {/* Top Header Bar */}
-        <header className="h-16 px-4 md:px-8 border-b border-white/5 bg-[#0a0a0c]/80 backdrop-blur-xl flex items-center justify-between gap-4 z-20">
-          {/* Search Bar Form */}
+        <header className="h-16 px-4 md:px-8 border-b border-white/5 bg-[#0a0a0c]/85 backdrop-blur-xl flex items-center justify-between gap-3 z-20">
+          {/* Mobile Header: Logo & Title (visible on < md) */}
+          <div className="md:hidden flex items-center gap-2.5">
+            <NavLink to="/" className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[var(--accent-primary)] to-purple-600 flex items-center justify-center shadow-[0_0_12px_var(--accent-glow)]">
+                <Radio className="w-4 h-4 text-white" />
+              </div>
+              <span className="font-extrabold text-base tracking-tight text-white">
+                {AUDIO_CONFIG.siteName}
+              </span>
+            </NavLink>
+          </div>
+
+          {/* Desktop Search Bar Form */}
           <form
             onSubmit={handleSearchSubmit}
-            className="relative flex-1 max-w-md"
+            className="hidden md:block relative flex-1 max-w-md"
           >
             <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
             <input
@@ -198,15 +227,25 @@ export const AppLayout: React.FC = () => {
             />
           </form>
 
-          {/* Right Header Actions */}
+          {/* Header Actions */}
           <div className="flex items-center gap-2">
+            {/* Add Song Shortcut Button (Mobile + Desktop) */}
+            <button
+              onClick={() => setIsAddSongOpen(true)}
+              className="px-3 py-1.5 rounded-xl bg-[var(--accent-primary)] hover:brightness-110 active:scale-95 text-white font-semibold text-xs flex items-center gap-1.5 shadow-[0_0_14px_var(--accent-glow)] transition-all"
+              title="Add Song Manually"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Add Song</span>
+            </button>
+
             {/* Theme Accent Quick Selector */}
-            <div className="hidden sm:flex items-center gap-1.5 p-1 rounded-xl bg-white/5 border border-white/5">
+            <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white/5 border border-white/5">
               {(['coral', 'purple', 'cyan', 'amber'] as const).map((accent) => (
                 <button
                   key={accent}
                   onClick={() => setActiveAccent(accent)}
-                  className={`w-4 h-4 rounded-full transition-transform ${
+                  className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full transition-transform ${
                     activeAccent === accent ? 'scale-125 ring-2 ring-white/60' : 'opacity-60 hover:opacity-100'
                   }`}
                   style={{
@@ -224,10 +263,10 @@ export const AppLayout: React.FC = () => {
               ))}
             </div>
 
-            {/* Keyboard Shortcuts Trigger */}
+            {/* Keyboard Shortcuts Trigger (Desktop only) */}
             <button
               onClick={() => setIsShortcutsOpen(true)}
-              className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+              className="hidden md:flex p-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
               title="Keyboard Shortcuts"
             >
               <Keyboard className="w-4 h-4" />
@@ -235,76 +274,53 @@ export const AppLayout: React.FC = () => {
           </div>
         </header>
 
-        {/* Scrollable Page Body */}
-        <main className="flex-1 overflow-y-auto px-4 md:px-8 py-6 pb-36 md:pb-32 focus:outline-none">
-          <Outlet context={{ onOpenPlaylistModal: (track: Track) => setAddToPlaylistTrack(track) }} />
+        {/* Scrollable Page Body with Dynamic Mobile Safe Area Padding */}
+        <main
+          className={`flex-1 overflow-y-auto px-4 md:px-8 py-6 focus:outline-none transition-all duration-300 ${
+            currentTrack ? 'pb-44 md:pb-32' : 'pb-24 md:pb-12'
+          }`}
+        >
+          <Outlet
+            context={{
+              onOpenPlaylistModal: (track: Track) => setAddToPlaylistTrack(track),
+              onOpenAddSongModal: () => setIsAddSongOpen(true),
+            }}
+          />
         </main>
       </div>
 
-      {/* Mobile Bottom Navigation (Visible only on small screens) */}
-      <nav className="md:hidden fixed bottom-16 left-0 right-0 z-30 bg-[#121217]/95 backdrop-blur-xl border-t border-white/10 px-2 py-1.5 flex items-center justify-around text-[10px]">
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            `flex flex-col items-center gap-1 py-1 px-3 rounded-lg ${
-              isActive ? 'text-[var(--accent-primary)] font-bold' : 'text-gray-400'
-            }`
-          }
-        >
-          <Home className="w-4 h-4" />
+      {/* ============================================================== */}
+      {/* MOBILE BOTTOM NAVIGATION BAR (Screens < 768px)                 */}
+      {/* Docked cleanly at bottom-0 with safe-area home indicator       */}
+      {/* ============================================================== */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#101016]/95 backdrop-blur-2xl border-t border-white/10 px-2 pt-1.5 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] flex items-center justify-around text-[10px] select-none">
+        <NavLink to="/" className={mobileNavLinkClass}>
+          <Home className="w-4 h-4 sm:w-5 sm:h-5" />
           <span>Home</span>
         </NavLink>
 
-        <NavLink
-          to="/browse"
-          className={({ isActive }) =>
-            `flex flex-col items-center gap-1 py-1 px-3 rounded-lg ${
-              isActive ? 'text-[var(--accent-primary)] font-bold' : 'text-gray-400'
-            }`
-          }
-        >
-          <Compass className="w-4 h-4" />
-          <span>Browse</span>
+        <NavLink to="/search" className={mobileNavLinkClass}>
+          <Search className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span>Search</span>
         </NavLink>
 
-        <NavLink
-          to="/songs"
-          className={({ isActive }) =>
-            `flex flex-col items-center gap-1 py-1 px-3 rounded-lg ${
-              isActive ? 'text-[var(--accent-primary)] font-bold' : 'text-gray-400'
-            }`
-          }
-        >
-          <Music className="w-4 h-4" />
+        <NavLink to="/songs" className={mobileNavLinkClass}>
+          <Music className="w-4 h-4 sm:w-5 sm:h-5" />
           <span>Songs</span>
         </NavLink>
 
-        <NavLink
-          to="/playlists"
-          className={({ isActive }) =>
-            `flex flex-col items-center gap-1 py-1 px-3 rounded-lg ${
-              isActive ? 'text-[var(--accent-primary)] font-bold' : 'text-gray-400'
-            }`
-          }
-        >
-          <ListMusic className="w-4 h-4" />
+        <NavLink to="/playlists" className={mobileNavLinkClass}>
+          <ListMusic className="w-4 h-4 sm:w-5 sm:h-5" />
           <span>Library</span>
         </NavLink>
 
-        <NavLink
-          to="/settings"
-          className={({ isActive }) =>
-            `flex flex-col items-center gap-1 py-1 px-3 rounded-lg ${
-              isActive ? 'text-[var(--accent-primary)] font-bold' : 'text-gray-400'
-            }`
-          }
-        >
-          <Settings className="w-4 h-4" />
+        <NavLink to="/settings" className={mobileNavLinkClass}>
+          <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
           <span>Settings</span>
         </NavLink>
       </nav>
 
-      {/* Persistent Audio Player Bar */}
+      {/* Persistent Audio Player Bar (Mobile mini + Desktop) */}
       <PlayerBar
         onOpenQueue={() => setIsQueueOpen(true)}
         onOpenNowPlaying={() => setIsNowPlayingOpen(true)}
@@ -320,6 +336,12 @@ export const AppLayout: React.FC = () => {
       <NowPlayingModal
         isOpen={isNowPlayingOpen}
         onClose={() => setIsNowPlayingOpen(false)}
+      />
+
+      {/* Add Song Manually Modal */}
+      <AddSongModal
+        isOpen={isAddSongOpen}
+        onClose={() => setIsAddSongOpen(false)}
       />
 
       {/* Playlist Creation / Rename Modal */}

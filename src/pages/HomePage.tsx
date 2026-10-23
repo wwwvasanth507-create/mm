@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import {
   Play,
@@ -9,6 +9,7 @@ import {
   Disc3,
   ListMusic,
   Users,
+  Plus,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 import {
@@ -27,12 +28,25 @@ import { Track } from '@/types/music';
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const { playTrack, currentTrack, isPlaying } = useAudio();
-  const { onOpenPlaylistModal } = useOutletContext<{ onOpenPlaylistModal: (track: Track) => void }>();
+  const { onOpenPlaylistModal, onOpenAddSongModal } = useOutletContext<{
+    onOpenPlaylistModal: (track: Track) => void;
+    onOpenAddSongModal?: () => void;
+  }>();
 
-  const allTracks = getAllTracks();
-  const allAlbums = getAllAlbums();
-  const allArtists = getAllArtists();
+  const [allTracks, setAllTracks] = useState(() => getAllTracks());
+  const [allAlbums, setAllAlbums] = useState(() => getAllAlbums());
+  const [allArtists, setAllArtists] = useState(() => getAllArtists());
   const playlists = getCuratedPlaylists();
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setAllTracks(getAllTracks());
+      setAllAlbums(getAllAlbums());
+      setAllArtists(getAllArtists());
+    };
+    window.addEventListener('wavemusic_tracks_updated', handleUpdate);
+    return () => window.removeEventListener('wavemusic_tracks_updated', handleUpdate);
+  }, []);
 
   // Featured Hero Track
   const featuredTrack = allTracks[0];
@@ -49,20 +63,33 @@ export const HomePage: React.FC = () => {
       playTrack(shuffled[0], shuffled);
     }
   };
+
   if (allTracks.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8 space-y-6 animate-in fade-in duration-300">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-6 sm:p-8 space-y-6 animate-in fade-in duration-300">
         <div className="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[var(--accent-primary)] shadow-2xl">
           <Disc3 className="w-10 h-10 animate-spin" style={{ animationDuration: '6s' }} />
         </div>
         <div className="max-w-md space-y-3">
           <h2 className="text-2xl font-bold text-white tracking-tight">Your Music Library is Ready</h2>
           <p className="text-sm text-gray-400 leading-relaxed">
-            All demo songs have been cleared. Add your music tracks to <code className="px-2 py-0.5 rounded bg-white/10 font-mono text-xs text-[var(--accent-primary)]">src/data/music.json</code>.
+            All demo songs have been cleared. Add songs via <code className="px-2 py-0.5 rounded bg-white/10 font-mono text-xs text-[var(--accent-primary)]">src/data/music.json</code> or add them directly using the button below:
           </p>
-          <p className="text-xs text-gray-500">
-            Check <code className="px-1.5 py-0.5 rounded bg-white/5 font-mono text-gray-300">src/data/music.example.json</code> for the exact song format and available fields.
-          </p>
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+            <button
+              onClick={() => onOpenAddSongModal?.()}
+              className="px-6 py-2.5 rounded-full bg-[var(--accent-primary)] hover:brightness-110 active:scale-95 text-white font-bold text-xs inline-flex items-center gap-2 shadow-[0_0_20px_var(--accent-glow)] transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Song Manually</span>
+            </button>
+            <button
+              onClick={() => navigate('/settings')}
+              className="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs transition-colors"
+            >
+              Settings & Guide
+            </button>
+          </div>
         </div>
       </div>
     );

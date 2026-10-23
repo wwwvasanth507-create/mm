@@ -36,6 +36,7 @@ export const AUDIO_CONFIG: AudioConfig = {
  * Storage keys for persisting library state locally
  */
 export const STORAGE_KEYS = {
+  USER_TRACKS: 'wavemusic_user_tracks_v1',
   FAVOURITES: 'wavemusic_favourites_v1',
   PLAYLISTS: 'wavemusic_playlists_v1',
   HISTORY: 'wavemusic_history_v1',

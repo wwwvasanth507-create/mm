@@ -154,10 +154,10 @@ export const TrackRow: React.FC<TrackRowProps> = ({
       >
         <button
           onClick={() => toggleFavourite(track.id)}
-          className={`p-1.5 rounded-full transition-colors ${
+          className={`p-2 rounded-full transition-colors ${
             liked
-              ? 'text-[var(--accent-primary)]'
-              : 'text-gray-500 hover:text-white opacity-0 group-hover:opacity-100'
+              ? 'text-[var(--accent-primary)] opacity-100'
+              : 'text-gray-500 hover:text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
           }`}
           title={liked ? 'Remove from Favourites' : 'Add to Favourites'}
           aria-label="Toggle favourite"
@@ -165,7 +165,7 @@ export const TrackRow: React.FC<TrackRowProps> = ({
           <Heart className={`w-4 h-4 ${liked ? 'fill-[var(--accent-primary)]' : ''}`} />
         </button>
 
-        <span className="font-mono text-xs w-10 text-right text-gray-400">
+        <span className="font-mono text-[11px] sm:text-xs w-9 sm:w-10 text-right text-gray-400">
           {formatTime(track.duration)}
         </span>
 

@@ -28,7 +28,16 @@
     -moz-osx-font-smoothing: grayscale;
     user-select: none;
     -webkit-user-select: none;
+    touch-action: manipulation;
   }
+}
+
+/* Safe-area utility classes for mobile notches and home indicators */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
 /* Custom Scrollbars */
