@@ -51,17 +51,9 @@ function slugify(text: string): string {
  */
 export function resolveAudioUrl(track?: Track | null): string {
   if (!track || !track.audioUrl) return '';
-  const url = track.audioUrl.trim();
-  // In browser on localhost / 127.0.0.1, proxy R2 URLs through Vite's /api/r2 to enable full Web Audio DSP without CORS issues
-  if (
-    typeof window !== 'undefined' &&
-    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
-    url.startsWith('https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/')
-  ) {
-    return url.replace('https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev', '/api/r2');
-  }
-  return url;
+  return track.audioUrl.trim();
 }
+
 
 /**
  * Resolves artwork image URL with graceful SVG gradient fallback

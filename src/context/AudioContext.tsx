@@ -269,18 +269,17 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       const updatedHistory = svcAddToHistory(track);
       setHistory(updatedHistory);
 
-      if (
-        streamUrl.startsWith('/') ||
-        (typeof window !== 'undefined' && streamUrl.startsWith(window.location.origin))
-      ) {
-        audio.crossOrigin = 'anonymous';
-      }
+      // Remove crossOrigin attribute to ensure browser never blocks or silences direct playback
+      audio.removeAttribute('crossOrigin');
       audio.src = streamUrl;
       audio.load();
 
-      // Attach Audio DSP Engine for Dolby Atmos & Apple Music mastering
+      // Ensure volume is properly applied to audio element
+      audio.volume = isMuted ? 0 : volume;
+      audio.muted = isMuted;
+
+      // Update Audio DSP state & visualization
       audioDsp.attach(audio);
-      audioDsp.resume();
       audioDsp.applySettings(eqSettings, isDolbyEnabled);
 
       try {
@@ -464,15 +463,16 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       audio.pause();
       setIsPlaying(false);
     } else {
+      audio.volume = isMuted ? 0 : volume;
+      audio.muted = isMuted;
       audioDsp.attach(audio);
-      audioDsp.resume();
       audioDsp.applySettings(eqSettings, isDolbyEnabled);
       audio.play().catch((err) => {
         console.error('Play failed:', err);
       });
       setIsPlaying(true);
     }
-  }, [currentTrack, isPlaying, queue, playTrack, eqSettings, isDolbyEnabled]);
+  }, [currentTrack, isPlaying, queue, playTrack, isMuted, volume, eqSettings, isDolbyEnabled]);
 
   const pause = useCallback(() => {
     if (audioRef.current) {
@@ -483,13 +483,14 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const resume = useCallback(() => {
     if (audioRef.current && currentTrack) {
+      audioRef.current.volume = isMuted ? 0 : volume;
+      audioRef.current.muted = isMuted;
       audioDsp.attach(audioRef.current);
-      audioDsp.resume();
       audioDsp.applySettings(eqSettings, isDolbyEnabled);
       audioRef.current.play().catch(console.error);
       setIsPlaying(true);
     }
-  }, [currentTrack, eqSettings, isDolbyEnabled]);
+  }, [currentTrack, isMuted, volume, eqSettings, isDolbyEnabled]);
 
   // Dolby Atmos & Equalizer Control Handlers
   const setAudioPreset = useCallback(
