@@ -16,8 +16,11 @@ import {
   Plus,
   Copy,
   Check,
+  Zap,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
+import { AUDIO_PRESETS } from '@/config/audio';
+import { AudioPresetId } from '@/types/music';
 import {
   testAudioUrl,
   AudioDiagnosticResult,
@@ -34,6 +37,10 @@ export const SettingsPage: React.FC = () => {
     volume,
     setVolume,
     clearHistory,
+    isDolbyEnabled,
+    toggleDolby,
+    audioPreset,
+    setAudioPreset,
   } = useAudio();
 
   const [copiedCatalog, setCopiedCatalog] = useState(false);
@@ -393,6 +400,73 @@ export const SettingsPage: React.FC = () => {
               </button>
             );
           })}
+        </div>
+      </section>
+
+      {/* Dolby Atmos & Apple Music High-Fidelity DSP */}
+      <section className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-6">
+        <div className="flex items-center justify-between pb-4 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+              <Zap className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-bold text-white">Dolby Atmos & Spatial Audio</h2>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">
+                  Apple Music Lossless
+                </span>
+              </div>
+              <p className="text-xs text-gray-400">
+                Studio-grade mastering with 3D spatial room expansion, vocal separation, and dynamic limiting
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={toggleDolby}
+            className={`relative inline-flex h-7 w-13 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+              isDolbyEnabled ? 'bg-gradient-to-r from-cyan-500 to-purple-600' : 'bg-gray-700'
+            }`}
+            title="Toggle Dolby Atmos Spatial Audio"
+          >
+            <span
+              className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                isDolbyEnabled ? 'translate-x-6' : 'translate-x-0'
+              }`}
+            />
+          </button>
+        </div>
+
+        <div>
+          <h4 className="text-xs font-bold uppercase tracking-wider text-gray-300 mb-3">
+            Active Sound Mastering Profile
+          </h4>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {(Object.keys(AUDIO_PRESETS) as AudioPresetId[]).map((pid) => {
+              if (pid === 'custom') return null;
+              const p = AUDIO_PRESETS[pid];
+              const isSelected = audioPreset === pid;
+
+              return (
+                <button
+                  key={pid}
+                  onClick={() => setAudioPreset(pid)}
+                  className={`p-3.5 rounded-2xl text-left border transition-all ${
+                    isSelected
+                      ? 'bg-gradient-to-br from-white/15 to-white/5 border-white/30 text-white shadow-[0_0_16px_rgba(6,182,212,0.25)]'
+                      : 'bg-white/5 hover:bg-white/10 border-white/10 text-gray-400'
+                  }`}
+                >
+                  <p className="text-xs font-bold text-white flex items-center justify-between">
+                    <span>{p.name}</span>
+                    {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400" />}
+                  </p>
+                  <p className="text-[11px] text-gray-400 mt-1 leading-snug">{p.description}</p>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </section>
 

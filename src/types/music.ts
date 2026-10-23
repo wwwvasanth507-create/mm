@@ -73,6 +73,24 @@ export interface PlaybackHistoryItem {
   playedAt: number; // timestamp ms
 }
 
+export type AudioPresetId =
+  | 'dolby-atmos'
+  | 'apple-lossless'
+  | 'bass-boost'
+  | 'vocal-pure'
+  | 'concert-hall'
+  | 'flat'
+  | 'custom';
+
+export interface EqualizerSettings {
+  subBass: number; // 60 Hz (-12 to +12 dB)
+  bassPunch: number; // 150 Hz (-12 to +12 dB)
+  mid: number; // 1000 Hz (-12 to +12 dB)
+  vocal: number; // 3200 Hz (-12 to +12 dB)
+  treble: number; // 10000 Hz (-12 to +12 dB)
+  spatialWidth: number; // 0.0 to 1.0 (Dolby 3D spatial surround width)
+}
+
 export interface AudioContextType {
   // Playback state
   currentTrack: Track | null;
@@ -86,6 +104,16 @@ export interface AudioContextType {
   shuffle: boolean;
   playbackRate: number;
   error: string | null;
+
+  // Dolby Atmos & Studio Audio DSP
+  isDolbyEnabled: boolean;
+  audioPreset: AudioPresetId;
+  eqSettings: EqualizerSettings;
+  setAudioPreset: (preset: AudioPresetId) => void;
+  toggleDolby: () => void;
+  setEqBand: (band: keyof EqualizerSettings, value: number) => void;
+  resetEq: () => void;
+  getFrequencyData: () => Uint8Array | null;
 
   // Queue
   queue: Track[];

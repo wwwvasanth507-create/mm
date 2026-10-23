@@ -15,6 +15,7 @@ import {
   Maximize2,
   AlertCircle,
   Loader2,
+  Zap,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 import { resolveArtworkUrl } from '@/services/musicService';
@@ -52,6 +53,8 @@ export const PlayerBar: React.FC<PlayerBarProps> = ({
     isFavourite,
     toggleFavourite,
     resume,
+    isDolbyEnabled,
+    toggleDolby,
   } = useAudio();
 
   const [hoverSeekTime, setHoverSeekTime] = useState<number | null>(null);
@@ -395,6 +398,24 @@ export const PlayerBar: React.FC<PlayerBarProps> = ({
                 }}
               />
             </div>
+
+            {/* Quick Dolby Atmos Spatial Audio Toggle */}
+            <button
+              onClick={toggleDolby}
+              className={`p-1.5 px-2.5 rounded-full text-[11px] font-extrabold flex items-center gap-1.5 transition-all border ${
+                isDolbyEnabled
+                  ? 'bg-gradient-to-r from-cyan-950/80 to-purple-950/80 border-cyan-400/50 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.35)]'
+                  : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
+              }`}
+              title={
+                isDolbyEnabled
+                  ? 'Dolby Atmos Spatial 3D Active (Click to toggle)'
+                  : 'Dolby Atmos Spatial Audio Disabled (Click to activate)'
+              }
+            >
+              <Zap className={`w-3.5 h-3.5 ${isDolbyEnabled ? 'text-cyan-400 fill-cyan-400' : ''}`} />
+              <span className="hidden xl:inline">DOLBY</span>
+            </button>
 
             <button
               onClick={onOpenQueue}

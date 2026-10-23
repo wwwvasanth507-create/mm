@@ -13,11 +13,15 @@ import {
   RepeatMode,
   ThemeAccent,
   AudioContextType,
+  AudioPresetId,
+  EqualizerSettings,
 } from '@/types/music';
 import {
   AUDIO_CONFIG,
   STORAGE_KEYS,
+  AUDIO_PRESETS,
 } from '@/config/audio';
+import { audioDsp } from '@/services/audioDspService';
 import {
   getAllTracks,
   resolveAudioUrl,
@@ -49,6 +53,28 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isBuffering, setIsBuffering] = useState<boolean>(false);
   const [playbackRate, setPlaybackRateState] = useState<number>(1);
   const [error, setError] = useState<string | null>(null);
+
+  // Dolby Atmos & Equalizer State
+  const [isDolbyEnabled, setIsDolbyEnabled] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true;
+    const saved = localStorage.getItem(STORAGE_KEYS.DOLBY_ENABLED);
+    return saved !== null ? saved === 'true' : true;
+  });
+
+  const [audioPreset, setAudioPresetState] = useState<AudioPresetId>(() => {
+    if (typeof window === 'undefined') return 'dolby-atmos';
+    const saved = localStorage.getItem(STORAGE_KEYS.AUDIO_PRESET) as AudioPresetId;
+    return saved && AUDIO_PRESETS[saved] ? saved : 'dolby-atmos';
+  });
+
+  const [eqSettings, setEqSettings] = useState<EqualizerSettings>(() => {
+    if (typeof window === 'undefined') return AUDIO_PRESETS['dolby-atmos'].settings;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.EQ_SETTINGS);
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return AUDIO_PRESETS['dolby-atmos'].settings;
+  });
 
   // Volume & Mute
   const [volume, setVolumeState] = useState<number>(() => {
@@ -99,6 +125,11 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       audioRef.current.muted = isMuted;
     }
   }, [volume, isMuted]);
+
+  // Synchronize Audio DSP whenever EQ settings or Dolby Atmos state change
+  useEffect(() => {
+    audioDsp.applySettings(eqSettings, isDolbyEnabled);
+  }, [eqSettings, isDolbyEnabled]);
 
   // Apply theme accent CSS variables on document root
   useEffect(() => {
@@ -238,8 +269,19 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       const updatedHistory = svcAddToHistory(track);
       setHistory(updatedHistory);
 
+      if (
+        streamUrl.startsWith('/') ||
+        (typeof window !== 'undefined' && streamUrl.startsWith(window.location.origin))
+      ) {
+        audio.crossOrigin = 'anonymous';
+      }
       audio.src = streamUrl;
       audio.load();
+
+      // Attach Audio DSP Engine for Dolby Atmos & Apple Music mastering
+      audioDsp.attach(audio);
+      audioDsp.resume();
+      audioDsp.applySettings(eqSettings, isDolbyEnabled);
 
       try {
         await audio.play();
@@ -258,7 +300,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setIsBuffering(false);
       }
     },
-    []
+    [eqSettings, isDolbyEnabled]
   );
 
   // Next Track Logic
@@ -422,12 +464,15 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       audio.pause();
       setIsPlaying(false);
     } else {
+      audioDsp.attach(audio);
+      audioDsp.resume();
+      audioDsp.applySettings(eqSettings, isDolbyEnabled);
       audio.play().catch((err) => {
         console.error('Play failed:', err);
       });
       setIsPlaying(true);
     }
-  }, [currentTrack, isPlaying, queue, playTrack]);
+  }, [currentTrack, isPlaying, queue, playTrack, eqSettings, isDolbyEnabled]);
 
   const pause = useCallback(() => {
     if (audioRef.current) {
@@ -438,10 +483,59 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const resume = useCallback(() => {
     if (audioRef.current && currentTrack) {
+      audioDsp.attach(audioRef.current);
+      audioDsp.resume();
+      audioDsp.applySettings(eqSettings, isDolbyEnabled);
       audioRef.current.play().catch(console.error);
       setIsPlaying(true);
     }
-  }, [currentTrack]);
+  }, [currentTrack, eqSettings, isDolbyEnabled]);
+
+  // Dolby Atmos & Equalizer Control Handlers
+  const setAudioPreset = useCallback(
+    (preset: AudioPresetId) => {
+      setAudioPresetState(preset);
+      localStorage.setItem(STORAGE_KEYS.AUDIO_PRESET, preset);
+      if (AUDIO_PRESETS[preset]) {
+        const newSettings = { ...AUDIO_PRESETS[preset].settings };
+        setEqSettings(newSettings);
+        localStorage.setItem(STORAGE_KEYS.EQ_SETTINGS, JSON.stringify(newSettings));
+        audioDsp.applySettings(newSettings, isDolbyEnabled);
+      }
+    },
+    [isDolbyEnabled]
+  );
+
+  const toggleDolby = useCallback(() => {
+    setIsDolbyEnabled((prev) => {
+      const next = !prev;
+      localStorage.setItem(STORAGE_KEYS.DOLBY_ENABLED, String(next));
+      audioDsp.applySettings(eqSettings, next);
+      return next;
+    });
+  }, [eqSettings]);
+
+  const setEqBand = useCallback(
+    (band: keyof EqualizerSettings, value: number) => {
+      setAudioPresetState('custom');
+      localStorage.setItem(STORAGE_KEYS.AUDIO_PRESET, 'custom');
+      setEqSettings((prev) => {
+        const next = { ...prev, [band]: value };
+        localStorage.setItem(STORAGE_KEYS.EQ_SETTINGS, JSON.stringify(next));
+        audioDsp.applySettings(next, isDolbyEnabled);
+        return next;
+      });
+    },
+    [isDolbyEnabled]
+  );
+
+  const resetEq = useCallback(() => {
+    setAudioPreset('dolby-atmos');
+  }, [setAudioPreset]);
+
+  const getFrequencyData = useCallback(() => {
+    return audioDsp.getFrequencyData();
+  }, []);
 
   // Seek to specific timestamp
   const seek = useCallback((time: number) => {
@@ -703,6 +797,14 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     shuffle,
     playbackRate,
     error,
+    isDolbyEnabled,
+    audioPreset,
+    eqSettings,
+    setAudioPreset,
+    toggleDolby,
+    setEqBand,
+    resetEq,
+    getFrequencyData,
     queue,
     queueIndex,
     playTrack,
