@@ -177,16 +177,25 @@ export const SongsPage: React.FC = () => {
         {/* Rows */}
         {filteredTracks.length === 0 ? (
           <div className="py-16 text-center text-gray-400 text-sm">
-            <p>No songs found matching your filter criteria.</p>
-            <button
-              onClick={() => {
-                setQuery('');
-                setSelectedLanguage('all');
-              }}
-              className="mt-2 text-xs text-[var(--accent-primary)] hover:underline"
-            >
-              Clear filters
-            </button>
+            {allTracks.length === 0 ? (
+              <div>
+                <p>No songs added to catalog yet.</p>
+                <p className="text-xs text-gray-500 mt-1">Open <code className="text-[var(--accent-primary)] font-mono">src/data/music.json</code> to add your tracks.</p>
+              </div>
+            ) : (
+              <div>
+                <p>No songs found matching your filter criteria.</p>
+                <button
+                  onClick={() => {
+                    setQuery('');
+                    setSelectedLanguage('all');
+                  }}
+                  className="mt-2 text-xs text-[var(--accent-primary)] hover:underline"
+                >
+                  Clear filters
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <div className="divide-y divide-white/5">

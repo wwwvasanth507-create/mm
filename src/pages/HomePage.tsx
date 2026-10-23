@@ -49,6 +49,24 @@ export const HomePage: React.FC = () => {
       playTrack(shuffled[0], shuffled);
     }
   };
+  if (allTracks.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8 space-y-6 animate-in fade-in duration-300">
+        <div className="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[var(--accent-primary)] shadow-2xl">
+          <Disc3 className="w-10 h-10 animate-spin" style={{ animationDuration: '6s' }} />
+        </div>
+        <div className="max-w-md space-y-3">
+          <h2 className="text-2xl font-bold text-white tracking-tight">Your Music Library is Ready</h2>
+          <p className="text-sm text-gray-400 leading-relaxed">
+            All demo songs have been cleared. Add your music tracks to <code className="px-2 py-0.5 rounded bg-white/10 font-mono text-xs text-[var(--accent-primary)]">src/data/music.json</code>.
+          </p>
+          <p className="text-xs text-gray-500">
+            Check <code className="px-1.5 py-0.5 rounded bg-white/5 font-mono text-gray-300">src/data/music.example.json</code> for the exact song format and available fields.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10 animate-in fade-in duration-300">

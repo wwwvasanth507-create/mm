@@ -19,11 +19,18 @@ export const ArtistsPage: React.FC = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        {artists.map((artist) => (
-          <ArtistCard key={artist.id} artist={artist} />
-        ))}
-      </div>
+      {artists.length === 0 ? (
+        <div className="py-20 text-center text-gray-400 text-sm glass-card rounded-2xl border border-white/5 p-8">
+          <p>No artists found yet.</p>
+          <p className="text-xs text-gray-500 mt-1">Artists are automatically generated when you add songs with an artist name to music.json.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {artists.map((artist) => (
+            <ArtistCard key={artist.id} artist={artist} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
