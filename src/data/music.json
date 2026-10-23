@@ -1,19 +1,28 @@
 {
   "songs": [
     {
-      "id": "my-song-001",
+      "id": "song-ravana-tandavam",
       "title": "Ravana Tandavam",
-      "artist": "",
-      "album": "",
+      "artist": "A.R. Rahman, G. V. Prakash Kumar, Anirudh Ravichander",
+      "album": "Ramayana",
       "genre": "Devotional",
       "year": 2026,
-      "duration": ,
+      "duration": 194,
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Ravana%20Tandavam.mp3",
       "thumbnailUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/ramayana%20new%20poster.jpg",
-      "description": "Tami melody song",
+      "description": "Ravana Tandavam from Ramayana composed by A.R. Rahman",
       "language": "Tamil",
       "isExplicit": false
     }
   ],
-  "playlists": []
+  "playlists": [
+    {
+      "id": "playlist-devotional",
+      "name": "Devotional & Power Hits",
+      "description": "High energy devotional and epic compositions",
+      "coverUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/ramayana%20new%20poster.jpg",
+      "trackIds": ["song-ravana-tandavam"],
+      "createdAt": "2026-10-23"
+    }
+  ]
 }
