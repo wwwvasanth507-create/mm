@@ -2,14 +2,14 @@
   "songs": [
     {
       "id": "my-song-001",
-      "title": "My Tamil Song",
-      "artist": "My Favourite Artist",
-      "album": "My Album",
-      "genre": "Melody",
-      "year": 2025,
-      "duration": 240,
+      "title": "Ravana Tandavam",
+      "artist": "",
+      "album": "",
+      "genre": "Devotional",
+      "year": 2026,
+      "duration": ,
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Ravana%20Tandavam.mp3",
-      "thumbnailUrl": "https://example.com/images/cover.jpg",
+      "thumbnailUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/ramayana%20new%20poster.jpg",
       "description": "Tami melody song",
       "language": "Tamil",
       "isExplicit": false
