@@ -1,0 +1,147 @@
+{
+  "songs": [
+    {
+      "id": "song-tamil-001",
+      "title": "Kanmani Anbodu (Acoustic Resonance)",
+      "artist": "Kamal Haasan & S. Janaki",
+      "album": "Gunaa",
+      "genre": "Melody",
+      "year": 2024,
+      "duration": 232,
+      "audioUrl": "https://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.mp3",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80",
+      "description": "Timeless Tamil romantic melody with intricate acoustic arrangements",
+      "language": "Tamil",
+      "isExplicit": false,
+      "isDemo": true,
+      "lyrics": [
+        { "time": 10, "text": "Kanmani anbodu kadhalan naan ezhuthum kadithamae" },
+        { "time": 25, "text": "Ponmani un veettil sowkiyama naan ingu sowkiyamae" },
+        { "time": 50, "text": "Undhan kadhal engae ennai thedi varumo" },
+        { "time": 85, "text": "Endhan nenjil koodum deepam unthan ninaivo" },
+        { "time": 130, "text": "Endrum unnai naan maravathen vazhvil" },
+        { "time": 175, "text": "Unthan sangeetham en moochil kalanthadhu" }
+      ]
+    },
+    {
+      "id": "song-tamil-002",
+      "title": "Enna Solla Pogirai (Midnight Reprise)",
+      "artist": "Shankar Mahadevan",
+      "album": "Kandukondain Kandukondain",
+      "genre": "Classical Fusion",
+      "year": 2025,
+      "duration": 131,
+      "audioUrl": "https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&auto=format&fit=crop&q=80",
+      "description": "Poignant Tamil composition featuring sweeping orchestration and emotive vocals",
+      "language": "Tamil",
+      "isExplicit": false,
+      "isDemo": true,
+      "lyrics": [
+        { "time": 8, "text": "Enna solla pogirai sandhanangal theikiraai" },
+        { "time": 25, "text": "Vaanavilum thoongumo un viralgal theendumo" },
+        { "time": 55, "text": "Kaadhal vandhu modhum bodhu kaalgal engum sellumo" },
+        { "time": 90, "text": "Enthan uyirai theendum ganam idhuthaano" }
+      ]
+    },
+    {
+      "id": "song-eng-001",
+      "title": "Lepidoptera (Atmospheric Wings)",
+      "artist": "Epoq",
+      "album": "Metamorphosis",
+      "genre": "Ambient Electronic",
+      "year": 2024,
+      "duration": 232,
+      "audioUrl": "https://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.mp3",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+      "description": "Expansive ambient electronic texture with warm analog synthesizers",
+      "language": "English",
+      "isExplicit": false,
+      "isDemo": true,
+      "lyrics": [
+        { "time": 10, "text": "Drifting through the luminous midnight haze" },
+        { "time": 30, "text": "Colors unfolding in kaleidoscopic phase" },
+        { "time": 60, "text": "Feel the soundwaves wash across the sky" },
+        { "time": 100, "text": "Suspended moments never letting go" }
+      ]
+    },
+    {
+      "id": "song-eng-002",
+      "title": "The Neverwritten Journey",
+      "artist": "Kangaroo MusiQue",
+      "album": "Odyssey of Shadows",
+      "genre": "Synthwave",
+      "year": 2023,
+      "duration": 131,
+      "audioUrl": "https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=800&auto=format&fit=crop&q=80",
+      "description": "Upbeat synthwave rhythm with driving retro bass and punchy leads",
+      "language": "English",
+      "isExplicit": false,
+      "isDemo": true
+    },
+    {
+      "id": "song-inst-001",
+      "title": "Algorithmic Harmony 1",
+      "artist": "SoundHelix Project",
+      "album": "Dreamscape Sequences",
+      "genre": "Deep House",
+      "year": 2024,
+      "duration": 372,
+      "audioUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=80",
+      "description": "Hypnotic deep house instrumental for focused workflow and coding",
+      "language": "Instrumental",
+      "isExplicit": false,
+      "isDemo": true
+    },
+    {
+      "id": "song-inst-002",
+      "title": "Quantum Pulse Horizon",
+      "artist": "SoundHelix Project",
+      "album": "Dreamscape Sequences",
+      "genre": "Progressive Trance",
+      "year": 2024,
+      "duration": 423,
+      "audioUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=800&auto=format&fit=crop&q=80",
+      "description": "Dynamic electronic track with uplifting progression and rich textures",
+      "language": "Instrumental",
+      "isExplicit": false,
+      "isDemo": true
+    },
+    {
+      "id": "song-user-template",
+      "title": "Your Custom Song (Demo Template)",
+      "artist": "Your Artist Name",
+      "album": "Your Album Title",
+      "genre": "Melody",
+      "year": 2025,
+      "duration": 240,
+      "audioUrl": "https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop&q=80",
+      "description": "Replace this entry with your real audio URL, album cover, and song metadata",
+      "language": "Tamil",
+      "isExplicit": false,
+      "isDemo": true
+    }
+  ],
+  "playlists": [
+    {
+      "id": "playlist-tamil-favorites",
+      "name": "Tamil Melodies & Hits",
+      "description": "Handpicked soothing Tamil melodies and soulful compositions",
+      "coverUrl": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80",
+      "trackIds": ["song-tamil-001", "song-tamil-002", "song-user-template"],
+      "createdAt": "2025-01-01"
+    },
+    {
+      "id": "playlist-deep-focus",
+      "name": "Deep Focus & Ambient Flow",
+      "description": "Calm instrumentals and atmospheric tracks for creative focus",
+      "coverUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+      "trackIds": ["song-eng-001", "song-inst-001", "song-inst-002"],
+      "createdAt": "2025-01-10"
+    }
+  ]
+}
