@@ -25,6 +25,7 @@ import { AddToPlaylistModal } from '@/components/modals/AddToPlaylistModal';
 import { ShortcutsModal } from '@/components/modals/ShortcutsModal';
 import { AddSongModal } from '@/components/modals/AddSongModal';
 import { WaveMusicLogo } from '@/components/common/WaveMusicLogo';
+import { PwaInstallModal } from '@/components/modals/PwaInstallModal';
 
 export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ export const AppLayout: React.FC = () => {
   const [addToPlaylistTrack, setAddToPlaylistTrack] = useState<Track | null>(null);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [isAddSongOpen, setIsAddSongOpen] = useState(false);
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -223,15 +225,15 @@ export const AppLayout: React.FC = () => {
               <span>24/7 NON-STOP</span>
             </div>
 
-            {/* Download APK / Android App Button */}
-            <NavLink
-              to="/settings"
+            {/* Install Native App / Get APK Button (Spotify/Apple Music lock screen player) */}
+            <button
+              onClick={() => setIsInstallModalOpen(true)}
               className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 font-semibold text-xs flex items-center gap-1.5 active:scale-95 transition-all shadow-sm"
-              title="Download Android APK & App Info"
+              title="Install Native App (Removes Chrome badge on Lock Screen)"
             >
               <Smartphone className="w-3.5 h-3.5 text-purple-400" />
-              <span>Get APK</span>
-            </NavLink>
+              <span>Get App</span>
+            </button>
 
             {/* Add Song Shortcut Button */}
             <button
@@ -366,6 +368,12 @@ export const AppLayout: React.FC = () => {
       <ShortcutsModal
         isOpen={isShortcutsOpen}
         onClose={() => setIsShortcutsOpen(false)}
+      />
+
+      {/* PWA WebAPK & Native App Modal */}
+      <PwaInstallModal
+        isOpen={isInstallModalOpen}
+        onClose={() => setIsInstallModalOpen(false)}
       />
     </div>
   );

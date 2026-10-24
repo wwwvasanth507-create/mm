@@ -15,12 +15,14 @@ import {
   Mic2,
   Sparkles,
   Zap,
+  Smartphone,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 import { resolveArtworkUrl } from '@/services/musicService';
 import { formatTime } from '@/utils/formatters';
 import { SoundLabTab } from './SoundLabTab';
 import { AmbientAudioGlow } from '@/components/common/AmbientAudioGlow';
+import { PwaInstallModal } from '@/components/modals/PwaInstallModal';
 
 interface NowPlayingModalProps {
   isOpen: boolean;
@@ -28,6 +30,7 @@ interface NowPlayingModalProps {
 }
 
 export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClose }) => {
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
   const {
     currentTrack,
     isPlaying,
@@ -195,6 +198,16 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
             <Zap className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isDolbyEnabled ? 'text-cyan-400' : ''}`} />
             <span className="hidden sm:inline">Dolby / EQ</span>
           </button>
+
+          {/* Native App Install Trigger (Removes Chrome badge on lock screen) */}
+          <button
+            onClick={() => setIsInstallModalOpen(true)}
+            className="p-1.5 sm:p-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1 bg-purple-500/20 text-purple-300 border border-purple-500/30 hover:bg-purple-500/30 active:scale-95"
+            title="Install App (Native Spotify/Apple Music lock screen player)"
+          >
+            <Smartphone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400" />
+            <span className="hidden sm:inline">App</span>
+          </button>
         </div>
       </header>
 
@@ -202,13 +215,15 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
       <div className="relative z-10 flex-1 overflow-y-auto flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
         {activeTab === 'visualizer' && (
           <div className="w-full max-w-md flex flex-col items-center text-center">
-            {/* Artwork Card with Vinyl Glow */}
+            {/* Artwork Card with Vinyl Glow & Glossy Sheen */}
             <div className="relative w-[56vw] max-w-[240px] sm:max-w-[300px] md:max-w-[360px] aspect-square max-h-[32vh] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_50px_rgba(250,45,72,0.35)] mb-4 sm:mb-6 border border-white/20 group">
               <img
                 src={artwork}
                 alt={currentTrack.title}
                 className="w-full h-full object-cover shadow-2xl transition-transform duration-700 hover:scale-105"
               />
+              {/* Glossy Tempered-Glass Diagonal Sheen Effect */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none" />
             </div>
 
             {/* Track Info with pristine text shadows */}
@@ -453,6 +468,12 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
           />
         </div>
       </div>
+
+      {/* Standalone Native App Installation Modal (Removes Chrome badge on lock screen) */}
+      <PwaInstallModal
+        isOpen={isInstallModalOpen}
+        onClose={() => setIsInstallModalOpen(false)}
+      />
     </div>
   );
 };
