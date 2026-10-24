@@ -21,7 +21,6 @@ import { useAudio } from '@/context/AudioContext';
 import { resolveArtworkUrl } from '@/services/musicService';
 import { formatTime } from '@/utils/formatters';
 import { SoundLabTab } from './SoundLabTab';
-import { AmbientAudioGlow } from '@/components/common/AmbientAudioGlow';
 import { PwaInstallModal } from '@/components/modals/PwaInstallModal';
 
 interface NowPlayingModalProps {
@@ -102,18 +101,16 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="fixed inset-0 z-[60] overflow-hidden bg-[#07070a] flex flex-col text-white animate-in fade-in duration-300">
-      {/* 1. Underlying Soft Artwork Color Tint */}
+    <div className="fixed inset-0 z-[60] overflow-hidden bg-[#0a0a0c] flex flex-col text-white animate-in fade-in duration-300">
+      {/* Sleek, Dark Blurred Artwork Background (All ambient lights turned off completely) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-25 z-0">
         <img
           src={artwork}
           alt=""
-          className="w-full h-full object-cover blur-[90px] scale-125 saturate-150 transform transition-all duration-1000"
+          className="w-full h-full object-cover blur-[90px] scale-125 transform transition-all duration-1000"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-black/50 to-black/70" />
       </div>
-
-      {/* 2. Full-Screen Audio-Reactive Beat, Voice & Music Ambient Lighting (Vibrant & Colorful) */}
-      <AmbientAudioGlow className="absolute inset-0 z-0" intensity="full" />
 
       {/* Mobile Top Drag Indicator Bar */}
       <div className="md:hidden pt-[calc(0.5rem+env(safe-area-inset-top,0px))] pb-1 flex justify-center z-20">
