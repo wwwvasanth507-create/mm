@@ -82,17 +82,20 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
     }
   }, [isOpen, activeTab, isPlaying, pause]);
 
-  // Auto-switch away from video tab if currentTrack does not have a direct video
-  useEffect(() => {
-    if (activeTab === 'video' && (!currentTrack?.videoUrl || !isDirectVideoUrl(currentTrack.videoUrl))) {
-      setActiveTab('visualizer');
-    }
-  }, [currentTrack, activeTab]);
-
   const lyricsContainerRef = useRef<HTMLDivElement>(null);
 
   // Find active lyrics line
   const lyricsList = Array.isArray(currentTrack?.lyrics) ? currentTrack.lyrics : [];
+
+  // Auto-switch away from video or lyrics tab if currentTrack does not have them
+  useEffect(() => {
+    if (activeTab === 'video' && (!currentTrack?.videoUrl || !isDirectVideoUrl(currentTrack.videoUrl))) {
+      setActiveTab('visualizer');
+    }
+    if (activeTab === 'lyrics' && lyricsList.length === 0) {
+      setActiveTab('visualizer');
+    }
+  }, [currentTrack, activeTab, lyricsList.length]);
   let currentLyricsIndex = -1;
   if (lyricsList.length > 0) {
     for (let i = 0; i < lyricsList.length; i++) {
@@ -208,18 +211,20 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
               <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
             </button>
           )}
-          <button
-            onClick={() => setActiveTab('lyrics')}
-            className={`p-1.5 sm:p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 ${
-              activeTab === 'lyrics'
-                ? 'bg-white/20 text-white shadow-sm'
-                : 'text-gray-400 hover:text-white'
-            }`}
-            title="Lyrics"
-          >
-            <Mic2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span className="hidden sm:inline">Lyrics</span>
-          </button>
+          {lyricsList.length > 0 && (
+            <button
+              onClick={() => setActiveTab('lyrics')}
+              className={`p-1.5 sm:p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 ${
+                activeTab === 'lyrics'
+                  ? 'bg-white/20 text-white shadow-sm'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+              title="Lyrics"
+            >
+              <Mic2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Lyrics</span>
+            </button>
+          )}
           <button
             onClick={() => setActiveTab('queue')}
             className={`p-1.5 sm:p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 ${

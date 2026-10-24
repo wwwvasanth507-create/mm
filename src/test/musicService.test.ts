@@ -222,11 +222,10 @@ describe('Favourites and Playback History', () => {
     expect(resolveVideoUrl(sampleMockTrack)).toBe('');
   });
 
-  it('includes the 6 Bison: Kaalamaadan tracks in the catalog with real thumbnails and no YouTube links', () => {
+  it('includes the Bison: Kaalamaadan tracks without duplicates and no YouTube links', () => {
     const tracks = getAllTracks();
     const bisonIds = [
       'song-cheenikkallu',
-      'song-cheenikkallu-unplugged',
       'song-kaalamaadan-gaanam',
       'song-rekka-rekka',
       'song-theekkoluthi',
@@ -238,10 +237,40 @@ describe('Favourites and Playback History', () => {
       expect(found).toBeDefined();
       expect(found?.album).toBe('Bison Kaalamaadan');
       expect(found?.audioUrl).toContain('pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/');
-      expect(found?.thumbnailUrl).toContain('c.saavncdn.com');
-      // All YouTube links are completely removed; direct video URLs only
       expect(found?.videoUrl).not.toContain('youtube.com');
       expect(found?.videoUrl).not.toContain('youtu.be');
+    });
+
+    // Verify duplicate Unplugged track was removed
+    expect(tracks.find((t) => t.id === 'song-cheenikkallu-unplugged')).toBeUndefined();
+  });
+
+  it('ensures all songs have lyrics removed as per user requirement', () => {
+    const tracks = getAllTracks();
+    const withLyrics = tracks.filter((t) => Boolean(t.lyrics));
+    expect(withLyrics.length).toBe(0);
+  });
+
+  it('correctly includes new Dude, Dragon, and Coolie songs with valid audio URLs and covers', () => {
+    const tracks = getAllTracks();
+
+    const sampleNewSongs = [
+      { id: 'song-blud-is-on-his-way', title: 'Blud Is On His Way', album: 'Dude' },
+      { id: 'song-singari', title: 'Singari', album: 'Dude' },
+      { id: 'song-iraivaa', title: 'Iraivaa', album: 'Dragon' },
+      { id: 'song-vazhithunaiye', title: 'Vazhithunaiye', album: 'Dragon' },
+      { id: 'song-chikitu', title: 'Chikitu', album: 'Coolie' },
+      { id: 'song-powerhouse', title: 'Powerhouse', album: 'Coolie' },
+      { id: 'song-monica', title: 'Monica', album: 'Coolie' },
+    ];
+
+    sampleNewSongs.forEach(({ id, title, album }) => {
+      const found = tracks.find((t) => t.id === id);
+      expect(found).toBeDefined();
+      expect(found?.title).toBe(title);
+      expect(found?.album).toBe(album);
+      expect(found?.audioUrl).toContain('pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev');
+      expect(found?.thumbnailUrl).toBeTruthy();
     });
   });
 

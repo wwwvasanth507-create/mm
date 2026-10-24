@@ -12,85 +12,7 @@
       "thumbnailUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/ramayana%20new%20poster.jpg",
       "description": "Ravana Tandavam from Ramayana composed by A.R. Rahman",
       "language": "Tamil",
-      "isExplicit": false,
-      "lyrics": [
-        {
-          "time": 0,
-          "text": "🔥 [Intro - War Drums & Conches]"
-        },
-        {
-          "time": 4,
-          "text": "Hey Om, Hey Om... Hey Hey Om, Hey Om..."
-        },
-        {
-          "time": 15,
-          "text": "Jatatavigalajjala Pravahapavitasthale"
-        },
-        {
-          "time": 22,
-          "text": "Galevalambya Lambitam Bhujangatungamalikam"
-        },
-        {
-          "time": 30,
-          "text": "Damaddamaddamaddama Ninadavaddamarvayam"
-        },
-        {
-          "time": 37,
-          "text": "Chakara Chandatandavam Tanotu Nah Shivah Shivam"
-        },
-        {
-          "time": 45,
-          "text": "🔱 Shiva...!"
-        },
-        {
-          "time": 52,
-          "text": "Gharar Gharar Jharar Samar Asur Pasar Jai Jai!"
-        },
-        {
-          "time": 60,
-          "text": "Chalat Hilat Karak Khilat Vikat Milat Jai Jai!"
-        },
-        {
-          "time": 68,
-          "text": "Shakra Vijita, Shakra Vijita, Shakra Vijita, Jai Jai!"
-        },
-        {
-          "time": 76,
-          "text": "Darsha Darsha Ravana Darsha!"
-        },
-        {
-          "time": 84,
-          "text": "Ra Ra Ra Ravana... Ra Ra Ra Ravana..."
-        },
-        {
-          "time": 100,
-          "text": "Ravana... Ravana... Ravana..."
-        },
-        {
-          "time": 108,
-          "text": "Dainyam Varsham Ravana"
-        },
-        {
-          "time": 115,
-          "text": "Jagatam Jagatam Bhramsham"
-        },
-        {
-          "time": 128,
-          "text": "⚡ [Fierce Tandavam Beats & War Chorus]"
-        },
-        {
-          "time": 150,
-          "text": "Gharar Gharar Jharar Samar Asur Pasar Jai Jai!"
-        },
-        {
-          "time": 164,
-          "text": "Shakra Vijita, Shakra Vijita, Jai Jai! Ravana!"
-        },
-        {
-          "time": 180,
-          "text": "⚡ [Grand Orchestral Climax]"
-        }
-      ]
+      "isExplicit": false
     },
     {
       "id": "song-anthaathi",
@@ -104,137 +26,7 @@
       "thumbnailUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/96-Original-Motion-Picture-Soundtrack-Tamil-2018-20250905072505-500x500.webp",
       "description": "Anthaathi from 96 composed by Govind Vasantha",
       "language": "Tamil",
-      "isExplicit": false,
-      "lyrics": [
-        {
-          "time": 0,
-          "text": "🎵 [Intro - Ambient Drone]"
-        },
-        {
-          "time": 6.5,
-          "text": "Peranbe... Kadhal..."
-        },
-        {
-          "time": 17.5,
-          "text": "Ulnokki aadugindra aadal sathaa... Aaraadha aaval..."
-        },
-        {
-          "time": 32.5,
-          "text": "Yethetho saayal yetru thiriyum kadhal... Prathyega thedal..."
-        },
-        {
-          "time": 47.5,
-          "text": "Theeyil theeraatha kaatril... Pul poondil puzhuvil ulathil ilathil..."
-        },
-        {
-          "time": 62.5,
-          "text": "Thaane ellaamum aagi naam kaanum aruvame... Ithyaathi kadhal..."
-        },
-        {
-          "time": 74.5,
-          "text": "Illaatha pothum thedum thedal sathaa... Maaraadhu kadhal..."
-        },
-        {
-          "time": 84.5,
-          "text": "Mandraadum pothum maattru karuthil modhum maalaatha oodal..."
-        },
-        {
-          "time": 92.5,
-          "text": "Naam intha theeyil veedu kattum theekuchchi!"
-        },
-        {
-          "time": 100.5,
-          "text": "Naam intha kaatril oonjal kattum thoosi!"
-        },
-        {
-          "time": 107.5,
-          "text": "Naam intha neeril vaazhkai oattum neer poochchi!"
-        },
-        {
-          "time": 114.5,
-          "text": "Naam intha kaambil kaamathin rusi..."
-        },
-        {
-          "time": 122.5,
-          "text": "Kadhal kanneeril silanthi... Kadhal vinmeenin meganthi..."
-        },
-        {
-          "time": 130.5,
-          "text": "Kadhal meiyaana vathanthi... Kaalanthorum thodarum diary..."
-        },
-        {
-          "time": 137.5,
-          "text": "Kadhal deiveega ethiri... Kadhal saaththaanin visiri..."
-        },
-        {
-          "time": 144.5,
-          "text": "Kadhal aanmaavin pulari... Vaazhnthu petra degree..."
-        },
-        {
-          "time": 152.5,
-          "text": "Oar... vidaikulle... Vinaavellaam... pathunguthey aaa..."
-        },
-        {
-          "time": 167.5,
-          "text": "Naan... karainthathey... marainthathey... mudinthathey aaa..."
-        },
-        {
-          "time": 180.5,
-          "text": "🎻 (Melodic Strings Interlude)"
-        },
-        {
-          "time": 198.5,
-          "text": "Konjum pooraname vaa... nee... Konjum ezhilisaye..."
-        },
-        {
-          "time": 208.5,
-          "text": "Panja varna bootham nenjam niraiyuthey... Kaanbathellaam kadhaladi..."
-        },
-        {
-          "time": 218.5,
-          "text": "Kadhale kadhale... thaniperunthunaiye..."
-        },
-        {
-          "time": 228.5,
-          "text": "Kooda vaa kooda vaa... pothum pothum..."
-        },
-        {
-          "time": 237.5,
-          "text": "Kadhale kadhale... vaazhvin neelam..."
-        },
-        {
-          "time": 247.5,
-          "text": "Pogalaam poga vaa... nee..."
-        },
-        {
-          "time": 258.5,
-          "text": "Aaa... Thigampari... Valampuri... Suyambu nee..."
-        },
-        {
-          "time": 268.5,
-          "text": "Aaa... Prahaaram nee... Prabaavam nee... Pravaaham nee..."
-        },
-        {
-          "time": 278.5,
-          "text": "Aaa... Srungaaram nee... Aangaaram nee... Oangaaram nee..."
-        },
-        {
-          "time": 288.5,
-          "text": "Nee... Anthaathi nee... Anthaathi nee... Anthaathi nee..."
-        },
-        {
-          "time": 307.5,
-          "text": "🎻 (Govind Vasantha Signature Violin Solo)"
-        },
-        {
-          "time": 392.5,
-          "text": "📜 [Dialogue - Theda vendam mun arivi...]"
-        },
-        {
-          "time": 422.5,
-          "text": "✨ (Instrumental Outro)"
-        }
-      ]
+      "isExplicit": false
     },
     {
       "id": "song-ak-the-tiger",
@@ -360,67 +152,33 @@
       "thumbnailUrl": "https://c.saavncdn.com/372/Cheenikkallu-From-Bison-Kaalamaadan-Tamil-2025-20250923180128-500x500.jpg",
       "description": "Enchanting romantic melody from Mari Selvaraj's Bison Kaalamaadan starring Dhruv Vikram and Anupama Parameswaran, music composed by Nivas K. Prasanna.",
       "language": "Tamil",
-      "isExplicit": false,
-      "lyrics": [
-        {
-          "time": 0,
-          "text": "🎵 [Intro - Acoustic Guitar & Whistle Melody]"
-        },
-        {
-          "time": 14,
-          "text": "Cheenikkallu Pola Unna Nenjukulla..."
-        },
-        {
-          "time": 27,
-          "text": "Serthuvechu Paathen En Usura Thanthu..."
-        },
-        {
-          "time": 40,
-          "text": "Kaathodu pesum un paarvaithaane..."
-        },
-        {
-          "time": 54,
-          "text": "En vazhkai thaane un kanavula..."
-        },
-        {
-          "time": 80,
-          "text": "🎻 (Violin & Flute Interlude)"
-        },
-        {
-          "time": 110,
-          "text": "Nee pogum paathai ellaam pookalaachu..."
-        },
-        {
-          "time": 135,
-          "text": "En naatkal ellaam un ninaivaalaachu..."
-        }
-      ]
+      "isExplicit": false
     },
     {
       "id": "song-chikitu",
-      "title": "Chikitu Vibe",
+      "title": "Chikitu",
       "artist": "Anirudh Ravichander, T. Rajendar, Arivu",
       "album": "Coolie",
       "genre": "Dance Pop",
       "year": 2025,
-      "duration": 198,
-      "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Chikitu.mp3",
+      "duration": 189,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Chikitu.mp3",
       "thumbnailUrl": "/covers/chikitu.jpg",
-      "description": "Energetic party explosion from Superstar Rajinikanth's Coolie directed by Lokesh Kanagaraj.",
+      "description": "Chikitu from Coolie composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
     },
     {
       "id": "song-coolie-disco",
       "title": "Coolie Disco",
-      "artist": "Anirudh Ravichander, T. Rajendar",
+      "artist": "Anirudh Ravichander",
       "album": "Coolie",
       "genre": "Retro Disco",
       "year": 2025,
-      "duration": 173,
-      "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Coolie%20Disco.mp3",
+      "duration": 105,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Coolie%20Disco.mp3",
       "thumbnailUrl": "/covers/coolie-disco.jpg",
-      "description": "Iconic retro disco dance number from Coolie composed by Anirudh Ravichander.",
+      "description": "Coolie Disco from Coolie composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
     },
@@ -497,14 +255,14 @@
     {
       "id": "song-iraivaa",
       "title": "Iraivaa",
-      "artist": "Anirudh Ravichander, Jonita Gandhi",
-      "album": "Velaikkaran",
+      "artist": "Yuvan Shankar Raja, Leon James",
+      "album": "Dragon",
       "genre": "Melodic Rock",
-      "year": 2017,
-      "duration": 283,
-      "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Iraivaa.mp3",
+      "year": 2025,
+      "duration": 160,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Iraivaa.mp3",
       "thumbnailUrl": "/covers/iraivaa.jpg",
-      "description": "Powerhouse melodic rock anthem from Velaikkaran starring Sivakarthikeyan and Nayanthara.",
+      "description": "Iraivaa from Dragon composed by Leon James",
       "language": "Tamil",
       "isExplicit": false
     },
@@ -537,42 +295,6 @@
       "isExplicit": false
     },
     {
-      "id": "song-cheenikkallu-unplugged",
-      "title": "Cheenikkallu (Unplugged)",
-      "artist": "Nivas K. Prasanna, Vijay Yesudas, Chinmayi Sripaada",
-      "album": "Bison Kaalamaadan",
-      "genre": "Acoustic Melody",
-      "year": 2025,
-      "duration": 194,
-      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Cheenikkallu%20(Unplugged).mp3",
-      "thumbnailUrl": "https://c.saavncdn.com/372/Cheenikkallu-From-Bison-Kaalamaadan-Tamil-2025-20250923180128-500x500.jpg",
-      "description": "Intimate acoustic unplugged rendition of Cheenikkallu composed and performed by Nivas K. Prasanna for Bison Kaalamaadan.",
-      "language": "Tamil",
-      "isExplicit": false,
-      "lyrics": [
-        {
-          "time": 0,
-          "text": "🎸 [Acoustic Guitar Unplugged Intro]"
-        },
-        {
-          "time": 10,
-          "text": "Cheenikkallu Pola Unna Nenjukulla..."
-        },
-        {
-          "time": 28,
-          "text": "Serthuvechu Paathen En Usura Thanthu..."
-        },
-        {
-          "time": 55,
-          "text": "Un ninaivodu vazhum kaalam ithuva..."
-        },
-        {
-          "time": 90,
-          "text": "✨ [Gentle Acoustic Solo]"
-        }
-      ]
-    },
-    {
       "id": "song-kaalamaadan-gaanam",
       "title": "Kaalamaadan Gaanam",
       "artist": "V.M. Mahalingam, Nivas K. Prasanna",
@@ -584,33 +306,7 @@
       "thumbnailUrl": "https://c.saavncdn.com/644/Kaalamaadan-Gaanam-From-Bison-Kaalamaadan-Tamil-2025-20251009183739-500x500.jpg",
       "description": "Fierce rustic spiritual anthem Kaalamaadan Gaanam sung by V.M. Mahalingam with music by Nivas K. Prasanna for Mari Selvaraj's Bison Kaalamaadan.",
       "language": "Tamil",
-      "isExplicit": false,
-      "lyrics": [
-        {
-          "time": 0,
-          "text": "🥁 [Intro - Traditional Parai Drums & Horns]"
-        },
-        {
-          "time": 10,
-          "text": "Kaalamaadaa... Kaalamaadaa..."
-        },
-        {
-          "time": 22,
-          "text": "Mannukku kaaval nirkum veera thozha..."
-        },
-        {
-          "time": 36,
-          "text": "Thee pola paayum un ratha moochu..."
-        },
-        {
-          "time": 50,
-          "text": "Kattavizha aattam idhu kaalamaadan paattu!"
-        },
-        {
-          "time": 72,
-          "text": "🔥 [Folk Climax & Native Percussion]"
-        }
-      ]
+      "isExplicit": false
     },
     {
       "id": "song-rekka-rekka",
@@ -624,33 +320,7 @@
       "thumbnailUrl": "https://c.saavncdn.com/007/Rekka-Rekka-From-Bison-Kaalamaadan-Tamil-2025-20250915194246-500x500.jpg",
       "description": "Adrenaline-fueled rap & folk anthem featuring hard-hitting verses by Arivu and Vedan, composed by Nivas K. Prasanna for Bison Kaalamaadan.",
       "language": "Tamil",
-      "isExplicit": false,
-      "lyrics": [
-        {
-          "time": 0,
-          "text": "⚡ [Intro - Bass Drop & Heavy Beats]"
-        },
-        {
-          "time": 8,
-          "text": "Rekka rekka katti paranthu vanthom..."
-        },
-        {
-          "time": 18,
-          "text": "Boomi athira vanthu ninnom..."
-        },
-        {
-          "time": 30,
-          "text": "Thadaigal ellaam thookki eriyum kaalam ithu!"
-        },
-        {
-          "time": 45,
-          "text": "Vettri kodi yetrum varai oaya maattom!"
-        },
-        {
-          "time": 65,
-          "text": "🔥 [High-energy Rap Verse - Arivu & Vedan]"
-        }
-      ]
+      "isExplicit": false
     },
     {
       "id": "song-theekkoluthi",
@@ -664,29 +334,7 @@
       "thumbnailUrl": "https://c.saavncdn.com/758/Theekkoluthi-From-Bison-Tamil-2025-20250901123631-500x500.jpg",
       "description": "Empowering and passionate rural anthem Theekkoluthi written by Mari Selvaraj and composed by Nivas K. Prasanna for Bison Kaalamaadan.",
       "language": "Tamil",
-      "isExplicit": false,
-      "lyrics": [
-        {
-          "time": 0,
-          "text": "🔥 [Intro - Resonant Strings & Village Bells]"
-        },
-        {
-          "time": 12,
-          "text": "Theekkoluthi... Theekkoluthi..."
-        },
-        {
-          "time": 26,
-          "text": "Kaattu theeyai pola valarum un vizhiththee..."
-        },
-        {
-          "time": 42,
-          "text": "Vaanam paarkkum payirai pola thaagam kondu..."
-        },
-        {
-          "time": 58,
-          "text": "Mannin sontham namakku endrum maraivathillai!"
-        }
-      ]
+      "isExplicit": false
     },
     {
       "id": "song-thennaadu",
@@ -700,94 +348,245 @@
       "thumbnailUrl": "https://c.saavncdn.com/728/Thennaadu-From-Bison-Kaalamaadan-Tamil-2025-20251002172427-500x500.jpg",
       "description": "Soil-rooted rural tribute anthem Thennaadu composed by Nivas K. Prasanna with lyrics by Mari Selvaraj for Dhruv Vikram's Bison Kaalamaadan.",
       "language": "Tamil",
-      "isExplicit": false,
-      "lyrics": [
-        {
-          "time": 0,
-          "text": "🌾 [Intro - Nadhaswaram & Thavil Harmony]"
-        },
-        {
-          "time": 12,
-          "text": "Thennaadu potrum theera veera mannu..."
-        },
-        {
-          "time": 25,
-          "text": "Engal thangamana sonthangalin tholodu..."
-        },
-        {
-          "time": 38,
-          "text": "Vithai potta mannukku nanri solli..."
-        },
-        {
-          "time": 52,
-          "text": "Vaazhnthu kaattuvom unmaiyaana perodu!"
-        }
-      ]
-    }
-  ],
-  "playlists": [
-    {
-      "id": "playlist-bison-kaalamaadan",
-      "name": "Bison: Kaalamaadan (Original Soundtrack)",
-      "description": "Complete musical soundtrack composed by Nivas K. Prasanna for Mari Selvaraj's Bison Kaalamaadan starring Dhruv Vikram",
-      "coverUrl": "https://c.saavncdn.com/372/Cheenikkallu-From-Bison-Kaalamaadan-Tamil-2025-20250923180128-500x500.jpg",
-      "trackIds": [
-        "song-cheenikkallu",
-        "song-cheenikkallu-unplugged",
-        "song-kaalamaadan-gaanam",
-        "song-rekka-rekka",
-        "song-theekkoluthi",
-        "song-thennaadu"
-      ],
-      "createdAt": "2025-10-24"
+      "isExplicit": false
     },
     {
-      "id": "playlist-devotional",
-      "name": "Devotional & Epic Anthems",
-      "description": "High energy devotional and epic cinematic compositions",
-      "coverUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/ramayana%20new%20poster.jpg",
-      "trackIds": [
-        "song-ravana-tandavam",
-        "song-agriculture-song",
-        "song-brahmakalasha"
-      ],
-      "createdAt": "2026-10-23"
+      "id": "song-i-am-the-danger",
+      "title": "I Am The Danger",
+      "artist": "Anirudh Ravichander, Siddharth Basrur",
+      "album": "Coolie",
+      "genre": "Soundtrack",
+      "year": 2025,
+      "duration": 178,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/I%20Am%20The%20Danger.mp3",
+      "thumbnailUrl": "/covers/i-am-the-danger.jpg",
+      "description": "I Am The Danger from Coolie composed by Anirudh Ravichander",
+      "language": "Tamil",
+      "isExplicit": false
     },
     {
-      "id": "playlist-romantic-melodies",
-      "name": "Romantic & Soulful Melodies",
-      "description": "Heartwarming soundtracks and nostalgic love melodies",
-      "coverUrl": "/covers/kaathalae-kaathalae.jpg",
-      "trackIds": [
-        "song-anthaathi",
-        "song-kaathalae-kaathalae",
-        "song-iravingu-theevai",
-        "song-aga-naga",
-        "song-agayam-theepiditha",
-        "song-aththaan",
-        "song-cheenikkallu",
-        "song-enna-sugam",
-        "song-edharkaga-marubadi"
-      ],
-      "createdAt": "2026-10-23"
+      "id": "song-kokki",
+      "title": "Kokki",
+      "artist": "Anirudh Ravichander, Sooraj Santhosh",
+      "album": "Coolie",
+      "genre": "Melody",
+      "year": 2025,
+      "duration": 201,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Kokki.mp3",
+      "thumbnailUrl": "/covers/kokki.jpg",
+      "description": "Kokki from Coolie composed by Anirudh Ravichander",
+      "language": "Tamil",
+      "isExplicit": false
     },
     {
-      "id": "playlist-mass-energy",
-      "name": "Mass & High Energy Hits",
-      "description": "Adrenaline-fueled mass intros, club bangers, and chart-topping beats",
-      "coverUrl": "/covers/coolie-disco.jpg",
-      "trackIds": [
-        "song-coolie-disco",
-        "song-ak-the-tiger",
-        "song-chikitu",
-        "song-animal-instinct",
-        "song-arasan-theme",
-        "song-god-bless-u",
-        "song-golden-sparrow",
-        "song-iraivaa",
-        "song-enjaami-thandhaane"
-      ],
-      "createdAt": "2026-10-23"
+      "id": "song-mobsta",
+      "title": "Mobsta",
+      "artist": "Anirudh Ravichander",
+      "album": "Coolie",
+      "genre": "Soundtrack",
+      "year": 2025,
+      "duration": 91,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Mobsta.mp3",
+      "thumbnailUrl": "/covers/mobsta.jpg",
+      "description": "Mobsta Theme from Coolie composed by Anirudh Ravichander",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-monica",
+      "title": "Monica",
+      "artist": "Anirudh Ravichander, Sublahshini, Asal Kolaar",
+      "album": "Coolie",
+      "genre": "Folk / Kuthu",
+      "year": 2025,
+      "duration": 179,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Monica.mp3",
+      "thumbnailUrl": "/covers/monica.jpg",
+      "description": "Monica from Coolie composed by Anirudh Ravichander",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-powerhouse",
+      "title": "Powerhouse",
+      "artist": "Anirudh Ravichander, Arivu",
+      "album": "Coolie",
+      "genre": "Hip-Hop / Rap",
+      "year": 2025,
+      "duration": 176,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Powerhouse.mp3",
+      "thumbnailUrl": "/covers/powerhouse.jpg",
+      "description": "Powerhouse from Coolie composed by Anirudh Ravichander",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-uyirnaadi-nanbane",
+      "title": "Uyirnaadi Nanbane",
+      "artist": "Anirudh Ravichander, Sai Smriti",
+      "album": "Coolie",
+      "genre": "Melody",
+      "year": 2025,
+      "duration": 181,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Uyirnaadi%20Nanbane.mp3",
+      "thumbnailUrl": "/covers/uyirnaadi-nanbane.jpg",
+      "description": "Uyirnaadi Nanbane from Coolie composed by Anirudh Ravichander",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-blud-is-on-his-way",
+      "title": "Blud Is On His Way",
+      "artist": "Sai Abhyankkar",
+      "album": "Dude",
+      "genre": "Soundtrack",
+      "year": 2025,
+      "duration": 63,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Blud%20Is%20On%20His%20Way.mp3",
+      "thumbnailUrl": "/covers/blud-is-on-his-way.jpg",
+      "description": "Blud Is On His Way from Dude composed by Sai Abhyankkar",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-dude-trailer-blast",
+      "title": "Dude Trailer Blast (Theme)",
+      "artist": "Sai Abhyankkar",
+      "album": "Dude",
+      "genre": "Theme",
+      "year": 2025,
+      "duration": 129,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Dude%20Trailer%20Blast%20(Theme).mp3",
+      "thumbnailUrl": "/covers/dude-trailer-blast.jpg",
+      "description": "Dude Trailer Blast (Theme) composed by Sai Abhyankkar",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-kannukulla",
+      "title": "Kannukulla",
+      "artist": "Sai Abhyankkar, Jonita Gandhi",
+      "album": "Dude",
+      "genre": "Melody",
+      "year": 2025,
+      "duration": 216,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Kannukulla.mp3",
+      "thumbnailUrl": "/covers/kannukulla.jpg",
+      "description": "Kannukulla from Dude composed by Sai Abhyankkar",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-nallaru-po",
+      "title": "Nallaru Po",
+      "artist": "Sai Abhyankkar, Tippu, Mohit Chauhan",
+      "album": "Dude",
+      "genre": "Melody",
+      "year": 2025,
+      "duration": 188,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Nallaru%20Po.mp3",
+      "thumbnailUrl": "/covers/nallaru-po.jpg",
+      "description": "Nallaru Po from Dude composed by Sai Abhyankkar",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-oorum-blood",
+      "title": "Oorum Blood",
+      "artist": "Sai Abhyankkar, Bebhumika, Deepthi Suresh, Paal Dabba",
+      "album": "Dude",
+      "genre": "Kuthu / Rap",
+      "year": 2025,
+      "duration": 195,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Oorum%20Blood.mp3",
+      "thumbnailUrl": "/covers/oorum-blood.jpg",
+      "description": "Oorum Blood from Dude composed by Sai Abhyankkar",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-singari",
+      "title": "Singari",
+      "artist": "Sai Abhyankkar, Pradeep Ranganathan, Sai Smriti",
+      "album": "Dude",
+      "genre": "Folk / Kuthu",
+      "year": 2025,
+      "duration": 170,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Singari.mp3",
+      "thumbnailUrl": "/covers/singari.jpg",
+      "description": "Singari from Dude composed by Sai Abhyankkar",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-maatikkinaaru-orutharu",
+      "title": "Maatikkinaaru Orutharu",
+      "artist": "Leon James, Gana Apellow",
+      "album": "Dragon",
+      "genre": "Gaana / Kuthu",
+      "year": 2025,
+      "duration": 169,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Maatikkinaaru%20Orutharu.mp3",
+      "thumbnailUrl": "/covers/maatikkinaaru-orutharu.jpg",
+      "description": "Maatikkinaaru Orutharu from Dragon composed by Leon James",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-maname-maname",
+      "title": "Maname Maname",
+      "artist": "Leon James, Pradeep Kumar",
+      "album": "Dragon",
+      "genre": "Melody",
+      "year": 2025,
+      "duration": 206,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Maname%20Maname.mp3",
+      "thumbnailUrl": "/covers/maname-maname.jpg",
+      "description": "Maname Maname from Dragon composed by Leon James",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-rise-of-dragon",
+      "title": "Rise Of Dragon",
+      "artist": "Leon James, Anirudh Ravichander, Nadisha Thomas, El Fé Choir",
+      "album": "Dragon",
+      "genre": "Theme / Mass",
+      "year": 2025,
+      "duration": 176,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Rise%20Of%20Dragon.mp3",
+      "thumbnailUrl": "/covers/rise-of-dragon.jpg",
+      "description": "Rise Of Dragon from Dragon composed by Leon James",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-vazhithunaiye",
+      "title": "Vazhithunaiye",
+      "artist": "Leon James, Sid Sriram, Sanjana Kalmanje",
+      "album": "Dragon",
+      "genre": "Melody",
+      "year": 2025,
+      "duration": 179,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Vazhithunaiye.mp3",
+      "thumbnailUrl": "/covers/vazhithunaiye.jpg",
+      "description": "Vazhithunaiye from Dragon composed by Leon James",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-yendi-vittu-pona",
+      "title": "Yendi Vittu Pona",
+      "artist": "Leon James, Silambarasan TR",
+      "album": "Dragon",
+      "genre": "Melody / Pathos",
+      "year": 2025,
+      "duration": 210,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Yendi%20Vittu%20Pona.mp3",
+      "thumbnailUrl": "/covers/yendi-vittu-pona.jpg",
+      "description": "Yendi Vittu Pona from Dragon composed by Leon James",
+      "language": "Tamil",
+      "isExplicit": false
     }
   ]
 }
