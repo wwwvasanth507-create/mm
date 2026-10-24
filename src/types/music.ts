@@ -21,6 +21,8 @@ export interface Track {
   language?: string; // e.g. "Tamil", "English", "Instrumental"
   isExplicit?: boolean;
   lyrics?: LyricsLine[] | string;
+  videoUrl?: string; // Direct video (.mp4/.webm) or YouTube URL for music video playback
+  hasVideo?: boolean;
 
   // Optional convenience / legacy aliases
   artworkUrl?: string; // Fallback alias for thumbnailUrl

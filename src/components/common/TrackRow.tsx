@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Heart, MoreHorizontal, Plus, ListMusic, Radio, Clock } from 'lucide-react';
+import { Play, Heart, MoreHorizontal, Plus, ListMusic, Radio, Clock, Film } from 'lucide-react';
 import { Track } from '@/types/music';
 import { useAudio } from '@/context/AudioContext';
 import { resolveArtworkUrl } from '@/services/musicService';
@@ -94,16 +94,23 @@ export const TrackRow: React.FC<TrackRowProps> = ({
 
         {/* Song Name & Artist - Full focus, maximum width, crystal clear */}
         <div className="min-w-0 flex-1">
-          <h4
-            className={`text-sm sm:text-base font-bold truncate leading-snug transition-colors ${
-              isCurrent
-                ? 'text-[var(--accent-primary)] font-extrabold'
-                : 'text-white group-hover:text-white'
-            }`}
-            title={track.title}
-          >
-            {track.title}
-          </h4>
+          <div className="flex items-center gap-2">
+            <h4
+              className={`text-sm sm:text-base font-bold truncate leading-snug transition-colors ${
+                isCurrent
+                  ? 'text-[var(--accent-primary)] font-extrabold'
+                  : 'text-white group-hover:text-white'
+              }`}
+              title={track.title}
+            >
+              {track.title}
+            </h4>
+            {track.videoUrl && (
+              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 flex-shrink-0">
+                VIDEO
+              </span>
+            )}
+          </div>
 
           <p className="text-xs sm:text-sm text-gray-400 truncate mt-0.5">
             {track.artist}
@@ -175,6 +182,22 @@ export const TrackRow: React.FC<TrackRowProps> = ({
                 <ListMusic className="w-4 h-4 text-gray-400" />
                 <span>Add to Playlist...</span>
               </button>
+            )}
+
+            {track.videoUrl && (
+              <a
+                href={track.videoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setMenuOpen(false);
+                }}
+                className="w-full flex items-center gap-2.5 px-3.5 py-2 hover:bg-white/10 text-left transition-colors text-rose-300"
+              >
+                <Film className="w-4 h-4 text-rose-400" />
+                <span>Watch Video Song</span>
+              </a>
             )}
 
             <div className="h-px bg-white/10 my-1" />

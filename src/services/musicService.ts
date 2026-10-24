@@ -32,6 +32,8 @@ const normalizedTracks: Track[] = rawSongs.map((song, idx) => ({
   language: song.language || 'English',
   description: song.description || '',
   isExplicit: Boolean(song.isExplicit),
+  videoUrl: song.videoUrl || '',
+  hasVideo: Boolean(song.videoUrl || song.hasVideo),
 }));
 
 /**
@@ -52,6 +54,24 @@ function slugify(text: string): string {
 export function resolveAudioUrl(track?: Track | null): string {
   if (!track || !track.audioUrl) return '';
   return track.audioUrl.trim();
+}
+
+/**
+ * Safely resolves a video URL (direct stream or YouTube link)
+ */
+export function resolveVideoUrl(track?: Track | null): string {
+  if (!track || !track.videoUrl) return '';
+  return track.videoUrl.trim();
+}
+
+/**
+ * Parses YouTube video ID from various YouTube URL formats
+ */
+export function getYouTubeVideoId(url?: string): string | null {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return match && match[2].length === 11 ? match[2] : null;
 }
 
 

@@ -16,6 +16,7 @@ import {
   AlertCircle,
   Loader2,
   Zap,
+  Film,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 import { resolveArtworkUrl } from '@/services/musicService';
@@ -24,11 +25,13 @@ import { formatTime } from '@/utils/formatters';
 interface PlayerBarProps {
   onOpenQueue: () => void;
   onOpenNowPlaying: () => void;
+  onOpenVideo?: () => void;
 }
 
 export const PlayerBar: React.FC<PlayerBarProps> = ({
   onOpenQueue,
   onOpenNowPlaying,
+  onOpenVideo,
 }) => {
   const {
     currentTrack,
@@ -142,6 +145,25 @@ export const PlayerBar: React.FC<PlayerBarProps> = ({
             className="flex items-center gap-1.5 flex-shrink-0"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Quick Video Toggle Button */}
+            {onOpenVideo && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenVideo();
+                }}
+                className={`p-2 rounded-full transition-colors ${
+                  currentTrack.videoUrl
+                    ? 'text-rose-400 hover:text-rose-300'
+                    : 'text-gray-400 hover:text-white'
+                }`}
+                title="Play Video Song"
+                aria-label="Play video song"
+              >
+                <Film className="w-4 h-4" />
+              </button>
+            )}
+
             {/* Quick Favourite Toggle */}
             <button
               onClick={() => toggleFavourite(currentTrack.id)}
@@ -416,6 +438,22 @@ export const PlayerBar: React.FC<PlayerBarProps> = ({
               <Zap className={`w-3.5 h-3.5 ${isDolbyEnabled ? 'text-cyan-400 fill-cyan-400' : ''}`} />
               <span className="hidden xl:inline">DOLBY</span>
             </button>
+
+            {/* Quick Video Player Button */}
+            {onOpenVideo && (
+              <button
+                onClick={onOpenVideo}
+                className={`p-1.5 px-2.5 rounded-full text-[11px] font-extrabold flex items-center gap-1.5 transition-all border ${
+                  currentTrack.videoUrl
+                    ? 'bg-rose-950/70 border-rose-500/50 text-rose-300 shadow-[0_0_12px_rgba(244,63,94,0.35)] hover:bg-rose-900/60'
+                    : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
+                }`}
+                title="Play Music Video"
+              >
+                <Film className="w-3.5 h-3.5 text-rose-400" />
+                <span className="hidden xl:inline">VIDEO</span>
+              </button>
+            )}
 
             <button
               onClick={onOpenQueue}

@@ -29,11 +29,12 @@ import { PwaInstallModal } from '@/components/modals/PwaInstallModal';
 
 export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
-  const { userPlaylists, activeAccent, setActiveAccent, currentTrack } = useAudio();
+  const { userPlaylists, activeAccent, setActiveAccent, currentTrack, playTrack } = useAudio();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [isQueueOpen, setIsQueueOpen] = useState(false);
   const [isNowPlayingOpen, setIsNowPlayingOpen] = useState(false);
+  const [nowPlayingTab, setNowPlayingTab] = useState<'visualizer' | 'video' | 'lyrics' | 'queue' | 'soundlab'>('visualizer');
   const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
   const [addToPlaylistTrack, setAddToPlaylistTrack] = useState<Track | null>(null);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
@@ -290,6 +291,11 @@ export const AppLayout: React.FC = () => {
             context={{
               onOpenPlaylistModal: (track: Track) => setAddToPlaylistTrack(track),
               onOpenAddSongModal: () => setIsAddSongOpen(true),
+              onOpenVideoModal: (track?: Track) => {
+                if (track) playTrack(track);
+                setNowPlayingTab('video');
+                setIsNowPlayingOpen(true);
+              },
             }}
           />
         </main>
@@ -329,7 +335,14 @@ export const AppLayout: React.FC = () => {
       {/* Persistent Audio Player Bar (Mobile mini + Desktop) */}
       <PlayerBar
         onOpenQueue={() => setIsQueueOpen(true)}
-        onOpenNowPlaying={() => setIsNowPlayingOpen(true)}
+        onOpenNowPlaying={() => {
+          setNowPlayingTab('visualizer');
+          setIsNowPlayingOpen(true);
+        }}
+        onOpenVideo={() => {
+          setNowPlayingTab('video');
+          setIsNowPlayingOpen(true);
+        }}
       />
 
       {/* Queue Side Drawer */}
@@ -342,6 +355,7 @@ export const AppLayout: React.FC = () => {
       <NowPlayingModal
         isOpen={isNowPlayingOpen}
         onClose={() => setIsNowPlayingOpen(false)}
+        initialTab={nowPlayingTab}
       />
 
       {/* Add Song Manually Modal */}

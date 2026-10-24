@@ -10,6 +10,7 @@ import {
   ListMusic,
   Users,
   Plus,
+  Film,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 import {
@@ -28,15 +29,17 @@ import { Track } from '@/types/music';
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const { playTrack, currentTrack, isPlaying } = useAudio();
-  const { onOpenPlaylistModal, onOpenAddSongModal } = useOutletContext<{
+  const { onOpenPlaylistModal, onOpenAddSongModal, onOpenVideoModal } = useOutletContext<{
     onOpenPlaylistModal: (track: Track) => void;
     onOpenAddSongModal?: () => void;
+    onOpenVideoModal?: (track?: Track) => void;
   }>();
 
   const [allTracks, setAllTracks] = useState(() => getAllTracks());
   const [allAlbums, setAllAlbums] = useState(() => getAllAlbums());
   const [allArtists, setAllArtists] = useState(() => getAllArtists());
   const playlists = getCuratedPlaylists();
+  const videoTracks = allTracks.filter((t) => Boolean(t.videoUrl));
 
   useEffect(() => {
     const handleUpdate = () => {
@@ -220,6 +223,60 @@ export const HomePage: React.FC = () => {
           ))}
         </div>
       </section>
+
+      {/* Official Music Videos Showcase */}
+      {videoTracks.length > 0 && (
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2.5">
+              <Film className="w-5 h-5 text-rose-500" />
+              <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                <span>Music Videos</span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                  VIDEOS
+                </span>
+              </h2>
+            </div>
+            <button
+              onClick={() => navigate('/songs')}
+              className="text-xs font-semibold text-gray-400 hover:text-white flex items-center gap-1 transition-colors"
+            >
+              <span>See all ({videoTracks.length})</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {videoTracks.slice(0, 4).map((track) => (
+              <div
+                key={track.id}
+                onClick={() => onOpenVideoModal?.(track)}
+                className="group relative bg-[#15151e] border border-white/5 hover:border-rose-500/30 rounded-2xl p-3 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-rose-900/20"
+              >
+                <div className="relative aspect-video rounded-xl overflow-hidden mb-2.5 bg-neutral-900">
+                  <img
+                    src={resolveArtworkUrl(track)}
+                    alt={track.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-rose-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <Play className="w-5 h-5 fill-white ml-0.5" />
+                    </div>
+                  </div>
+                  <span className="absolute bottom-2 right-2 px-1.5 py-0.5 rounded bg-black/70 text-[10px] font-mono text-white backdrop-blur-md">
+                    VIDEO
+                  </span>
+                </div>
+                <h4 className="text-sm font-bold text-white truncate group-hover:text-rose-400 transition-colors">
+                  {track.title}
+                </h4>
+                <p className="text-xs text-gray-400 truncate mt-0.5">{track.artist}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Featured Albums */}
       <section>

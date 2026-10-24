@@ -9,6 +9,7 @@ import {
   Plus,
   X,
   Sparkles,
+  Film,
 } from 'lucide-react';
 import { getAllTracks } from '@/services/musicService';
 import { TrackRow } from '@/components/common/TrackRow';
@@ -34,6 +35,7 @@ export const SongsPage: React.FC = () => {
   const [query, setQuery] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState<string>('all');
   const [sortBy, setSortBy] = useState<SortOption>('title');
+  const [onlyVideos, setOnlyVideos] = useState(false);
 
   // Extract available languages
   const availableLanguages = [
@@ -45,7 +47,7 @@ export const SongsPage: React.FC = () => {
     return allTracks
       .filter((track) => {
         const q = query.toLowerCase().trim();
-        if (!q && selectedLanguage === 'all') return true;
+        if (!q && selectedLanguage === 'all' && !onlyVideos) return true;
 
         const matchesQuery =
           !q ||
@@ -61,7 +63,9 @@ export const SongsPage: React.FC = () => {
             ? true
             : track.language?.toLowerCase() === selectedLanguage.toLowerCase();
 
-        return matchesQuery && matchesLanguage;
+        const matchesVideo = !onlyVideos || Boolean(track.videoUrl);
+
+        return matchesQuery && matchesLanguage && matchesVideo;
       })
       .sort((a, b) => {
         if (sortBy === 'title') return a.title.localeCompare(b.title);
@@ -70,7 +74,7 @@ export const SongsPage: React.FC = () => {
         if (sortBy === 'duration') return b.duration - a.duration;
         return 0;
       });
-  }, [allTracks, query, selectedLanguage, sortBy]);
+  }, [allTracks, query, selectedLanguage, sortBy, onlyVideos]);
 
   const handlePlayAll = () => {
     if (filteredTracks.length > 0) {
@@ -177,6 +181,20 @@ export const SongsPage: React.FC = () => {
               </button>
             ))}
           </div>
+
+          {/* Video Songs Quick Filter Toggle */}
+          <button
+            onClick={() => setOnlyVideos(!onlyVideos)}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border flex-shrink-0 ${
+              onlyVideos
+                ? 'bg-rose-600 border-rose-500 text-white shadow-[0_0_12px_rgba(244,63,94,0.4)]'
+                : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
+            }`}
+            title="Filter by Video Songs"
+          >
+            <Film className="w-3.5 h-3.5 text-rose-400" />
+            <span>Video Songs</span>
+          </button>
 
           {/* Sort Dropdown */}
           <div className="flex items-center gap-1.5 text-xs text-gray-400 flex-shrink-0">

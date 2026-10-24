@@ -19,6 +19,8 @@ import {
   addToPlaybackHistory,
   getPlaybackHistory,
   clearPlaybackHistory,
+  resolveVideoUrl,
+  getYouTubeVideoId,
 } from '@/services/musicService';
 import { Track } from '@/types/music';
 import { formatTime, formatNumber } from '@/utils/formatters';
@@ -183,6 +185,46 @@ describe('Favourites and Playback History', () => {
 
     clearPlaybackHistory();
     expect(getPlaybackHistory().length).toBe(0);
+  });
+
+  it('correctly resolves video URLs and parses YouTube video IDs', () => {
+    const trackWithVideo = {
+      ...sampleMockTrack,
+      videoUrl: 'https://www.youtube.com/watch?v=AyYyZUI0Rgk',
+    };
+    expect(resolveVideoUrl(trackWithVideo)).toBe('https://www.youtube.com/watch?v=AyYyZUI0Rgk');
+    expect(getYouTubeVideoId(trackWithVideo.videoUrl)).toBe('AyYyZUI0Rgk');
+
+    // Shortened youtu.be format
+    expect(getYouTubeVideoId('https://youtu.be/8cviQKlGBoE')).toBe('8cviQKlGBoE');
+
+    // Embed format
+    expect(getYouTubeVideoId('https://www.youtube.com/embed/13F1eZ0b8iE')).toBe('13F1eZ0b8iE');
+
+    // Non-video track
+    expect(resolveVideoUrl(sampleMockTrack)).toBe('');
+    expect(getYouTubeVideoId(undefined)).toBeNull();
+  });
+
+  it('includes the 6 Bison: Kaalamaadan tracks in the catalog with real thumbnails', () => {
+    const tracks = getAllTracks();
+    const bisonIds = [
+      'song-cheenikkallu',
+      'song-cheenikkallu-unplugged',
+      'song-kaalamaadan-gaanam',
+      'song-rekka-rekka',
+      'song-theekkoluthi',
+      'song-thennaadu',
+    ];
+
+    bisonIds.forEach((id) => {
+      const found = tracks.find((t) => t.id === id);
+      expect(found).toBeDefined();
+      expect(found?.album).toBe('Bison Kaalamaadan');
+      expect(found?.audioUrl).toContain('pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/');
+      expect(found?.thumbnailUrl).toContain('c.saavncdn.com');
+      expect(found?.videoUrl).toBeTruthy();
+    });
   });
 });
 

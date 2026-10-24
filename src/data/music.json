@@ -14,26 +14,84 @@
       "language": "Tamil",
       "isExplicit": false,
       "lyrics": [
-        { "time": 0, "text": "🔥 [Intro - War Drums & Conches]" },
-        { "time": 4, "text": "Hey Om, Hey Om... Hey Hey Om, Hey Om..." },
-        { "time": 15, "text": "Jatatavigalajjala Pravahapavitasthale" },
-        { "time": 22, "text": "Galevalambya Lambitam Bhujangatungamalikam" },
-        { "time": 30, "text": "Damaddamaddamaddama Ninadavaddamarvayam" },
-        { "time": 37, "text": "Chakara Chandatandavam Tanotu Nah Shivah Shivam" },
-        { "time": 45, "text": "🔱 Shiva...!" },
-        { "time": 52, "text": "Gharar Gharar Jharar Samar Asur Pasar Jai Jai!" },
-        { "time": 60, "text": "Chalat Hilat Karak Khilat Vikat Milat Jai Jai!" },
-        { "time": 68, "text": "Shakra Vijita, Shakra Vijita, Shakra Vijita, Jai Jai!" },
-        { "time": 76, "text": "Darsha Darsha Ravana Darsha!" },
-        { "time": 84, "text": "Ra Ra Ra Ravana... Ra Ra Ra Ravana..." },
-        { "time": 100, "text": "Ravana... Ravana... Ravana..." },
-        { "time": 108, "text": "Dainyam Varsham Ravana" },
-        { "time": 115, "text": "Jagatam Jagatam Bhramsham" },
-        { "time": 128, "text": "⚡ [Fierce Tandavam Beats & War Chorus]" },
-        { "time": 150, "text": "Gharar Gharar Jharar Samar Asur Pasar Jai Jai!" },
-        { "time": 164, "text": "Shakra Vijita, Shakra Vijita, Jai Jai! Ravana!" },
-        { "time": 180, "text": "⚡ [Grand Orchestral Climax]" }
-      ]
+        {
+          "time": 0,
+          "text": "🔥 [Intro - War Drums & Conches]"
+        },
+        {
+          "time": 4,
+          "text": "Hey Om, Hey Om... Hey Hey Om, Hey Om..."
+        },
+        {
+          "time": 15,
+          "text": "Jatatavigalajjala Pravahapavitasthale"
+        },
+        {
+          "time": 22,
+          "text": "Galevalambya Lambitam Bhujangatungamalikam"
+        },
+        {
+          "time": 30,
+          "text": "Damaddamaddamaddama Ninadavaddamarvayam"
+        },
+        {
+          "time": 37,
+          "text": "Chakara Chandatandavam Tanotu Nah Shivah Shivam"
+        },
+        {
+          "time": 45,
+          "text": "🔱 Shiva...!"
+        },
+        {
+          "time": 52,
+          "text": "Gharar Gharar Jharar Samar Asur Pasar Jai Jai!"
+        },
+        {
+          "time": 60,
+          "text": "Chalat Hilat Karak Khilat Vikat Milat Jai Jai!"
+        },
+        {
+          "time": 68,
+          "text": "Shakra Vijita, Shakra Vijita, Shakra Vijita, Jai Jai!"
+        },
+        {
+          "time": 76,
+          "text": "Darsha Darsha Ravana Darsha!"
+        },
+        {
+          "time": 84,
+          "text": "Ra Ra Ra Ravana... Ra Ra Ra Ravana..."
+        },
+        {
+          "time": 100,
+          "text": "Ravana... Ravana... Ravana..."
+        },
+        {
+          "time": 108,
+          "text": "Dainyam Varsham Ravana"
+        },
+        {
+          "time": 115,
+          "text": "Jagatam Jagatam Bhramsham"
+        },
+        {
+          "time": 128,
+          "text": "⚡ [Fierce Tandavam Beats & War Chorus]"
+        },
+        {
+          "time": 150,
+          "text": "Gharar Gharar Jharar Samar Asur Pasar Jai Jai!"
+        },
+        {
+          "time": 164,
+          "text": "Shakra Vijita, Shakra Vijita, Jai Jai! Ravana!"
+        },
+        {
+          "time": 180,
+          "text": "⚡ [Grand Orchestral Climax]"
+        }
+      ],
+      "videoUrl": "https://www.youtube.com/watch?v=4xR3sI69r3Y"
     },
     {
       "id": "song-anthaathi",
@@ -49,39 +107,136 @@
       "language": "Tamil",
       "isExplicit": false,
       "lyrics": [
-        { "time": 0, "text": "🎵 [Intro - Ambient Drone]" },
-        { "time": 6.5, "text": "Peranbe... Kadhal..." },
-        { "time": 17.5, "text": "Ulnokki aadugindra aadal sathaa... Aaraadha aaval..." },
-        { "time": 32.5, "text": "Yethetho saayal yetru thiriyum kadhal... Prathyega thedal..." },
-        { "time": 47.5, "text": "Theeyil theeraatha kaatril... Pul poondil puzhuvil ulathil ilathil..." },
-        { "time": 62.5, "text": "Thaane ellaamum aagi naam kaanum aruvame... Ithyaathi kadhal..." },
-        { "time": 74.5, "text": "Illaatha pothum thedum thedal sathaa... Maaraadhu kadhal..." },
-        { "time": 84.5, "text": "Mandraadum pothum maattru karuthil modhum maalaatha oodal..." },
-        { "time": 92.5, "text": "Naam intha theeyil veedu kattum theekuchchi!" },
-        { "time": 100.5, "text": "Naam intha kaatril oonjal kattum thoosi!" },
-        { "time": 107.5, "text": "Naam intha neeril vaazhkai oattum neer poochchi!" },
-        { "time": 114.5, "text": "Naam intha kaambil kaamathin rusi..." },
-        { "time": 122.5, "text": "Kadhal kanneeril silanthi... Kadhal vinmeenin meganthi..." },
-        { "time": 130.5, "text": "Kadhal meiyaana vathanthi... Kaalanthorum thodarum diary..." },
-        { "time": 137.5, "text": "Kadhal deiveega ethiri... Kadhal saaththaanin visiri..." },
-        { "time": 144.5, "text": "Kadhal aanmaavin pulari... Vaazhnthu petra degree..." },
-        { "time": 152.5, "text": "Oar... vidaikulle... Vinaavellaam... pathunguthey aaa..." },
-        { "time": 167.5, "text": "Naan... karainthathey... marainthathey... mudinthathey aaa..." },
-        { "time": 180.5, "text": "🎻 (Melodic Strings Interlude)" },
-        { "time": 198.5, "text": "Konjum pooraname vaa... nee... Konjum ezhilisaye..." },
-        { "time": 208.5, "text": "Panja varna bootham nenjam niraiyuthey... Kaanbathellaam kadhaladi..." },
-        { "time": 218.5, "text": "Kadhale kadhale... thaniperunthunaiye..." },
-        { "time": 228.5, "text": "Kooda vaa kooda vaa... pothum pothum..." },
-        { "time": 237.5, "text": "Kadhale kadhale... vaazhvin neelam..." },
-        { "time": 247.5, "text": "Pogalaam poga vaa... nee..." },
-        { "time": 258.5, "text": "Aaa... Thigampari... Valampuri... Suyambu nee..." },
-        { "time": 268.5, "text": "Aaa... Prahaaram nee... Prabaavam nee... Pravaaham nee..." },
-        { "time": 278.5, "text": "Aaa... Srungaaram nee... Aangaaram nee... Oangaaram nee..." },
-        { "time": 288.5, "text": "Nee... Anthaathi nee... Anthaathi nee... Anthaathi nee..." },
-        { "time": 307.5, "text": "🎻 (Govind Vasantha Signature Violin Solo)" },
-        { "time": 392.5, "text": "📜 [Dialogue - Theda vendam mun arivi...]" },
-        { "time": 422.5, "text": "✨ (Instrumental Outro)" }
-      ]
+        {
+          "time": 0,
+          "text": "🎵 [Intro - Ambient Drone]"
+        },
+        {
+          "time": 6.5,
+          "text": "Peranbe... Kadhal..."
+        },
+        {
+          "time": 17.5,
+          "text": "Ulnokki aadugindra aadal sathaa... Aaraadha aaval..."
+        },
+        {
+          "time": 32.5,
+          "text": "Yethetho saayal yetru thiriyum kadhal... Prathyega thedal..."
+        },
+        {
+          "time": 47.5,
+          "text": "Theeyil theeraatha kaatril... Pul poondil puzhuvil ulathil ilathil..."
+        },
+        {
+          "time": 62.5,
+          "text": "Thaane ellaamum aagi naam kaanum aruvame... Ithyaathi kadhal..."
+        },
+        {
+          "time": 74.5,
+          "text": "Illaatha pothum thedum thedal sathaa... Maaraadhu kadhal..."
+        },
+        {
+          "time": 84.5,
+          "text": "Mandraadum pothum maattru karuthil modhum maalaatha oodal..."
+        },
+        {
+          "time": 92.5,
+          "text": "Naam intha theeyil veedu kattum theekuchchi!"
+        },
+        {
+          "time": 100.5,
+          "text": "Naam intha kaatril oonjal kattum thoosi!"
+        },
+        {
+          "time": 107.5,
+          "text": "Naam intha neeril vaazhkai oattum neer poochchi!"
+        },
+        {
+          "time": 114.5,
+          "text": "Naam intha kaambil kaamathin rusi..."
+        },
+        {
+          "time": 122.5,
+          "text": "Kadhal kanneeril silanthi... Kadhal vinmeenin meganthi..."
+        },
+        {
+          "time": 130.5,
+          "text": "Kadhal meiyaana vathanthi... Kaalanthorum thodarum diary..."
+        },
+        {
+          "time": 137.5,
+          "text": "Kadhal deiveega ethiri... Kadhal saaththaanin visiri..."
+        },
+        {
+          "time": 144.5,
+          "text": "Kadhal aanmaavin pulari... Vaazhnthu petra degree..."
+        },
+        {
+          "time": 152.5,
+          "text": "Oar... vidaikulle... Vinaavellaam... pathunguthey aaa..."
+        },
+        {
+          "time": 167.5,
+          "text": "Naan... karainthathey... marainthathey... mudinthathey aaa..."
+        },
+        {
+          "time": 180.5,
+          "text": "🎻 (Melodic Strings Interlude)"
+        },
+        {
+          "time": 198.5,
+          "text": "Konjum pooraname vaa... nee... Konjum ezhilisaye..."
+        },
+        {
+          "time": 208.5,
+          "text": "Panja varna bootham nenjam niraiyuthey... Kaanbathellaam kadhaladi..."
+        },
+        {
+          "time": 218.5,
+          "text": "Kadhale kadhale... thaniperunthunaiye..."
+        },
+        {
+          "time": 228.5,
+          "text": "Kooda vaa kooda vaa... pothum pothum..."
+        },
+        {
+          "time": 237.5,
+          "text": "Kadhale kadhale... vaazhvin neelam..."
+        },
+        {
+          "time": 247.5,
+          "text": "Pogalaam poga vaa... nee..."
+        },
+        {
+          "time": 258.5,
+          "text": "Aaa... Thigampari... Valampuri... Suyambu nee..."
+        },
+        {
+          "time": 268.5,
+          "text": "Aaa... Prahaaram nee... Prabaavam nee... Pravaaham nee..."
+        },
+        {
+          "time": 278.5,
+          "text": "Aaa... Srungaaram nee... Aangaaram nee... Oangaaram nee..."
+        },
+        {
+          "time": 288.5,
+          "text": "Nee... Anthaathi nee... Anthaathi nee... Anthaathi nee..."
+        },
+        {
+          "time": 307.5,
+          "text": "🎻 (Govind Vasantha Signature Violin Solo)"
+        },
+        {
+          "time": 392.5,
+          "text": "📜 [Dialogue - Theda vendam mun arivi...]"
+        },
+        {
+          "time": 422.5,
+          "text": "✨ (Instrumental Outro)"
+        }
+      ],
+      "videoUrl": "https://www.youtube.com/watch?v=sK7mwsm_rCw"
     },
     {
       "id": "song-ak-the-tiger",
@@ -95,7 +250,8 @@
       "thumbnailUrl": "/covers/ak-the-tiger.jpg",
       "description": "Electrifying intro anthem for Ajith Kumar composed by G. V. Prakash Kumar with vocals by Darkkey.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=G30Xv4v34w8"
     },
     {
       "id": "song-aga-naga",
@@ -109,7 +265,8 @@
       "thumbnailUrl": "/covers/aga-naga.jpg",
       "description": "Enchanting romantic melody from Mani Ratnam's Ponniyin Selvan Part 2 composed by A. R. Rahman.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=o04_770Rrv8"
     },
     {
       "id": "song-agayam-theepiditha",
@@ -123,7 +280,8 @@
       "thumbnailUrl": "/covers/agayam-theepiditha.jpg",
       "description": "Soul-stirring melody from Madras starring Karthi, composed by Santhosh Narayanan.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=8Vz9Fh_g3g4"
     },
     {
       "id": "song-agriculture-song",
@@ -137,7 +295,8 @@
       "thumbnailUrl": "/covers/agriculture-song.jpg",
       "description": "Vibrant earth and agricultural anthem from Rishab Shetty's Kantara Chapter 1.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=F5xL4j0Hj9k"
     },
     {
       "id": "song-animal-instinct",
@@ -151,7 +310,8 @@
       "thumbnailUrl": "/covers/animal-instinct.jpg",
       "description": "High-octane mass theme composed by Anirudh Ravichander for A.R. Murugadoss's Madharaasi starring Sivakarthikeyan.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=4s7P8K2o8d4"
     },
     {
       "id": "song-arasan-theme",
@@ -165,7 +325,8 @@
       "thumbnailUrl": "/covers/arasan-theme.jpg",
       "description": "Fierce promo theme composed by Anirudh Ravichander for Vetrimaaran's Arasan starring Silambarasan TR.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=sJ4h2Qk9p7E"
     },
     {
       "id": "song-aththaan",
@@ -179,7 +340,8 @@
       "thumbnailUrl": "/covers/aththaan.jpg",
       "description": "Catchy and breezy romantic track from Aan Paavam Pollathathu starring Rio Raj.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=Xh7L1o8jK4w"
     },
     {
       "id": "song-brahmakalasha",
@@ -193,21 +355,57 @@
       "thumbnailUrl": "/covers/brahmakalasha.jpg",
       "description": "Divine spiritual composition from Kantara Chapter 1 composed by B. Ajaneesh Loknath.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=B7vL0dK1w2o"
     },
     {
       "id": "song-cheenikkallu",
       "title": "Cheenikkallu",
-      "artist": "Nivas K. Prasanna, Chinmayi Sripaada, Vijay Yesudas",
+      "artist": "Vijay Yesudas, Chinmayi Sripaada, Nivas K. Prasanna",
       "album": "Bison Kaalamaadan",
-      "genre": "Acoustic Melody",
+      "genre": "Romantic Melody",
       "year": 2025,
-      "duration": 264,
-      "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Cheenikkallu.mp3",
-      "thumbnailUrl": "/covers/cheenikkallu.jpg",
-      "description": "Haunting emotional melody from Mari Selvaraj's Bison Kaalamaadan starring Dhruv Vikram.",
+      "duration": 357,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Cheenikkallu.mp3",
+      "thumbnailUrl": "https://c.saavncdn.com/372/Cheenikkallu-From-Bison-Kaalamaadan-Tamil-2025-20250923180128-500x500.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=AyYyZUI0Rgk",
+      "description": "Enchanting romantic melody from Mari Selvaraj's Bison Kaalamaadan starring Dhruv Vikram and Anupama Parameswaran, music composed by Nivas K. Prasanna.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "lyrics": [
+        {
+          "time": 0,
+          "text": "🎵 [Intro - Acoustic Guitar & Whistle Melody]"
+        },
+        {
+          "time": 14,
+          "text": "Cheenikkallu Pola Unna Nenjukulla..."
+        },
+        {
+          "time": 27,
+          "text": "Serthuvechu Paathen En Usura Thanthu..."
+        },
+        {
+          "time": 40,
+          "text": "Kaathodu pesum un paarvaithaane..."
+        },
+        {
+          "time": 54,
+          "text": "En vazhkai thaane un kanavula..."
+        },
+        {
+          "time": 80,
+          "text": "🎻 (Violin & Flute Interlude)"
+        },
+        {
+          "time": 110,
+          "text": "Nee pogum paathai ellaam pookalaachu..."
+        },
+        {
+          "time": 135,
+          "text": "En naatkal ellaam un ninaivaalaachu..."
+        }
+      ]
     },
     {
       "id": "song-chikitu",
@@ -221,7 +419,8 @@
       "thumbnailUrl": "/covers/chikitu.jpg",
       "description": "Energetic party explosion from Superstar Rajinikanth's Coolie directed by Lokesh Kanagaraj.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=jW3g0PzI7j8"
     },
     {
       "id": "song-coolie-disco",
@@ -235,7 +434,8 @@
       "thumbnailUrl": "/covers/coolie-disco.jpg",
       "description": "Iconic retro disco dance number from Coolie composed by Anirudh Ravichander.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=4a38Fz4oR9A"
     },
     {
       "id": "song-edharkaga-marubadi",
@@ -249,7 +449,8 @@
       "thumbnailUrl": "/covers/edharkaga-marubadi.jpg",
       "description": "Soulful melodic ballad from Karthik Subbaraj's Retro starring Suriya and Pooja Hegde.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=N6dK3oP1w9A"
     },
     {
       "id": "song-enjaami-thandhaane",
@@ -263,7 +464,8 @@
       "thumbnailUrl": "/covers/enjaami-thandhaane.jpg",
       "description": "Heartwarming rural soul composition from Dhanush's Idli Kadai composed by G. V. Prakash Kumar.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=qXg7p6O14zE"
     },
     {
       "id": "song-enna-sugam",
@@ -277,7 +479,8 @@
       "thumbnailUrl": "/covers/enna-sugam.jpg",
       "description": "Sensual romantic duet sung by Dhanush and Shweta Mohan for Idli Kadai.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=4JtY0a9M3i0"
     },
     {
       "id": "song-god-bless-u",
@@ -291,7 +494,8 @@
       "thumbnailUrl": "/covers/god-bless-u.jpg",
       "description": "High octane hip-hop mass anthem from Good Bad Ugly starring Ajith Kumar.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=v0A3J5k7G6M"
     },
     {
       "id": "song-golden-sparrow",
@@ -305,7 +509,8 @@
       "thumbnailUrl": "/covers/golden-sparrow.jpg",
       "description": "Viral sensational dance banger from Nilavuku En Mel Ennadi Kobam directed by Dhanush.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=0w1vA4J31qY"
     },
     {
       "id": "song-iraivaa",
@@ -319,7 +524,8 @@
       "thumbnailUrl": "/covers/iraivaa.jpg",
       "description": "Powerhouse melodic rock anthem from Velaikkaran starring Sivakarthikeyan and Nayanthara.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=Uq2T_L4V0vI"
     },
     {
       "id": "song-iravingu-theevai",
@@ -333,7 +539,8 @@
       "thumbnailUrl": "/covers/iravingu-theevai.jpg",
       "description": "Nocturnal and intimate musical masterpiece from Vijay Sethupathi and Trisha's classic 96.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=0c7YvY2jX5E"
     },
     {
       "id": "song-kaathalae-kaathalae",
@@ -347,10 +554,219 @@
       "thumbnailUrl": "/covers/kaathalae-kaathalae.jpg",
       "description": "Timeless anthem of eternal love from the cult classic romance 96.",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://www.youtube.com/watch?v=Yf1eZ9s2v14"
+    },
+    {
+      "id": "song-cheenikkallu-unplugged",
+      "title": "Cheenikkallu (Unplugged)",
+      "artist": "Nivas K. Prasanna, Vijay Yesudas, Chinmayi Sripaada",
+      "album": "Bison Kaalamaadan",
+      "genre": "Acoustic Melody",
+      "year": 2025,
+      "duration": 194,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Cheenikkallu%20(Unplugged).mp3",
+      "thumbnailUrl": "https://c.saavncdn.com/372/Cheenikkallu-From-Bison-Kaalamaadan-Tamil-2025-20250923180128-500x500.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=AyYyZUI0Rgk",
+      "description": "Intimate acoustic unplugged rendition of Cheenikkallu composed and performed by Nivas K. Prasanna for Bison Kaalamaadan.",
+      "language": "Tamil",
+      "isExplicit": false,
+      "lyrics": [
+        {
+          "time": 0,
+          "text": "🎸 [Acoustic Guitar Unplugged Intro]"
+        },
+        {
+          "time": 10,
+          "text": "Cheenikkallu Pola Unna Nenjukulla..."
+        },
+        {
+          "time": 28,
+          "text": "Serthuvechu Paathen En Usura Thanthu..."
+        },
+        {
+          "time": 55,
+          "text": "Un ninaivodu vazhum kaalam ithuva..."
+        },
+        {
+          "time": 90,
+          "text": "✨ [Gentle Acoustic Solo]"
+        }
+      ]
+    },
+    {
+      "id": "song-kaalamaadan-gaanam",
+      "title": "Kaalamaadan Gaanam",
+      "artist": "V.M. Mahalingam, Nivas K. Prasanna",
+      "album": "Bison Kaalamaadan",
+      "genre": "Folk / Devotional",
+      "year": 2025,
+      "duration": 297,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Kaalamaadan%20Gaanam.mp3",
+      "thumbnailUrl": "https://c.saavncdn.com/644/Kaalamaadan-Gaanam-From-Bison-Kaalamaadan-Tamil-2025-20251009183739-500x500.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=13F1eZ0b8iE",
+      "description": "Fierce rustic spiritual anthem Kaalamaadan Gaanam sung by V.M. Mahalingam with music by Nivas K. Prasanna for Mari Selvaraj's Bison Kaalamaadan.",
+      "language": "Tamil",
+      "isExplicit": false,
+      "lyrics": [
+        {
+          "time": 0,
+          "text": "🥁 [Intro - Traditional Parai Drums & Horns]"
+        },
+        {
+          "time": 10,
+          "text": "Kaalamaadaa... Kaalamaadaa..."
+        },
+        {
+          "time": 22,
+          "text": "Mannukku kaaval nirkum veera thozha..."
+        },
+        {
+          "time": 36,
+          "text": "Thee pola paayum un ratha moochu..."
+        },
+        {
+          "time": 50,
+          "text": "Kattavizha aattam idhu kaalamaadan paattu!"
+        },
+        {
+          "time": 72,
+          "text": "🔥 [Folk Climax & Native Percussion]"
+        }
+      ]
+    },
+    {
+      "id": "song-rekka-rekka",
+      "title": "Rekka Rekka",
+      "artist": "Arivu, Vedan, Nivas K. Prasanna",
+      "album": "Bison Kaalamaadan",
+      "genre": "Rap / Folk Fusion",
+      "year": 2025,
+      "duration": 303,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Rekka%20Rekka.mp3",
+      "thumbnailUrl": "https://c.saavncdn.com/007/Rekka-Rekka-From-Bison-Kaalamaadan-Tamil-2025-20250915194246-500x500.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=8cviQKlGBoE",
+      "description": "Adrenaline-fueled rap & folk anthem featuring hard-hitting verses by Arivu and Vedan, composed by Nivas K. Prasanna for Bison Kaalamaadan.",
+      "language": "Tamil",
+      "isExplicit": false,
+      "lyrics": [
+        {
+          "time": 0,
+          "text": "⚡ [Intro - Bass Drop & Heavy Beats]"
+        },
+        {
+          "time": 8,
+          "text": "Rekka rekka katti paranthu vanthom..."
+        },
+        {
+          "time": 18,
+          "text": "Boomi athira vanthu ninnom..."
+        },
+        {
+          "time": 30,
+          "text": "Thadaigal ellaam thookki eriyum kaalam ithu!"
+        },
+        {
+          "time": 45,
+          "text": "Vettri kodi yetrum varai oaya maattom!"
+        },
+        {
+          "time": 65,
+          "text": "🔥 [High-energy Rap Verse - Arivu & Vedan]"
+        }
+      ]
+    },
+    {
+      "id": "song-theekkoluthi",
+      "title": "Theekkoluthi",
+      "artist": "Nivas K. Prasanna, Padmaja Sreenivasan",
+      "album": "Bison Kaalamaadan",
+      "genre": "Folk Anthem",
+      "year": 2025,
+      "duration": 363,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Theekkoluthi.mp3",
+      "thumbnailUrl": "https://c.saavncdn.com/758/Theekkoluthi-From-Bison-Tamil-2025-20250901123631-500x500.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=kYV3Vl6Wz94",
+      "description": "Empowering and passionate rural anthem Theekkoluthi written by Mari Selvaraj and composed by Nivas K. Prasanna for Bison Kaalamaadan.",
+      "language": "Tamil",
+      "isExplicit": false,
+      "lyrics": [
+        {
+          "time": 0,
+          "text": "🔥 [Intro - Resonant Strings & Village Bells]"
+        },
+        {
+          "time": 12,
+          "text": "Theekkoluthi... Theekkoluthi..."
+        },
+        {
+          "time": 26,
+          "text": "Kaattu theeyai pola valarum un vizhiththee..."
+        },
+        {
+          "time": 42,
+          "text": "Vaanam paarkkum payirai pola thaagam kondu..."
+        },
+        {
+          "time": 58,
+          "text": "Mannin sontham namakku endrum maraivathillai!"
+        }
+      ]
+    },
+    {
+      "id": "song-thennaadu",
+      "title": "Thennaadu",
+      "artist": "Sathyan Mahalingam, Nivas K. Prasanna, Meenakshi Elayaraja",
+      "album": "Bison Kaalamaadan",
+      "genre": "Rural Folk Anthem",
+      "year": 2025,
+      "duration": 301,
+      "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Thennaadu.mp3",
+      "thumbnailUrl": "https://c.saavncdn.com/728/Thennaadu-From-Bison-Kaalamaadan-Tamil-2025-20251002172427-500x500.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=Xz2hD7b9vEQ",
+      "description": "Soil-rooted rural tribute anthem Thennaadu composed by Nivas K. Prasanna with lyrics by Mari Selvaraj for Dhruv Vikram's Bison Kaalamaadan.",
+      "language": "Tamil",
+      "isExplicit": false,
+      "lyrics": [
+        {
+          "time": 0,
+          "text": "🌾 [Intro - Nadhaswaram & Thavil Harmony]"
+        },
+        {
+          "time": 12,
+          "text": "Thennaadu potrum theera veera mannu..."
+        },
+        {
+          "time": 25,
+          "text": "Engal thangamana sonthangalin tholodu..."
+        },
+        {
+          "time": 38,
+          "text": "Vithai potta mannukku nanri solli..."
+        },
+        {
+          "time": 52,
+          "text": "Vaazhnthu kaattuvom unmaiyaana perodu!"
+        }
+      ]
     }
   ],
   "playlists": [
+    {
+      "id": "playlist-bison-kaalamaadan",
+      "name": "Bison: Kaalamaadan (Original Soundtrack)",
+      "description": "Complete musical soundtrack composed by Nivas K. Prasanna for Mari Selvaraj's Bison Kaalamaadan starring Dhruv Vikram",
+      "coverUrl": "https://c.saavncdn.com/372/Cheenikkallu-From-Bison-Kaalamaadan-Tamil-2025-20250923180128-500x500.jpg",
+      "trackIds": [
+        "song-cheenikkallu",
+        "song-cheenikkallu-unplugged",
+        "song-kaalamaadan-gaanam",
+        "song-rekka-rekka",
+        "song-theekkoluthi",
+        "song-thennaadu"
+      ],
+      "createdAt": "2025-10-24"
+    },
     {
       "id": "playlist-devotional",
       "name": "Devotional & Epic Anthems",
