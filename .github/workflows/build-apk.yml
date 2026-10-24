@@ -11,6 +11,9 @@ permissions:
 jobs:
   build-apk:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
 
     steps:
       - name: Checkout Repository
@@ -28,30 +31,34 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Accept Android SDK Licenses
+        run: |
+          if [ -d "$ANDROID_HOME/cmdline-tools/latest/bin" ]; then
+            yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          fi
 
       - name: Install Dependencies
         run: npm ci || npm install
 
-      - name: Build Web App Assets
+      - name: Build Web Assets
         run: npm run build
 
       - name: Sync Capacitor Android
         run: npx cap sync android
 
-      - name: Make Gradle Wrapper Executable
+      - name: Make Gradle Executable
         run: chmod +x android/gradlew
 
-      - name: Build Debug APK
+      - name: Build Android Debug APK
         run: |
           cd android
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug --no-daemon --stacktrace
 
-      - name: Rename APK for Easy Download
+      - name: Prepare APK for Artifact & Release
         run: |
           mkdir -p build-output
           cp android/app/build/outputs/apk/debug/app-debug.apk build-output/WaveMusic.apk
+          ls -lh build-output/WaveMusic.apk
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -60,18 +67,19 @@ jobs:
           path: build-output/WaveMusic.apk
           retention-days: 30
 
-      - name: Create GitHub Release with APK
+      - name: Release APK on GitHub
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
         with:
           tag_name: v1.0.0-apk
-          name: "WaveMusic v1.0.0 Android APK"
+          name: "WaveMusic Android APK (v1.0.0)"
           body: |
             ### 🎵 WaveMusic Android App (APK)
             - **24/7 Unlimited Non-Stop Audio Streaming**
-            - **Brand New 3D Neon Glassmorphism Logo**
+            - **Brand New 3D Holographic App Icon**
+            - **Audio-Reactive Ambient Lighting (Beat & Vocal Sync)**
             - **Dolby Atmos & Studio Hi-Fi Sound Engine**
-            - **Zero Screen Sleep / Timeout**
+            - **Zero Screen Sleep & Anti-Repeat Playback**
           files: build-output/WaveMusic.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
