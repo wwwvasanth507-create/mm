@@ -274,6 +274,54 @@ describe('Favourites and Playback History', () => {
     });
   });
 
+  it('correctly includes the newly added songs (Thug Life, Maaman, Sirai, etc.) without duplicate versions', () => {
+    const tracks = getAllTracks();
+
+    // Verify key new tracks exist with valid audio and thumbnails
+    const expectedTracks = [
+      { title: 'Anju Vanna Poove', album: 'Thug Life' },
+      { title: 'Muththa Mazhai', album: 'Thug Life' },
+      { title: 'Engeyo', album: 'Thug Life' },
+      { title: 'Jinguchaa', album: 'Thug Life' },
+      { title: 'Azhage Agarame', album: 'Maaman' },
+      { title: 'Dheivamagane Dheivamagane', album: 'Maaman' },
+      { title: 'Kallaliye Kallaliye', album: 'Maaman' },
+      { title: 'Kannale Pesuma', album: 'Maaman' },
+      { title: 'Vaanam Kizhiyuthu', album: 'Maaman' },
+      { title: 'Vizhuthe Thalavizhuthe', album: 'Maaman' },
+      { title: 'Kanne Kalangadha', album: 'Sirai' },
+      { title: 'Mannichiru', album: 'Sirai' },
+      { title: 'Minnu Vattaam Poochi', album: 'Sirai' },
+      { title: 'Neelothi', album: 'Sirai' },
+      { title: 'OG Sambavam', album: 'Good Bad Ugly' },
+      { title: 'Ranagalam', album: 'Good Bad Ugly' },
+      { title: 'Pathikichu', album: 'Vidaamuyarchi' },
+      { title: 'Salambala', album: 'Madharaasi' },
+      { title: 'Thangapoovey', album: 'Madharaasi' },
+      { title: 'Yedi', album: 'Nilavuku En Mel Ennadi Kobam (NEEK)' },
+      { title: 'Kalloorum', album: 'Veera Dheera Sooran' },
+    ];
+
+    expectedTracks.forEach(({ title, album }) => {
+      const found = tracks.find((t) => t.title.toLowerCase() === title.toLowerCase());
+      expect(found).toBeDefined();
+      expect(found?.album.toLowerCase()).toBe(album.toLowerCase());
+      expect(found?.audioUrl).toContain('pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev');
+      expect(found?.thumbnailUrl).toBeTruthy();
+    });
+
+    // Ensure duplicates (Reprise / Chinmayi Version) are not present
+    expect(tracks.find((t) => t.title.toLowerCase().includes('anju vanna poove (reprise)'))).toBeUndefined();
+    expect(tracks.find((t) => t.title.toLowerCase().includes('chinmayi-version'))).toBeUndefined();
+
+    // Verify all 75 tracks have valid audioUrl and thumbnailUrl
+    tracks.forEach((track) => {
+      expect(track.audioUrl).toBeTruthy();
+      expect(track.thumbnailUrl).toBeTruthy();
+      expect(track.lyrics).toBeUndefined();
+    });
+  });
+
   it('only activates video features when a valid direct video URL is present and strips YouTube links', () => {
     const tracks = getAllTracks();
     // Default catalog has all YouTube links removed and no direct video links yet
