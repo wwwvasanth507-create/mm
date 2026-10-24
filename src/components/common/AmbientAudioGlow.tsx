@@ -8,7 +8,7 @@ interface AmbientAudioGlowProps {
 
 export const AmbientAudioGlow: React.FC<AmbientAudioGlowProps> = ({
   className = '',
-  intensity = 'subtle',
+  intensity = 'full',
 }) => {
   const [reactive, setReactive] = useState<AudioReactiveState>(() =>
     audioDsp.getAudioReactiveState()
@@ -23,8 +23,8 @@ export const AmbientAudioGlow: React.FC<AmbientAudioGlowProps> = ({
     const tick = (now: number) => {
       if (!active) return;
 
-      // Throttle to ~35fps for butter-smooth mobile performance and low battery impact
-      if (now - lastUpdateRef.current >= 28) {
+      // Throttle to ~40fps for silky-smooth animation and high responsiveness
+      if (now - lastUpdateRef.current >= 24) {
         lastUpdateRef.current = now;
         setReactive(audioDsp.getAudioReactiveState());
       }
@@ -44,61 +44,66 @@ export const AmbientAudioGlow: React.FC<AmbientAudioGlowProps> = ({
 
   const { beat, voice, music, colors, isPlaying } = reactive;
 
-  // Scale and opacity adjustments based on intensity mode
-  const baseOpacity = intensity === 'full' ? 0.55 : 0.35;
-  const activeOpacity = isPlaying ? baseOpacity : 0.12;
+  // Saturated, highly visible opacity levels
+  const baseOpacity = intensity === 'full' ? 0.92 : 0.70;
+  const activeOpacity = isPlaying ? baseOpacity : 0.28;
 
-  // Beat kick scale factor
-  const beatScale = 1 + beat * 0.32;
-  // Vocal swell scale factor
-  const voiceScale = 1 + voice * 0.28;
-  // Treble melody scale factor
-  const musicScale = 1 + music * 0.25;
+  // Audio-reactive scale multipliers
+  const beatScale = 1 + beat * 0.42;
+  const voiceScale = 1 + voice * 0.38;
+  const musicScale = 1 + music * 0.35;
+  const coreScale = 1 + (beat + voice) * 0.25;
 
   return (
     <div
-      className={`pointer-events-none overflow-hidden select-none transition-opacity duration-1000 ${className}`}
+      className={`pointer-events-none overflow-hidden select-none transition-opacity duration-700 ${className}`}
       style={{ opacity: activeOpacity }}
       aria-hidden="true"
     >
-      {/* Dynamic Audio-Reactive Light Node 1: Beat / Sub-Bass Kick (Center-Bottom) */}
+      {/* Dynamic Audio-Reactive Light Node 1: Beat / Sub-Bass Kick (Center-Bottom - Ruby/Coral/Magenta) */}
       <div
-        className="absolute -bottom-[15%] left-[20%] w-[55vw] max-w-[700px] h-[55vw] max-h-[700px] rounded-full blur-[110px] sm:blur-[130px] transition-transform duration-200 ease-out will-change-transform"
+        className="absolute -bottom-[12%] left-[15%] w-[68vw] max-w-[820px] h-[68vw] max-h-[820px] rounded-full blur-[70px] sm:blur-[95px] transition-transform duration-150 ease-out will-change-transform mix-blend-screen"
         style={{
           backgroundColor: colors.primary,
           transform: `translate3d(0, 0, 0) scale(${beatScale})`,
         }}
       />
 
-      {/* Dynamic Audio-Reactive Light Node 2: Voice / Mid Harmonics (Left-Center) */}
+      {/* Dynamic Audio-Reactive Light Node 2: Voice / Mid Vocals (Top-Left - Electric Violet/Purple/Pink) */}
       <div
-        className="absolute top-[25%] -left-[10%] w-[50vw] max-w-[650px] h-[50vw] max-h-[650px] rounded-full blur-[110px] sm:blur-[140px] transition-transform duration-300 ease-out will-change-transform"
+        className="absolute top-[8%] -left-[12%] w-[62vw] max-w-[740px] h-[62vw] max-h-[740px] rounded-full blur-[65px] sm:blur-[90px] transition-transform duration-200 ease-out will-change-transform mix-blend-screen"
         style={{
           backgroundColor: colors.secondary,
           transform: `translate3d(0, 0, 0) scale(${voiceScale})`,
         }}
       />
 
-      {/* Dynamic Audio-Reactive Light Node 3: Music / Instruments & Treble (Top-Right) */}
+      {/* Dynamic Audio-Reactive Light Node 3: Music / Treble & Melodies (Top-Right - Shimmering Cyan/Teal/Aqua) */}
       <div
-        className="absolute -top-[10%] -right-[10%] w-[52vw] max-w-[680px] h-[52vw] max-h-[680px] rounded-full blur-[110px] sm:blur-[135px] transition-transform duration-250 ease-out will-change-transform"
+        className="absolute -top-[10%] -right-[10%] w-[64vw] max-w-[760px] h-[64vw] max-h-[760px] rounded-full blur-[65px] sm:blur-[90px] transition-transform duration-180 ease-out will-change-transform mix-blend-screen"
         style={{
           backgroundColor: colors.accent,
           transform: `translate3d(0, 0, 0) scale(${musicScale})`,
         }}
       />
 
-      {/* Atmospheric Base Color Wash */}
+      {/* Dynamic Audio-Reactive Light Node 4: Aura Center (Directly behind album artwork - Warm Radiant Core) */}
       <div
-        className="absolute inset-0 transition-colors duration-700"
+        className="absolute top-[35%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[52vw] max-w-[550px] h-[52vw] max-h-[550px] rounded-full blur-[60px] sm:blur-[85px] transition-transform duration-220 ease-out will-change-transform mix-blend-screen"
         style={{
-          background: `radial-gradient(ellipse at center, ${colors.primary} 0%, transparent 70%)`,
-          opacity: 0.2,
+          backgroundColor: colors.ambient,
+          transform: `translate3d(-50%, -50%, 0) scale(${coreScale})`,
         }}
       />
 
-      {/* Contrast & Readability Shield: Ensures text and UI elements remain 100% visible and undisturbed */}
-      <div className="absolute inset-0 bg-[#0a0a0c]/45 backdrop-brightness-95 pointer-events-none" />
+      {/* Atmospheric Base Luminous Wash */}
+      <div
+        className="absolute inset-0 transition-colors duration-500"
+        style={{
+          background: `radial-gradient(ellipse at 50% 40%, ${colors.primary} 0%, ${colors.secondary} 40%, transparent 75%)`,
+          opacity: 0.35,
+        }}
+      />
     </div>
   );
 };

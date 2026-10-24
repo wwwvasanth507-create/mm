@@ -99,19 +99,18 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="fixed inset-0 z-[60] overflow-hidden bg-[#0c0c10] flex flex-col text-white animate-in fade-in duration-300">
-      {/* Full-Screen Beat, Voice & Music Reactive Ambient Lighting */}
-      <AmbientAudioGlow className="absolute inset-0 z-0" intensity="full" />
-
-      {/* Blurred dynamic glowing ambient background */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30 z-0">
+    <div className="fixed inset-0 z-[60] overflow-hidden bg-[#07070a] flex flex-col text-white animate-in fade-in duration-300">
+      {/* 1. Underlying Soft Artwork Color Tint */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-25 z-0">
         <img
           src={artwork}
           alt=""
-          className="w-full h-full object-cover blur-[100px] scale-125 saturate-150 transform transition-all duration-1000"
+          className="w-full h-full object-cover blur-[90px] scale-125 saturate-150 transform transition-all duration-1000"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-black/40 to-black/60" />
       </div>
+
+      {/* 2. Full-Screen Audio-Reactive Beat, Voice & Music Ambient Lighting (Vibrant & Colorful) */}
+      <AmbientAudioGlow className="absolute inset-0 z-0" intensity="full" />
 
       {/* Mobile Top Drag Indicator Bar */}
       <div className="md:hidden pt-[calc(0.5rem+env(safe-area-inset-top,0px))] pb-1 flex justify-center z-20">
@@ -119,7 +118,7 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
       </div>
 
       {/* Top Header */}
-      <header className="relative z-10 flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-4 border-b border-white/10 backdrop-blur-md">
+      <header className="relative z-10 flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-4 border-b border-white/10 backdrop-blur-md bg-black/20">
         <button
           onClick={onClose}
           className="p-1.5 sm:p-2 rounded-full hover:bg-white/10 transition-colors text-gray-300 hover:text-white"
@@ -204,7 +203,7 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
         {activeTab === 'visualizer' && (
           <div className="w-full max-w-md flex flex-col items-center text-center">
             {/* Artwork Card with Vinyl Glow */}
-            <div className="relative w-[56vw] max-w-[240px] sm:max-w-[300px] md:max-w-[360px] aspect-square max-h-[32vh] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl mb-4 sm:mb-6 border border-white/10 group">
+            <div className="relative w-[56vw] max-w-[240px] sm:max-w-[300px] md:max-w-[360px] aspect-square max-h-[32vh] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_50px_rgba(250,45,72,0.35)] mb-4 sm:mb-6 border border-white/20 group">
               <img
                 src={artwork}
                 alt={currentTrack.title}
@@ -212,13 +211,13 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
               />
             </div>
 
-            {/* Track Info */}
+            {/* Track Info with pristine text shadows */}
             <div className="w-full flex items-center justify-between mb-2">
               <div className="text-left min-w-0 flex-1 pr-4">
-                <h2 className="text-2xl md:text-3xl font-extrabold truncate text-white tracking-tight">
+                <h2 className="text-2xl md:text-3xl font-extrabold truncate text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
                   {currentTrack.title}
                 </h2>
-                <p className="text-base md:text-lg text-gray-300 font-medium truncate mt-1">
+                <p className="text-base md:text-lg text-gray-200 font-medium truncate mt-1 drop-shadow-[0_1px_8px_rgba(0,0,0,0.95)]">
                   {currentTrack.artist}
                 </p>
               </div>
@@ -344,8 +343,8 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
         {activeTab === 'soundlab' && <SoundLabTab />}
       </div>
 
-      {/* Persistent Bottom Controls Drawer in Full Modal */}
-      <div className="relative z-10 w-full max-w-2xl mx-auto px-4 sm:px-6 pb-[calc(1.25rem+env(safe-area-inset-bottom,0px))] pt-2 sm:pt-4">
+      {/* Persistent Bottom Controls Drawer in Full Modal (Glassmorphic protection for 100% controls visibility) */}
+      <div className="relative z-10 w-full max-w-2xl mx-auto px-4 sm:px-6 pb-[calc(1.25rem+env(safe-area-inset-bottom,0px))] pt-3 sm:pt-4 bg-black/40 backdrop-blur-2xl rounded-t-3xl border-t border-white/10 shadow-[0_-12px_40px_rgba(0,0,0,0.6)]">
         {/* Scrubber Progress Bar */}
         <div className="w-full mb-3 sm:mb-6">
           <div className="relative group w-full flex items-center py-2 cursor-pointer">

@@ -161,9 +161,9 @@ class AudioDspEngine {
     // Music/Treble: High shimmering tones (Electric Cyan -> Aqua -> Teal -> Golden Amber)
     const musicHue = (185 + Math.sin(t * 0.6) * 45 + this.smoothMusic * 20) % 360;
 
-    const primaryAlpha = (0.16 + this.smoothBeat * 0.22).toFixed(3);
-    const secondaryAlpha = (0.14 + this.smoothVoice * 0.20).toFixed(3);
-    const accentAlpha = (0.12 + this.smoothMusic * 0.18).toFixed(3);
+    const primaryAlpha = (0.65 + this.smoothBeat * 0.28).toFixed(3);
+    const secondaryAlpha = (0.60 + this.smoothVoice * 0.28).toFixed(3);
+    const accentAlpha = (0.55 + this.smoothMusic * 0.30).toFixed(3);
 
     return {
       isPlaying: true,
@@ -172,10 +172,10 @@ class AudioDspEngine {
       music: this.smoothMusic,
       energy: overallEnergy,
       colors: {
-        primary: `hsla(${Math.round(beatHue)}, 92%, 58%, ${primaryAlpha})`,
-        secondary: `hsla(${Math.round(voiceHue)}, 88%, 62%, ${secondaryAlpha})`,
-        accent: `hsla(${Math.round(musicHue)}, 95%, 55%, ${accentAlpha})`,
-        ambient: `hsla(${(beatHue + 180) % 360}, 60%, 15%, 0.4)`,
+        primary: `hsla(${Math.round(beatHue)}, 98%, 56%, ${primaryAlpha})`,
+        secondary: `hsla(${Math.round(voiceHue)}, 95%, 60%, ${secondaryAlpha})`,
+        accent: `hsla(${Math.round(musicHue)}, 98%, 54%, ${accentAlpha})`,
+        ambient: `hsla(${Math.round((beatHue + 120) % 360)}, 90%, 45%, 0.45)`,
       },
     };
   }
