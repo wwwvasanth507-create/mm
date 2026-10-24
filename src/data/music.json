@@ -11,7 +11,6 @@
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Ravana%20Tandavam.mp3",
       "thumbnailUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/ramayana%20new%20poster.jpg",
       "description": "Ravana Tandavam from Ramayana composed by A.R. Rahman",
-<<<<<<< Updated upstream
       "language": "Tamil",
       "isExplicit": false,
       "lyrics": [
@@ -347,8 +346,6 @@
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Kaathalae_Kaathalae-MassTamilan.com.mp3",
       "thumbnailUrl": "/covers/kaathalae-kaathalae.jpg",
       "description": "Timeless anthem of eternal love from the cult classic romance 96.",
-=======
->>>>>>> Stashed changes
       "language": "Tamil",
       "isExplicit": false
     }
@@ -356,7 +353,6 @@
   "playlists": [
     {
       "id": "playlist-devotional",
-<<<<<<< Updated upstream
       "name": "Devotional & Epic Anthems",
       "description": "High energy devotional and epic cinematic compositions",
       "coverUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/ramayana%20new%20poster.jpg",
@@ -401,12 +397,6 @@
         "song-iraivaa",
         "song-enjaami-thandhaane"
       ],
-=======
-      "name": "Devotional & Power Hits",
-      "description": "High energy devotional and epic compositions",
-      "coverUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/ramayana%20new%20poster.jpg",
-      "trackIds": ["song-ravana-tandavam"],
->>>>>>> Stashed changes
       "createdAt": "2026-10-23"
     }
   ]
