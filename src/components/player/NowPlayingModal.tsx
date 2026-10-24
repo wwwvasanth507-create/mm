@@ -20,6 +20,7 @@ import { useAudio } from '@/context/AudioContext';
 import { resolveArtworkUrl } from '@/services/musicService';
 import { formatTime } from '@/utils/formatters';
 import { SoundLabTab } from './SoundLabTab';
+import { AmbientAudioGlow } from '@/components/common/AmbientAudioGlow';
 
 interface NowPlayingModalProps {
   isOpen: boolean;
@@ -99,8 +100,11 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
 
   return (
     <div className="fixed inset-0 z-[60] overflow-hidden bg-[#0c0c10] flex flex-col text-white animate-in fade-in duration-300">
+      {/* Full-Screen Beat, Voice & Music Reactive Ambient Lighting */}
+      <AmbientAudioGlow className="absolute inset-0 z-0" intensity="full" />
+
       {/* Blurred dynamic glowing ambient background */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-40">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30 z-0">
         <img
           src={artwork}
           alt=""
@@ -151,10 +155,10 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
                 ? 'bg-white/20 text-white shadow-sm'
                 : 'text-gray-400 hover:text-white'
             }`}
-            title="Cover & Visualizer"
+            title="Cover Art"
           >
             <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span className="hidden sm:inline">Visuals</span>
+            <span className="hidden sm:inline">Cover</span>
           </button>
           <button
             onClick={() => setActiveTab('lyrics')}
@@ -206,30 +210,6 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({ isOpen, onClos
                 alt={currentTrack.title}
                 className="w-full h-full object-cover shadow-2xl transition-transform duration-700 hover:scale-105"
               />
-
-              {/* Animated Equalizer Wave Bars Overlay */}
-              <div className="absolute bottom-4 right-4 flex items-end gap-1.5 px-3 py-2 rounded-xl bg-black/60 backdrop-blur-md border border-white/10">
-                <span
-                  className={`w-1 rounded-full bg-[var(--accent-primary)] ${
-                    isPlaying ? 'animate-wave-1' : 'h-2'
-                  }`}
-                />
-                <span
-                  className={`w-1 rounded-full bg-[var(--accent-primary)] ${
-                    isPlaying ? 'animate-wave-2' : 'h-3'
-                  }`}
-                />
-                <span
-                  className={`w-1 rounded-full bg-[var(--accent-primary)] ${
-                    isPlaying ? 'animate-wave-3' : 'h-1.5'
-                  }`}
-                />
-                <span
-                  className={`w-1 rounded-full bg-[var(--accent-primary)] ${
-                    isPlaying ? 'animate-wave-4' : 'h-2.5'
-                  }`}
-                />
-              </div>
             </div>
 
             {/* Track Info */}

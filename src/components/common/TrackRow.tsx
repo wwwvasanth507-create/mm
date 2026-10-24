@@ -82,11 +82,7 @@ export const TrackRow: React.FC<TrackRowProps> = ({
             />
             {isCurrentlyPlaying ? (
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                <div className="flex items-end gap-[2px] h-4">
-                  <span className="w-1 bg-[var(--accent-primary)] rounded-full animate-wave-1"></span>
-                  <span className="w-1 bg-[var(--accent-primary)] rounded-full animate-wave-2"></span>
-                  <span className="w-1 bg-[var(--accent-primary)] rounded-full animate-wave-3"></span>
-                </div>
+                <span className="w-3 h-3 rounded-full bg-[var(--accent-primary)] shadow-[0_0_10px_var(--accent-primary)] animate-pulse" />
               </div>
             ) : isCurrent ? (
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center">

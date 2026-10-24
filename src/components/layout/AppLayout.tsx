@@ -25,6 +25,7 @@ import { AddToPlaylistModal } from '@/components/modals/AddToPlaylistModal';
 import { ShortcutsModal } from '@/components/modals/ShortcutsModal';
 import { AddSongModal } from '@/components/modals/AddSongModal';
 import { WaveMusicLogo } from '@/components/common/WaveMusicLogo';
+import { AmbientAudioGlow } from '@/components/common/AmbientAudioGlow';
 
 export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -60,9 +61,12 @@ export const AppLayout: React.FC = () => {
     }`;
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#0a0a0c] text-white">
+    <div className="flex h-screen w-screen overflow-hidden bg-[#0a0a0c] text-white relative">
+      {/* Full-Screen Beat, Voice & Music Reactive Ambient Lighting (Zero UI Distraction) */}
+      <AmbientAudioGlow className="fixed inset-0 z-0" intensity="subtle" />
+
       {/* Desktop Sidebar (>= 768px) */}
-      <aside className="hidden md:flex flex-col w-64 lg:w-72 h-full bg-[#101015] border-r border-white/5 flex-shrink-0 select-none">
+      <aside className="hidden md:flex flex-col w-64 lg:w-72 h-full bg-[#101015]/90 backdrop-blur-md border-r border-white/5 flex-shrink-0 select-none relative z-10">
         {/* Brand Header */}
         <div className="p-5 flex items-center justify-between border-b border-white/5">
           <NavLink to="/" className="flex items-center gap-3 group">
@@ -187,7 +191,7 @@ export const AppLayout: React.FC = () => {
       </aside>
 
       {/* Main App Content Viewport */}
-      <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden relative">
+      <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden relative z-10">
         {/* Top Header Bar */}
         <header className="h-16 px-4 md:px-8 border-b border-white/5 bg-[#0a0a0c]/85 backdrop-blur-xl flex items-center justify-between gap-3 z-20">
           {/* Mobile Header: Logo & Title (visible on < md) */}

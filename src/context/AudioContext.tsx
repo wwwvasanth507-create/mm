@@ -167,6 +167,8 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [activeAccent]);
 
   const nextTrackRef = useRef<() => void>(() => {});
+  // Rolling memory of recently played IDs to prevent immediate song repetition
+  const recentPlayedIdsRef = useRef<string[]>([]);
 
   // Initialize single persistent Audio element
   useEffect(() => {
@@ -192,6 +194,11 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if ('mediaSession' in navigator) {
         navigator.mediaSession.playbackState = 'paused';
       }
+    };
+
+    const onEnded = () => {
+      console.log('[WaveMusic] Song finished naturally, advancing to next unique track...');
+      nextTrackRef.current?.();
     };
 
     const onTimeUpdate = () => {
@@ -249,6 +256,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     audio.addEventListener('play', onPlay);
     audio.addEventListener('pause', onPause);
+    audio.addEventListener('ended', onEnded);
     audio.addEventListener('timeupdate', onTimeUpdate);
     audio.addEventListener('loadedmetadata', onLoadedMetadata);
     audio.addEventListener('waiting', onWaiting);
@@ -259,6 +267,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return () => {
       audio.removeEventListener('play', onPlay);
       audio.removeEventListener('pause', onPause);
+      audio.removeEventListener('ended', onEnded);
       audio.removeEventListener('timeupdate', onTimeUpdate);
       audio.removeEventListener('loadedmetadata', onLoadedMetadata);
       audio.removeEventListener('waiting', onWaiting);
@@ -308,6 +317,12 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setDuration(track.duration || 0);
       setCurrentTrack(track);
 
+      // Register into rolling recent memory to guarantee no immediate song repetition
+      recentPlayedIdsRef.current = [
+        track.id,
+        ...recentPlayedIdsRef.current.filter((id) => id !== track.id),
+      ].slice(0, 6);
+
       // Record to history
       const updatedHistory = svcAddToHistory(track);
       setHistory(updatedHistory);
@@ -345,7 +360,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     [eqSettings, isDolbyEnabled]
   );
 
-  // Next Track Logic (24/7 Unlimited Looping)
+  // Next Track Logic (Strict Non-Repeating & 24/7 Unlimited Looping)
   const nextTrack = useCallback(() => {
     let currentQueue = queue;
     if (currentQueue.length === 0) {
@@ -354,28 +369,48 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
     if (currentQueue.length === 0) return;
 
-    if (repeatMode === 'one' && currentTrack) {
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-        audioRef.current.play().catch(console.error);
-      }
+    // Filter out the currently playing song so it CANNOT play immediately again in any mode
+    const differentCandidates = currentQueue
+      .map((t, idx) => ({ track: t, idx }))
+      .filter(
+        (item) =>
+          item.track.id !== currentTrack?.id &&
+          item.track.audioUrl !== currentTrack?.audioUrl
+      );
+
+    if (differentCandidates.length === 0) {
+      // If queue has only 1 track total in the entire list
+      const singleTrack = currentQueue[0];
+      if (singleTrack) loadAndPlayTrack(singleTrack);
       return;
     }
 
-    let nextIdx = queueIndex + 1;
+    // Prefer candidates that were NOT recently played
+    const freshCandidates = differentCandidates.filter(
+      (item) => !recentPlayedIdsRef.current.includes(item.track.id)
+    );
+    const pool = freshCandidates.length > 0 ? freshCandidates : differentCandidates;
+
+    let chosenItem: { track: Track; idx: number };
+
     if (shuffle) {
-      nextIdx = Math.floor(Math.random() * currentQueue.length);
-    } else if (nextIdx >= currentQueue.length) {
-      // 24/7 UNLIMITED PLAYBACK: Loop back to 0 so the music NEVER stops!
-      nextIdx = 0;
+      // Pick randomly from non-repeating candidates
+      const randIdx = Math.floor(Math.random() * pool.length);
+      chosenItem = pool[randIdx];
+    } else {
+      // Sequential: find next candidate after current queueIndex
+      const nextInLine = pool.find((item) => item.idx > queueIndex);
+      if (nextInLine) {
+        chosenItem = nextInLine;
+      } else {
+        // Wrap around to start of queue with distinct track
+        chosenItem = pool[0];
+      }
     }
 
-    setQueueIndex(nextIdx);
-    const nextSong = currentQueue[nextIdx];
-    if (nextSong) {
-      loadAndPlayTrack(nextSong);
-    }
-  }, [queue, queueIndex, repeatMode, shuffle, currentTrack, loadAndPlayTrack]);
+    setQueueIndex(chosenItem.idx);
+    loadAndPlayTrack(chosenItem.track);
+  }, [queue, queueIndex, shuffle, currentTrack, loadAndPlayTrack]);
 
   // Keep nextTrackRef updated for auto-recovery
   useEffect(() => {

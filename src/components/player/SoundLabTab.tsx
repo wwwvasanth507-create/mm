@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import {
   Zap,
   Sliders,
@@ -33,54 +33,7 @@ export const SoundLabTab: React.FC = () => {
     eqSettings,
     setEqBand,
     resetEq,
-    getFrequencyData,
-    isPlaying,
   } = useAudio();
-
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  // Live Spectrum Visualizer loop
-  useEffect(() => {
-    let animId: number;
-
-    const render = () => {
-      const canvas = canvasRef.current;
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        const data = getFrequencyData();
-
-        if (ctx && data) {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          const barWidth = (canvas.width / 32) - 1.5;
-          let x = 0;
-
-          for (let i = 0; i < 32; i++) {
-            // Pick frequency bin (logarithmic spread)
-            const binIdx = Math.floor(Math.pow(i / 32, 1.4) * (data.length - 1));
-            const val = isPlaying ? data[binIdx] || 0 : 4;
-            const barHeight = Math.max(3, (val / 255) * canvas.height * 0.9);
-
-            // Apple Music gradient: Cyan to Purple to Coral
-            const grad = ctx.createLinearGradient(0, canvas.height, 0, 0);
-            grad.addColorStop(0, '#06b6d4');
-            grad.addColorStop(0.5, '#a855f7');
-            grad.addColorStop(1, '#fa2d48');
-
-            ctx.fillStyle = grad;
-            ctx.beginPath();
-            ctx.roundRect(x, canvas.height - barHeight, barWidth, barHeight, [2, 2, 0, 0]);
-            ctx.fill();
-
-            x += barWidth + 1.5;
-          }
-        }
-      }
-      animId = requestAnimationFrame(render);
-    };
-
-    animId = requestAnimationFrame(render);
-    return () => cancelAnimationFrame(animId);
-  }, [getFrequencyData, isPlaying]);
 
   const bands: { key: keyof EqualizerSettings; label: string; freq: string; min: number; max: number; step: number; unit: string }[] = [
     { key: 'subBass', label: 'Sub-Bass', freq: '60 Hz', min: -10, max: 12, step: 0.5, unit: 'dB' },
@@ -134,21 +87,27 @@ export const SoundLabTab: React.FC = () => {
         </button>
       </div>
 
-      {/* Live Audio Spectrum Canvas */}
-      <div className="p-4 rounded-2xl bg-black/40 border border-white/10 flex flex-col items-center">
-        <div className="w-full flex items-center justify-between text-[11px] font-mono text-gray-400 mb-2 px-1">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            Live 24-bit / 96kHz DSP Spectrum
-          </span>
-          <span>{AUDIO_PRESETS[audioPreset]?.name || 'Custom EQ'}</span>
+      {/* Studio Hi-Fi 24-bit / 96kHz Status Card (Spectrum bars removed) */}
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/30 via-black/40 to-cyan-950/30 border border-white/10 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-500/20 to-cyan-500/20 border border-white/10 flex items-center justify-center text-cyan-400">
+            <Sparkles className="w-4 h-4 text-cyan-300" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-white tracking-wide">Studio Hi-Fi 24-bit / 96kHz</span>
+              <span className="px-1.5 py-0.5 rounded-full text-[9px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                LOSSLESS
+              </span>
+            </div>
+            <p className="text-[11px] text-gray-400 mt-0.5">
+              Full-Screen Dynamic Ambient Lighting synced with original beat & voice
+            </p>
+          </div>
         </div>
-        <canvas
-          ref={canvasRef}
-          width={400}
-          height={64}
-          className="w-full h-16 rounded-xl bg-black/50"
-        />
+        <span className="text-xs font-mono font-bold text-purple-300 px-2.5 py-1 rounded-xl bg-purple-500/10 border border-purple-500/20">
+          {AUDIO_PRESETS[audioPreset]?.name || 'Custom EQ'}
+        </span>
       </div>
 
       {/* Audio Preset Profile Selector */}
