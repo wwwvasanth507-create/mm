@@ -13,6 +13,7 @@ import {
   Search,
   Plus,
   Keyboard,
+  Smartphone,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 import { Track } from '@/types/music';
@@ -221,6 +222,16 @@ export const AppLayout: React.FC = () => {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>24/7 NON-STOP</span>
             </div>
+
+            {/* Download APK / Android App Button */}
+            <NavLink
+              to="/settings"
+              className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 font-semibold text-xs flex items-center gap-1.5 active:scale-95 transition-all shadow-sm"
+              title="Download Android APK & App Info"
+            >
+              <Smartphone className="w-3.5 h-3.5 text-purple-400" />
+              <span>Get APK</span>
+            </NavLink>
 
             {/* Add Song Shortcut Button */}
             <button

@@ -19,6 +19,7 @@ import {
   Zap,
   Globe,
   Shield,
+  Smartphone,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 import { AUDIO_PRESETS } from '@/config/audio';
@@ -236,6 +237,96 @@ export const SettingsPage: React.FC = () => {
             </a>
           </span>
           <span className="text-emerald-400 text-[11px] font-mono">100% Cloudflare Workers CDN</span>
+        </div>
+      </section>
+
+      {/* Android Mobile App (APK) & PWA Installation */}
+      <section className="glass-panel p-6 sm:p-8 rounded-3xl border border-purple-500/30 bg-gradient-to-br from-[#180d24]/90 via-[#121217] to-[#0c1322] space-y-6 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-purple-600/15 via-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 pb-5 border-b border-white/10 relative z-10">
+          <div className="flex items-center gap-4">
+            <div className="relative w-16 h-16 rounded-2xl overflow-hidden p-[2px] bg-gradient-to-tr from-[#fa2d48] via-[#a855f7] to-[#06b6d4] shadow-[0_0_24px_rgba(168,85,247,0.4)] flex-shrink-0 animate-in zoom-in-95">
+              <img
+                src="/logo.png"
+                alt="WaveMusic App Icon"
+                className="w-full h-full object-cover rounded-[14px]"
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-xl font-extrabold text-white">WaveMusic Android App (APK)</h2>
+                <span className="px-2 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 font-mono text-[10px] font-bold">
+                  v1.0.0 NATIVE
+                </span>
+              </div>
+              <p className="text-xs text-gray-300 mt-1">
+                Install directly on your Android phone for 24/7 background audio and zero screen timeouts
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5 flex-wrap self-start sm:self-auto">
+            <a
+              href="/WaveMusic.apk"
+              download="WaveMusic.apk"
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[var(--accent-primary)] via-purple-600 to-cyan-500 hover:opacity-95 text-white font-bold text-xs flex items-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.35)] transition-all active:scale-95"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download APK</span>
+            </a>
+
+            <a
+              href="https://github.com/wwwvasanth507-create/mm/releases"
+              target="_blank"
+              rel="noreferrer"
+              className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-gray-200 border border-white/10 font-bold text-xs flex items-center gap-2 transition-all active:scale-95"
+            >
+              <Globe className="w-4 h-4 text-cyan-400" />
+              <span>Releases</span>
+            </a>
+          </div>
+        </div>
+
+        {/* Feature Highlights Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-xs relative z-10">
+          <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/5 space-y-1.5">
+            <p className="font-bold text-white flex items-center gap-2">
+              <Smartphone className="w-4 h-4 text-purple-400" />
+              Standalone App Experience
+            </p>
+            <p className="text-gray-400 text-[11px] leading-relaxed">
+              Full-screen immersive audio player with high-fidelity cover art and instant response.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/5 space-y-1.5">
+            <p className="font-bold text-white flex items-center gap-2">
+              <Zap className="w-4 h-4 text-emerald-400" />
+              24-Hour Continuous Play
+            </p>
+            <p className="text-gray-400 text-[11px] leading-relaxed">
+              Screen Wake Lock & background media playback service prevent Android OS from sleeping the audio engine.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/5 space-y-1.5">
+            <p className="font-bold text-white flex items-center gap-2">
+              <Globe className="w-4 h-4 text-cyan-400" />
+              Progressive Web App (PWA)
+            </p>
+            <p className="text-gray-400 text-[11px] leading-relaxed">
+              On Android Chrome or Brave, tap ⋮ and choose <strong>"Add to Home screen"</strong> to install in 2 seconds.
+            </p>
+          </div>
+        </div>
+
+        {/* Instructions footer */}
+        <div className="pt-3 border-t border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-gray-400">
+          <span>
+            💡 <strong>How to install APK:</strong> Download the .apk file, open it in your Android notification/downloads, and tap &ldquo;Install&rdquo;.
+          </span>
+          <span className="font-mono text-purple-400">Package: com.wavemusic.app</span>
         </div>
       </section>
 
