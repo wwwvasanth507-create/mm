@@ -314,11 +314,45 @@ describe('Favourites and Playback History', () => {
     expect(tracks.find((t) => t.title.toLowerCase().includes('anju vanna poove (reprise)'))).toBeUndefined();
     expect(tracks.find((t) => t.title.toLowerCase().includes('chinmayi-version'))).toBeUndefined();
 
-    // Verify all 75 tracks have valid audioUrl and thumbnailUrl
+    // Verify all tracks have valid audioUrl and thumbnailUrl
     tracks.forEach((track) => {
       expect(track.audioUrl).toBeTruthy();
       expect(track.thumbnailUrl).toBeTruthy();
       expect(track.lyrics).toBeUndefined();
+    });
+  });
+
+  it('correctly includes the 55 new 2024-2025 songs (Amaran, GOAT, Indian 2, Raayan, Lubber Pandhu, Vettaiyan, Pushpa 2, etc.)', () => {
+    const tracks = getAllTracks();
+    expect(tracks.length).toBe(130);
+
+    const sampleNewTracks = [
+      { id: 'song-aasa-orave', title: 'Aasa Orave', album: 'Lubber Pandhu' },
+      { id: 'song-achacho', title: 'Achacho', album: 'Aranmanai 4' },
+      { id: 'song-hey-minnale', title: 'Hey Minnale', album: 'Amaran' },
+      { id: 'song-hunter-vantaar', title: 'Hunter Vantaar', album: 'Vettaiyan' },
+      { id: 'song-manasilaayo', title: 'Manasilaayo', album: 'Vettaiyan' },
+      { id: 'song-matta', title: 'Matta', album: 'The Greatest of All Time (GOAT)' },
+      { id: 'song-whistle-podu', title: 'Whistle Podu', album: 'The Greatest of All Time (GOAT)' },
+      { id: 'song-adangaatha-asuran', title: 'Adangaatha Asuran', album: 'Raayan' },
+      { id: 'song-water-packet', title: 'Water Packet', album: 'Raayan' },
+      { id: 'song-pushpa-pushpa', title: 'Pushpa Pushpa', album: 'Pushpa 2: The Rule' },
+      { id: 'song-kissik', title: 'Kissik', album: 'Pushpa 2: The Rule' },
+      { id: 'song-paaraa', title: 'Paaraa', album: 'Indian 2' },
+      { id: 'song-fire-song', title: 'Fire Song', album: 'Kanguva' },
+      { id: 'song-poraen-naa-poraen', title: 'Poraen Naa Poraen', album: 'Meiyazhagan' },
+      { id: 'song-oru-oorula-raaja', title: 'Oru Oorula Raaja', album: 'Vaazhai' },
+      { id: 'song-theansudare', title: 'Theansudare', album: 'Lover' },
+    ];
+
+    sampleNewTracks.forEach(({ id, title, album }) => {
+      const found = tracks.find((t) => t.id === id);
+      expect(found).toBeDefined();
+      expect(found?.title).toBe(title);
+      expect(found?.album).toBe(album);
+      expect(found?.audioUrl).toContain('pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs');
+      expect(found?.thumbnailUrl).toBeTruthy();
+      expect(found?.lyrics).toBeUndefined();
     });
   });
 
