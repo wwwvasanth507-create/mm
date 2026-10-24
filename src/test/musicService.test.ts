@@ -226,6 +226,17 @@ describe('Favourites and Playback History', () => {
       expect(found?.videoUrl).toBeTruthy();
     });
   });
+
+  it('only assigns videoUrl to the 6 Bison tracks and keeps other tracks strictly audio-only', () => {
+    const tracks = getAllTracks();
+    const tracksWithVideo = tracks.filter((t) => Boolean(t.videoUrl));
+    expect(tracksWithVideo.length).toBe(6);
+    expect(tracksWithVideo.every((t) => t.album === 'Bison Kaalamaadan')).toBe(true);
+
+    const nonVideoTrack = tracks.find((t) => t.id === 'song-ravana-tandavam');
+    expect(nonVideoTrack?.videoUrl).toBe('');
+    expect(nonVideoTrack?.hasVideo).toBe(false);
+  });
 });
 
 describe('Formatters', () => {

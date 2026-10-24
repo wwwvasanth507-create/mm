@@ -183,18 +183,20 @@ export const SongsPage: React.FC = () => {
           </div>
 
           {/* Video Songs Quick Filter Toggle */}
-          <button
-            onClick={() => setOnlyVideos(!onlyVideos)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border flex-shrink-0 ${
-              onlyVideos
-                ? 'bg-rose-600 border-rose-500 text-white shadow-[0_0_12px_rgba(244,63,94,0.4)]'
-                : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
-            }`}
-            title="Filter by Video Songs"
-          >
-            <Film className="w-3.5 h-3.5 text-rose-400" />
-            <span>Video Songs</span>
-          </button>
+          {allTracks.some((t) => Boolean(t.videoUrl)) && (
+            <button
+              onClick={() => setOnlyVideos(!onlyVideos)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border flex-shrink-0 ${
+                onlyVideos
+                  ? 'bg-rose-600 border-rose-500 text-white shadow-[0_0_12px_rgba(244,63,94,0.4)]'
+                  : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
+              }`}
+              title="Filter by Video Songs"
+            >
+              <Film className="w-3.5 h-3.5 text-rose-400" />
+              <span>Videos ({allTracks.filter((t) => Boolean(t.videoUrl)).length})</span>
+            </button>
+          )}
 
           {/* Sort Dropdown */}
           <div className="flex items-center gap-1.5 text-xs text-gray-400 flex-shrink-0">

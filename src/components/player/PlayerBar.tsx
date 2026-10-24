@@ -145,18 +145,14 @@ export const PlayerBar: React.FC<PlayerBarProps> = ({
             className="flex items-center gap-1.5 flex-shrink-0"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Quick Video Toggle Button */}
-            {onOpenVideo && (
+            {/* Quick Video Toggle Button - ONLY if current track has video */}
+            {Boolean(currentTrack.videoUrl) && onOpenVideo && (
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  onOpenVideo();
+                  onOpenVideo?.();
                 }}
-                className={`p-2 rounded-full transition-colors ${
-                  currentTrack.videoUrl
-                    ? 'text-rose-400 hover:text-rose-300'
-                    : 'text-gray-400 hover:text-white'
-                }`}
+                className="p-2 rounded-full text-rose-400 hover:text-rose-300 active:scale-90 transition-transform"
                 title="Play Video Song"
                 aria-label="Play video song"
               >
@@ -439,15 +435,11 @@ export const PlayerBar: React.FC<PlayerBarProps> = ({
               <span className="hidden xl:inline">DOLBY</span>
             </button>
 
-            {/* Quick Video Player Button */}
-            {onOpenVideo && (
+            {/* Quick Video Player Button - ONLY if current track has video */}
+            {Boolean(currentTrack.videoUrl) && onOpenVideo && (
               <button
-                onClick={onOpenVideo}
-                className={`p-1.5 px-2.5 rounded-full text-[11px] font-extrabold flex items-center gap-1.5 transition-all border ${
-                  currentTrack.videoUrl
-                    ? 'bg-rose-950/70 border-rose-500/50 text-rose-300 shadow-[0_0_12px_rgba(244,63,94,0.35)] hover:bg-rose-900/60'
-                    : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
-                }`}
+                onClick={() => onOpenVideo?.()}
+                className="p-1.5 px-2.5 rounded-full text-[11px] font-extrabold flex items-center gap-1.5 transition-all border bg-rose-950/70 border-rose-500/50 text-rose-300 shadow-[0_0_12px_rgba(244,63,94,0.35)] hover:bg-rose-900/60 active:scale-95"
                 title="Play Music Video"
               >
                 <Film className="w-3.5 h-3.5 text-rose-400" />

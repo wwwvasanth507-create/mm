@@ -82,6 +82,14 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
       pause();
     }
   }, [isOpen, activeTab, isPlaying, pause]);
+
+  // Auto-switch away from video tab if currentTrack does not have a video
+  useEffect(() => {
+    if (activeTab === 'video' && !currentTrack?.videoUrl) {
+      setActiveTab('visualizer');
+    }
+  }, [currentTrack, activeTab]);
+
   const lyricsContainerRef = useRef<HTMLDivElement>(null);
 
   // Find active lyrics line
@@ -185,21 +193,21 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
             <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">Cover</span>
           </button>
-          <button
-            onClick={() => setActiveTab('video')}
-            className={`p-1.5 sm:p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 ${
-              activeTab === 'video'
-                ? 'bg-rose-600 text-white shadow-sm'
-                : 'text-gray-400 hover:text-white'
-            }`}
-            title="Music Video"
-          >
-            <Film className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-400" />
-            <span className="hidden sm:inline">Video</span>
-            {currentTrack.videoUrl && (
+          {Boolean(currentTrack.videoUrl) && (
+            <button
+              onClick={() => setActiveTab('video')}
+              className={`p-1.5 sm:p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 ${
+                activeTab === 'video'
+                  ? 'bg-rose-600 text-white shadow-sm'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+              title="Music Video"
+            >
+              <Film className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-400" />
+              <span className="hidden sm:inline">Video</span>
               <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
-            )}
-          </button>
+            </button>
+          )}
           <button
             onClick={() => setActiveTab('lyrics')}
             className={`p-1.5 sm:p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 ${
@@ -253,28 +261,28 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
       <div className="relative z-10 flex-1 overflow-y-auto flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
         {activeTab === 'visualizer' && (
           <div className="w-full max-w-md flex flex-col items-center text-center">
-            {/* Song / Video Switcher (YouTube Music / Spotify Style) */}
-            <div className="flex items-center justify-center mb-3">
-              <div className="inline-flex p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 shadow-inner">
-                <button
-                  onClick={() => setActiveTab('visualizer')}
-                  className="px-3.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-black shadow-md"
-                >
-                  <Music className="w-3.5 h-3.5" />
-                  <span>Song</span>
-                </button>
-                <button
-                  onClick={() => setActiveTab('video')}
-                  className="px-3.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 text-gray-300 hover:text-white hover:bg-white/10"
-                >
-                  <Film className="w-3.5 h-3.5 text-rose-400" />
-                  <span>Video</span>
-                  {currentTrack.videoUrl && (
+            {/* Song / Video Switcher - ONLY shown if video is available */}
+            {Boolean(currentTrack.videoUrl) && (
+              <div className="flex items-center justify-center mb-3">
+                <div className="inline-flex p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 shadow-inner">
+                  <button
+                    onClick={() => setActiveTab('visualizer')}
+                    className="px-3.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-black shadow-md"
+                  >
+                    <Music className="w-3.5 h-3.5" />
+                    <span>Song</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('video')}
+                    className="px-3.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 text-gray-300 hover:text-white hover:bg-white/10"
+                  >
+                    <Film className="w-3.5 h-3.5 text-rose-400" />
+                    <span>Video</span>
                     <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
-                  )}
-                </button>
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Artwork Card with Vinyl Glow & Glossy Sheen */}
             <div className="relative w-[56vw] max-w-[240px] sm:max-w-[300px] md:max-w-[360px] aspect-square max-h-[32vh] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_50px_rgba(250,45,72,0.35)] mb-4 sm:mb-6 border border-white/20 group">
@@ -337,8 +345,8 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
           </div>
         )}
 
-        {/* Video Song Playback Tab */}
-        {activeTab === 'video' && (
+        {/* Video Song Playback Tab - ONLY when video is available */}
+        {activeTab === 'video' && Boolean(currentTrack.videoUrl) && (
           <div className="w-full max-w-3xl h-full flex flex-col items-center justify-center py-2 px-2 sm:px-4 animate-in fade-in zoom-in-95 duration-200">
             {/* Song / Video Switcher */}
             <div className="flex items-center justify-center mb-3">
