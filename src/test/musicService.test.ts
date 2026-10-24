@@ -20,7 +20,7 @@ import {
   getPlaybackHistory,
   clearPlaybackHistory,
   resolveVideoUrl,
-  getYouTubeVideoId,
+  isDirectVideoUrl,
 } from '@/services/musicService';
 import { Track } from '@/types/music';
 import { formatTime, formatNumber } from '@/utils/formatters';
@@ -187,26 +187,42 @@ describe('Favourites and Playback History', () => {
     expect(getPlaybackHistory().length).toBe(0);
   });
 
-  it('correctly resolves video URLs and parses YouTube video IDs', () => {
-    const trackWithVideo = {
+  it('correctly validates direct video URLs and rejects YouTube/third-party page URLs', () => {
+    // Direct Cloudflare R2 / stream / mp4 URLs are accepted
+    expect(
+      isDirectVideoUrl('https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/videos/sample.mp4')
+    ).toBe(true);
+    expect(isDirectVideoUrl('https://example.com/media/song.webm')).toBe(true);
+    expect(isDirectVideoUrl('/videos/local-sample.mp4')).toBe(true);
+
+    // YouTube and Vimeo URLs must be rejected
+    expect(isDirectVideoUrl('https://www.youtube.com/watch?v=AyYyZUI0Rgk')).toBe(false);
+    expect(isDirectVideoUrl('https://youtu.be/8cviQKlGBoE')).toBe(false);
+    expect(isDirectVideoUrl('https://www.youtube.com/embed/13F1eZ0b8iE')).toBe(false);
+    expect(isDirectVideoUrl('https://vimeo.com/123456')).toBe(false);
+    expect(isDirectVideoUrl(undefined)).toBe(false);
+    expect(isDirectVideoUrl('')).toBe(false);
+
+    // Track resolution: only direct video URLs resolve, YouTube URLs return empty string
+    const trackWithDirectVideo = {
+      ...sampleMockTrack,
+      videoUrl: 'https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/videos/sample.mp4',
+    };
+    expect(resolveVideoUrl(trackWithDirectVideo)).toBe(
+      'https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/videos/sample.mp4'
+    );
+
+    const trackWithYouTube = {
       ...sampleMockTrack,
       videoUrl: 'https://www.youtube.com/watch?v=AyYyZUI0Rgk',
     };
-    expect(resolveVideoUrl(trackWithVideo)).toBe('https://www.youtube.com/watch?v=AyYyZUI0Rgk');
-    expect(getYouTubeVideoId(trackWithVideo.videoUrl)).toBe('AyYyZUI0Rgk');
+    expect(resolveVideoUrl(trackWithYouTube)).toBe('');
 
-    // Shortened youtu.be format
-    expect(getYouTubeVideoId('https://youtu.be/8cviQKlGBoE')).toBe('8cviQKlGBoE');
-
-    // Embed format
-    expect(getYouTubeVideoId('https://www.youtube.com/embed/13F1eZ0b8iE')).toBe('13F1eZ0b8iE');
-
-    // Non-video track
+    // Non-video track returns empty string
     expect(resolveVideoUrl(sampleMockTrack)).toBe('');
-    expect(getYouTubeVideoId(undefined)).toBeNull();
   });
 
-  it('includes the 6 Bison: Kaalamaadan tracks in the catalog with real thumbnails', () => {
+  it('includes the 6 Bison: Kaalamaadan tracks in the catalog with real thumbnails and no YouTube links', () => {
     const tracks = getAllTracks();
     const bisonIds = [
       'song-cheenikkallu',
@@ -223,19 +239,65 @@ describe('Favourites and Playback History', () => {
       expect(found?.album).toBe('Bison Kaalamaadan');
       expect(found?.audioUrl).toContain('pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/');
       expect(found?.thumbnailUrl).toContain('c.saavncdn.com');
-      expect(found?.videoUrl).toBeTruthy();
+      // All YouTube links are completely removed; direct video URLs only
+      expect(found?.videoUrl).not.toContain('youtube.com');
+      expect(found?.videoUrl).not.toContain('youtu.be');
     });
   });
 
-  it('only assigns videoUrl to the 6 Bison tracks and keeps other tracks strictly audio-only', () => {
+  it('only activates video features when a valid direct video URL is present and strips YouTube links', () => {
     const tracks = getAllTracks();
+    // Default catalog has all YouTube links removed and no direct video links yet
     const tracksWithVideo = tracks.filter((t) => Boolean(t.videoUrl));
-    expect(tracksWithVideo.length).toBe(6);
-    expect(tracksWithVideo.every((t) => t.album === 'Bison Kaalamaadan')).toBe(true);
+    expect(tracksWithVideo.length).toBe(0);
 
     const nonVideoTrack = tracks.find((t) => t.id === 'song-ravana-tandavam');
     expect(nonVideoTrack?.videoUrl).toBe('');
     expect(nonVideoTrack?.hasVideo).toBe(false);
+
+    // Dynamic track with direct Cloudflare R2 video
+    const cloudflareVideoTrack: Track = {
+      id: 'custom-cf-video-001',
+      title: 'Cloudflare Video Song',
+      artist: 'Artist',
+      album: 'Album',
+      genre: 'Soundtrack',
+      year: 2026,
+      duration: 200,
+      audioUrl: 'https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/song.mp3',
+      thumbnailUrl: 'https://example.com/cover.jpg',
+      videoUrl: 'https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/video.mp4',
+    };
+    saveUserTrack(cloudflareVideoTrack);
+
+    const savedCfTrack = getAllTracks().find((t) => t.id === 'custom-cf-video-001');
+    expect(savedCfTrack?.videoUrl).toBe(
+      'https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/video.mp4'
+    );
+    expect(savedCfTrack?.hasVideo).toBe(true);
+
+    // Dynamic track with YouTube link must have videoUrl stripped
+    const youtubeTrack: Track = {
+      id: 'custom-yt-video-002',
+      title: 'YouTube Track',
+      artist: 'Artist',
+      album: 'Album',
+      genre: 'Pop',
+      year: 2026,
+      duration: 180,
+      audioUrl: 'https://example.com/song.mp3',
+      thumbnailUrl: 'https://example.com/cover.jpg',
+      videoUrl: 'https://www.youtube.com/watch?v=12345',
+    };
+    saveUserTrack(youtubeTrack);
+
+    const savedYtTrack = getAllTracks().find((t) => t.id === 'custom-yt-video-002');
+    expect(savedYtTrack?.videoUrl).toBe('');
+    expect(savedYtTrack?.hasVideo).toBe(false);
+
+    // Clean up
+    deleteUserTrack('custom-cf-video-001');
+    deleteUserTrack('custom-yt-video-002');
   });
 });
 

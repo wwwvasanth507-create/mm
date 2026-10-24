@@ -18,10 +18,9 @@ import {
   Smartphone,
   Film,
   Music,
-  ExternalLink,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
-import { resolveArtworkUrl, getYouTubeVideoId } from '@/services/musicService';
+import { resolveArtworkUrl, isDirectVideoUrl } from '@/services/musicService';
 import { formatTime } from '@/utils/formatters';
 import { SoundLabTab } from './SoundLabTab';
 import { PwaInstallModal } from '@/components/modals/PwaInstallModal';
@@ -83,9 +82,9 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
     }
   }, [isOpen, activeTab, isPlaying, pause]);
 
-  // Auto-switch away from video tab if currentTrack does not have a video
+  // Auto-switch away from video tab if currentTrack does not have a direct video
   useEffect(() => {
-    if (activeTab === 'video' && !currentTrack?.videoUrl) {
+    if (activeTab === 'video' && (!currentTrack?.videoUrl || !isDirectVideoUrl(currentTrack.videoUrl))) {
       setActiveTab('visualizer');
     }
   }, [currentTrack, activeTab]);
@@ -133,6 +132,7 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
   const artwork = resolveArtworkUrl(currentTrack);
   const liked = isFavourite(currentTrack.id);
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
+  const hasDirectVideo = Boolean(currentTrack.videoUrl && isDirectVideoUrl(currentTrack.videoUrl));
 
   return (
     <div className="fixed inset-0 z-[60] overflow-hidden bg-[#0a0a0c] flex flex-col text-white animate-in fade-in duration-300">
@@ -193,7 +193,7 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
             <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">Cover</span>
           </button>
-          {Boolean(currentTrack.videoUrl) && (
+          {hasDirectVideo && (
             <button
               onClick={() => setActiveTab('video')}
               className={`p-1.5 sm:p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 ${
@@ -201,7 +201,7 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
                   ? 'bg-rose-600 text-white shadow-sm'
                   : 'text-gray-400 hover:text-white'
               }`}
-              title="Music Video"
+              title="Direct Video Song"
             >
               <Film className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-400" />
               <span className="hidden sm:inline">Video</span>
@@ -261,8 +261,8 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
       <div className="relative z-10 flex-1 overflow-y-auto flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
         {activeTab === 'visualizer' && (
           <div className="w-full max-w-md flex flex-col items-center text-center">
-            {/* Song / Video Switcher - ONLY shown if video is available */}
-            {Boolean(currentTrack.videoUrl) && (
+            {/* Song / Video Switcher - ONLY shown if direct video is available */}
+            {hasDirectVideo && (
               <div className="flex items-center justify-center mb-3">
                 <div className="inline-flex p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 shadow-inner">
                   <button
@@ -345,9 +345,9 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
           </div>
         )}
 
-        {/* Video Song Playback Tab - ONLY when video is available */}
-        {activeTab === 'video' && Boolean(currentTrack.videoUrl) && (
-          <div className="w-full max-w-3xl h-full flex flex-col items-center justify-center py-2 px-2 sm:px-4 animate-in fade-in zoom-in-95 duration-200">
+        {/* Direct Video Song Playback Tab - ONLY when direct video is available */}
+        {activeTab === 'video' && hasDirectVideo && (
+          <div className="w-full max-w-4xl h-full flex flex-col items-center justify-center py-2 px-2 sm:px-4 animate-in fade-in zoom-in-95 duration-200">
             {/* Song / Video Switcher */}
             <div className="flex items-center justify-center mb-3">
               <div className="inline-flex p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 shadow-inner">
@@ -366,61 +366,24 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
                   className="px-3.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 bg-rose-600 text-white shadow-md shadow-rose-900/40"
                 >
                   <Film className="w-3.5 h-3.5" />
-                  <span>Video Song</span>
+                  <span>Direct Video Song</span>
                 </button>
               </div>
             </div>
 
-            {/* Video Player Display Screen */}
-            <div className="relative w-full aspect-video max-h-[50vh] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_35px_rgba(244,63,94,0.3)] border border-white/20 bg-black flex items-center justify-center">
-              {(() => {
-                const videoUrl = currentTrack.videoUrl;
-                const ytId = getYouTubeVideoId(videoUrl);
-
-                if (ytId) {
-                  return (
-                    <iframe
-                      src={`https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&enablejsapi=1&rel=0&playsinline=1`}
-                      title={`${currentTrack.title} Music Video`}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                      className="w-full h-full border-0"
-                    />
-                  );
-                }
-
-                if (
-                  videoUrl &&
-                  (videoUrl.endsWith('.mp4') ||
-                    videoUrl.endsWith('.webm') ||
-                    videoUrl.endsWith('.m3u8') ||
-                    videoUrl.includes('video'))
-                ) {
-                  return (
-                    <video
-                      src={videoUrl}
-                      controls
-                      autoPlay
-                      playsInline
-                      className="w-full h-full object-contain"
-                    />
-                  );
-                }
-
-                // If not an exact YouTube link or file, search YouTube embed
-                const searchEmbedUrl = `https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(
-                  currentTrack.title + ' ' + currentTrack.artist + ' official video'
-                )}&autoplay=1`;
-                return (
-                  <iframe
-                    src={searchEmbedUrl}
-                    title={`${currentTrack.title} Music Video`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    className="w-full h-full border-0"
-                  />
-                );
-              })()}
+            {/* Direct Video Player Display Screen (Cloudflare R2 / Direct Video Stream) */}
+            <div className="relative w-full aspect-video max-h-[52vh] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.95),0_0_35px_rgba(244,63,94,0.35)] border border-white/20 bg-black flex items-center justify-center group">
+              <video
+                key={currentTrack.videoUrl}
+                src={currentTrack.videoUrl}
+                controls
+                autoPlay
+                playsInline
+                preload="metadata"
+                className="w-full h-full object-contain bg-black"
+              >
+                Your browser does not support direct video playback.
+              </video>
             </div>
 
             {/* Video Details Bar */}
@@ -430,7 +393,7 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
                   <Film className="w-4 h-4 text-rose-500 flex-shrink-0" />
                   <span>{currentTrack.title}</span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                    VIDEO
+                    DIRECT VIDEO
                   </span>
                 </p>
                 <p className="text-gray-400 truncate mt-0.5">
@@ -439,24 +402,12 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
               </div>
 
               <div className="flex items-center gap-2 flex-shrink-0">
-                {currentTrack.videoUrl && (
-                  <a
-                    href={currentTrack.videoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium transition-colors border border-white/10"
-                    title="Watch directly on YouTube"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5 text-rose-400" />
-                    <span className="hidden sm:inline">YouTube</span>
-                  </a>
-                )}
                 <button
                   onClick={() => {
                     setActiveTab('visualizer');
                     resume();
                   }}
-                  className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white font-medium transition-colors border border-white/10"
+                  className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-gray-200 hover:text-white font-medium transition-colors border border-white/10"
                 >
                   Switch to Audio
                 </button>

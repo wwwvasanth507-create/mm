@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { X, Music, Check, Copy, RefreshCw, AlertCircle, Image, Sparkles } from 'lucide-react';
+import { X, Music, Check, Copy, RefreshCw, AlertCircle, Image, Sparkles, Film } from 'lucide-react';
 import { Track } from '@/types/music';
-import { saveUserTrack, testAudioUrl } from '@/services/musicService';
+import { saveUserTrack, testAudioUrl, isDirectVideoUrl } from '@/services/musicService';
 
 interface AddSongModalProps {
   isOpen: boolean;
@@ -16,6 +16,7 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
   const [genre, setGenre] = useState('Melody');
   const [language, setLanguage] = useState('Tamil');
   const [audioUrl, setAudioUrl] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
   const [thumbnailUrl, setThumbnailUrl] = useState('');
   const [duration, setDuration] = useState<number>(180);
   const [isTestingUrl, setIsTestingUrl] = useState(false);
@@ -84,6 +85,20 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
       return;
     }
 
+    if (videoUrl.trim()) {
+      const vLower = videoUrl.trim().toLowerCase();
+      if (vLower.includes('youtube.com') || vLower.includes('youtu.be') || vLower.includes('vimeo.com')) {
+        setErrorMsg('YouTube & Vimeo links are not supported. Only direct video stream URLs (e.g. Cloudflare R2, MP4, WebM) are allowed.');
+        return;
+      }
+      if (!isDirectVideoUrl(videoUrl.trim())) {
+        setErrorMsg('Invalid direct video URL. Please provide a direct HTTPS video link (e.g. .mp4, .webm, or Cloudflare stream).');
+        return;
+      }
+    }
+
+    const cleanVideoUrl = isDirectVideoUrl(videoUrl.trim()) ? videoUrl.trim() : undefined;
+
     const newTrack: Track = {
       id: `song-${Date.now()}`,
       title: title.trim(),
@@ -93,6 +108,8 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
       year: new Date().getFullYear(),
       duration: Number(duration) || 180,
       audioUrl: audioUrl.trim(),
+      videoUrl: cleanVideoUrl,
+      hasVideo: Boolean(cleanVideoUrl),
       thumbnailUrl: thumbnailUrl.trim() || '',
       artworkUrl: thumbnailUrl.trim() || '',
       language: language.trim() || 'Tamil',
@@ -109,6 +126,7 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
     setArtist('');
     setAlbum('');
     setAudioUrl('');
+    setVideoUrl('');
     setThumbnailUrl('');
     setTestResult(null);
     setErrorMsg('');
@@ -116,6 +134,7 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
   };
 
   const handleCopyJson = () => {
+    const cleanVideoUrl = isDirectVideoUrl(videoUrl.trim()) ? videoUrl.trim() : undefined;
     const jsonSnippet = JSON.stringify(
       {
         id: `song-${Date.now()}`,
@@ -126,6 +145,7 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
         year: new Date().getFullYear(),
         duration: Number(duration) || 240,
         audioUrl: audioUrl.trim() || 'https://example.com/song.mp3',
+        ...(cleanVideoUrl ? { videoUrl: cleanVideoUrl, hasVideo: true } : {}),
         thumbnailUrl: thumbnailUrl.trim() || 'https://example.com/cover.jpg',
         language: language || 'Tamil',
         isExplicit: false,
@@ -237,6 +257,27 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
                 {testResult.message}
               </p>
             )}
+          </div>
+
+          {/* Direct Video Stream URL (Cloudflare R2 / MP4 - Optional) */}
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-semibold text-gray-300 flex items-center gap-1.5">
+                <Film className="w-3.5 h-3.5 text-rose-500" />
+                <span>Direct Video URL (Cloudflare R2 / MP4 - Optional)</span>
+              </label>
+              <span className="text-[10px] text-gray-400">Direct media files only (No YouTube)</span>
+            </div>
+            <input
+              type="url"
+              value={videoUrl}
+              onChange={(e) => setVideoUrl(e.target.value)}
+              placeholder="https://pub-xxxxxx.r2.dev/videos/song.mp4"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-rose-500 outline-none text-xs font-mono text-white placeholder-gray-500"
+            />
+            <p className="text-[10px] text-gray-400 mt-1">
+              Plays in native video player. Only direct video links are supported (Cloudflare R2, MP4, WebM). YouTube is disallowed.
+            </p>
           </div>
 
           {/* Album & Genre */}

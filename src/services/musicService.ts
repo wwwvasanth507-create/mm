@@ -17,24 +17,27 @@ const rawSongs: Track[] = (
 ) as Track[];
 
 // Normalize catalog items to ensure thumbnailUrl and audioUrl are populated
-const normalizedTracks: Track[] = rawSongs.map((song, idx) => ({
-  ...song,
-  id: song.id || `song-${idx + 1}`,
-  title: song.title || 'Untitled Track',
-  artist: song.artist || 'Unknown Artist',
-  album: song.album || 'Single',
-  genre: song.genre || 'General',
-  year: song.year || new Date().getFullYear(),
-  duration: song.duration || 0,
-  audioUrl: song.audioUrl || '',
-  thumbnailUrl: song.thumbnailUrl || song.artworkUrl || '',
-  artworkUrl: song.thumbnailUrl || song.artworkUrl || '',
-  language: song.language || 'English',
-  description: song.description || '',
-  isExplicit: Boolean(song.isExplicit),
-  videoUrl: song.videoUrl || '',
-  hasVideo: Boolean(song.videoUrl || song.hasVideo),
-}));
+const normalizedTracks: Track[] = rawSongs.map((song, idx) => {
+  const directVideo = isDirectVideoUrl(song.videoUrl) ? song.videoUrl?.trim() : '';
+  return {
+    ...song,
+    id: song.id || `song-${idx + 1}`,
+    title: song.title || 'Untitled Track',
+    artist: song.artist || 'Unknown Artist',
+    album: song.album || 'Single',
+    genre: song.genre || 'General',
+    year: song.year || new Date().getFullYear(),
+    duration: song.duration || 0,
+    audioUrl: song.audioUrl || '',
+    thumbnailUrl: song.thumbnailUrl || song.artworkUrl || '',
+    artworkUrl: song.thumbnailUrl || song.artworkUrl || '',
+    language: song.language || 'English',
+    description: song.description || '',
+    isExplicit: Boolean(song.isExplicit),
+    videoUrl: directVideo || '',
+    hasVideo: Boolean(directVideo),
+  };
+});
 
 /**
  * Normalizes a string into a clean URL-friendly ID slug
@@ -57,21 +60,33 @@ export function resolveAudioUrl(track?: Track | null): string {
 }
 
 /**
- * Safely resolves a video URL (direct stream or YouTube link)
+ * Verifies if a URL is a direct media video URL (e.g. Cloudflare R2, direct MP4/WebM/HLS stream)
+ * Rejects YouTube, Vimeo, and third-party page links
  */
-export function resolveVideoUrl(track?: Track | null): string {
-  if (!track || !track.videoUrl) return '';
-  return track.videoUrl.trim();
+export function isDirectVideoUrl(url?: string | null): boolean {
+  if (!url || typeof url !== 'string') return false;
+  const trimmed = url.trim().toLowerCase();
+  if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://') && !trimmed.startsWith('/')) {
+    return false;
+  }
+  // Disallow YouTube and third-party video page links
+  if (
+    trimmed.includes('youtube.com') ||
+    trimmed.includes('youtu.be') ||
+    trimmed.includes('vimeo.com')
+  ) {
+    return false;
+  }
+  return true;
 }
 
 /**
- * Parses YouTube video ID from various YouTube URL formats
+ * Safely resolves a direct video stream URL (Cloudflare R2, direct MP4/WebM)
  */
-export function getYouTubeVideoId(url?: string): string | null {
-  if (!url) return null;
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : null;
+export function resolveVideoUrl(track?: Track | null): string {
+  if (!track || !track.videoUrl) return '';
+  const trimmed = track.videoUrl.trim();
+  return isDirectVideoUrl(trimmed) ? trimmed : '';
 }
 
 
@@ -100,7 +115,16 @@ export function getUserTracks(): Track[] {
   if (typeof window === 'undefined') return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.USER_TRACKS);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    const list: Track[] = JSON.parse(raw);
+    return list.map((t) => {
+      const directVideo = isDirectVideoUrl(t.videoUrl) ? t.videoUrl?.trim() : '';
+      return {
+        ...t,
+        videoUrl: directVideo || '',
+        hasVideo: Boolean(directVideo),
+      };
+    });
   } catch {
     return [];
   }
@@ -108,13 +132,19 @@ export function getUserTracks(): Track[] {
 
 export function saveUserTrack(track: Track): Track[] {
   const current = getUserTracks();
-  const existsIndex = current.findIndex((t) => t.id === track.id);
+  const directVideo = isDirectVideoUrl(track.videoUrl) ? track.videoUrl?.trim() : '';
+  const sanitizedTrack: Track = {
+    ...track,
+    videoUrl: directVideo || '',
+    hasVideo: Boolean(directVideo),
+  };
+  const existsIndex = current.findIndex((t) => t.id === sanitizedTrack.id);
   let updated: Track[];
   if (existsIndex >= 0) {
     updated = [...current];
-    updated[existsIndex] = track;
+    updated[existsIndex] = sanitizedTrack;
   } else {
-    updated = [track, ...current];
+    updated = [sanitizedTrack, ...current];
   }
   if (typeof window !== 'undefined') {
     localStorage.setItem(STORAGE_KEYS.USER_TRACKS, JSON.stringify(updated));

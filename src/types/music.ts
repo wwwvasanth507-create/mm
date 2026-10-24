@@ -21,7 +21,7 @@ export interface Track {
   language?: string; // e.g. "Tamil", "English", "Instrumental"
   isExplicit?: boolean;
   lyrics?: LyricsLine[] | string;
-  videoUrl?: string; // Direct video (.mp4/.webm) or YouTube URL for music video playback
+  videoUrl?: string; // Direct video stream URL (Cloudflare R2, .mp4, .webm)
   hasVideo?: boolean;
 
   // Optional convenience / legacy aliases
