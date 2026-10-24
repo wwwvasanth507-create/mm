@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   ChevronDown,
   Play,
@@ -18,6 +18,7 @@ import {
   Smartphone,
   Film,
   Music,
+  Maximize2,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 import { resolveArtworkUrl, isDirectVideoUrl } from '@/services/musicService';
@@ -68,6 +69,18 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
     initialTab
   );
 
+  // Video State & Controls (Unified with App Player)
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(true);
+  const [videoCurrentTime, setVideoCurrentTime] = useState<number>(0);
+  const [videoDuration, setVideoDuration] = useState<number>(0);
+  const [isVideoBuffering, setIsVideoBuffering] = useState<boolean>(false);
+  const [showCenterPlayFeedback, setShowCenterPlayFeedback] = useState<boolean>(false);
+  const [centerAction, setCenterAction] = useState<'play' | 'pause'>('play');
+
+  const hasDirectVideo = Boolean(currentTrack?.videoUrl && isDirectVideoUrl(currentTrack.videoUrl));
+  const isVideoTab = activeTab === 'video' && hasDirectVideo;
+
   // Sync initialTab when modal opens
   useEffect(() => {
     if (isOpen && initialTab) {
@@ -75,12 +88,29 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
     }
   }, [isOpen, initialTab]);
 
-  // Pause background audio when in video tab to avoid dual playing
+  // Synchronize volume and mute with video element
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.volume = isMuted ? 0 : volume;
+      videoRef.current.muted = isMuted;
+    }
+  }, [volume, isMuted, activeTab]);
+
+  // Pause background audio when in video tab to avoid dual audio playing
   useEffect(() => {
     if (isOpen && activeTab === 'video' && isPlaying) {
       pause();
     }
   }, [isOpen, activeTab, isPlaying, pause]);
+
+  // Reset video state when track changes
+  useEffect(() => {
+    if (isVideoTab) {
+      setVideoCurrentTime(0);
+      setVideoDuration(currentTrack?.duration || 0);
+      setIsVideoPlaying(true);
+    }
+  }, [currentTrack?.id, isVideoTab, currentTrack?.duration]);
 
   const lyricsContainerRef = useRef<HTMLDivElement>(null);
 
@@ -96,6 +126,7 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
       setActiveTab('visualizer');
     }
   }, [currentTrack, activeTab, lyricsList.length]);
+
   let currentLyricsIndex = -1;
   if (lyricsList.length > 0) {
     for (let i = 0; i < lyricsList.length; i++) {
@@ -117,25 +148,118 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
     }
   }, [currentLyricsIndex, activeTab, isOpen]);
 
-  // Escape key listener to close modal
+  // Unified Play / Pause handler for both Audio and Video
+  const handleTogglePlay = useCallback(() => {
+    if (isVideoTab) {
+      const vid = videoRef.current;
+      if (!vid) return;
+      if (vid.paused) {
+        vid.play().then(() => setIsVideoPlaying(true)).catch(() => {});
+        setCenterAction('play');
+      } else {
+        vid.pause();
+        setIsVideoPlaying(false);
+        setCenterAction('pause');
+      }
+      setShowCenterPlayFeedback(true);
+      setTimeout(() => setShowCenterPlayFeedback(false), 700);
+    } else {
+      togglePlay();
+    }
+  }, [isVideoTab, togglePlay]);
+
+  // Unified seek handler
+  const handleSeek = (newTime: number) => {
+    if (isVideoTab) {
+      if (videoRef.current) {
+        videoRef.current.currentTime = newTime;
+      }
+      setVideoCurrentTime(newTime);
+    } else {
+      seek(newTime);
+    }
+  };
+
+  // Unified Previous track handler
+  const handlePreviousTrack = () => {
+    if (isVideoTab && videoRef.current && videoRef.current.currentTime > 3) {
+      videoRef.current.currentTime = 0;
+      setVideoCurrentTime(0);
+      return;
+    }
+    previousTrack();
+  };
+
+  // Unified Next track handler
+  const handleNextTrack = () => {
+    nextTrack();
+  };
+
+  // Switch to Audio with seamlessly synced playback time
+  const handleSwitchToAudio = () => {
+    if (videoRef.current) {
+      const vTime = videoRef.current.currentTime;
+      videoRef.current.pause();
+      setIsVideoPlaying(false);
+      seek(vTime);
+    }
+    setActiveTab('visualizer');
+    resume();
+  };
+
+  // Switch to Video with seamlessly synced playback time
+  const handleSwitchToVideo = () => {
+    const aTime = currentTime;
+    pause();
+    setActiveTab('video');
+    setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.currentTime = aTime;
+        videoRef.current.play().then(() => setIsVideoPlaying(true)).catch(() => {});
+      }
+    }, 60);
+  };
+
+  // Gracefully close modal preserving playback position
+  const handleModalClose = useCallback(() => {
+    if (isVideoTab && videoRef.current) {
+      const vTime = videoRef.current.currentTime;
+      seek(vTime);
+      if (isVideoPlaying) {
+        resume();
+      }
+    }
+    onClose();
+  }, [isVideoTab, isVideoPlaying, seek, resume, onClose]);
+
+  // Escape key and Spacebar keyboard listeners
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        handleModalClose();
+      } else if (e.code === 'Space' && e.target === document.body) {
+        e.preventDefault();
+        handleTogglePlay();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, handleModalClose, handleTogglePlay]);
 
   // Early return ONLY after all React hooks have unconditionally executed
   if (!isOpen || !currentTrack) return null;
 
   const artwork = resolveArtworkUrl(currentTrack);
   const liked = isFavourite(currentTrack.id);
-  const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
-  const hasDirectVideo = Boolean(currentTrack.videoUrl && isDirectVideoUrl(currentTrack.videoUrl));
+
+  // Unified time & progress values for both Audio & Video
+  const displayCurrentTime = isVideoTab ? videoCurrentTime : currentTime;
+  const displayDuration = isVideoTab
+    ? (videoDuration || currentTrack.duration || 100)
+    : (duration || currentTrack.duration || 100);
+  const displayIsPlaying = isVideoTab ? isVideoPlaying : isPlaying;
+  const progressPercent = displayDuration > 0 ? (displayCurrentTime / displayDuration) * 100 : 0;
 
   return (
     <div className="fixed inset-0 z-[60] overflow-hidden bg-[#0a0a0c] flex flex-col text-white animate-in fade-in duration-300">
@@ -157,7 +281,7 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
       {/* Top Header */}
       <header className="relative z-10 flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-4 border-b border-white/10 backdrop-blur-md bg-black/20">
         <button
-          onClick={onClose}
+          onClick={handleModalClose}
           className="p-1.5 sm:p-2 rounded-full hover:bg-white/10 transition-colors text-gray-300 hover:text-white"
           title="Minimize player"
         >
@@ -198,7 +322,11 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
           </button>
           {hasDirectVideo && (
             <button
-              onClick={() => setActiveTab('video')}
+              onClick={() => {
+                if (activeTab !== 'video') {
+                  handleSwitchToVideo();
+                }
+              }}
               className={`p-1.5 sm:p-2 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 ${
                 activeTab === 'video'
                   ? 'bg-rose-600 text-white shadow-sm'
@@ -278,7 +406,7 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
                     <span>Song</span>
                   </button>
                   <button
-                    onClick={() => setActiveTab('video')}
+                    onClick={handleSwitchToVideo}
                     className="px-3.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 text-gray-300 hover:text-white hover:bg-white/10"
                   >
                     <Film className="w-3.5 h-3.5 text-rose-400" />
@@ -357,10 +485,7 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
             <div className="flex items-center justify-center mb-3">
               <div className="inline-flex p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 shadow-inner">
                 <button
-                  onClick={() => {
-                    setActiveTab('visualizer');
-                    resume();
-                  }}
+                  onClick={handleSwitchToAudio}
                   className="px-3.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 text-gray-300 hover:text-white hover:bg-white/10"
                 >
                   <Music className="w-3.5 h-3.5" />
@@ -376,19 +501,82 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
               </div>
             </div>
 
-            {/* Direct Video Player Display Screen (Cloudflare R2 / Direct Video Stream) */}
-            <div className="relative w-full aspect-video max-h-[52vh] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.95),0_0_35px_rgba(244,63,94,0.35)] border border-white/20 bg-black flex items-center justify-center group">
+            {/* Direct Video Player Display Screen - Clean, No Browser Controls */}
+            <div
+              onClick={handleTogglePlay}
+              className="relative w-full aspect-video max-h-[52vh] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.95),0_0_35px_rgba(244,63,94,0.35)] border border-white/20 bg-black flex items-center justify-center group cursor-pointer select-none"
+            >
               <video
+                ref={videoRef}
                 key={currentTrack.videoUrl}
                 src={currentTrack.videoUrl}
-                controls
                 autoPlay
                 playsInline
+                disablePictureInPicture
+                controlsList="nodownload noplaybackrate nofullscreen"
                 preload="metadata"
-                className="w-full h-full object-contain bg-black"
+                className="w-full h-full object-contain bg-black pointer-events-none"
+                onPlay={() => setIsVideoPlaying(true)}
+                onPause={() => setIsVideoPlaying(false)}
+                onTimeUpdate={() => {
+                  if (videoRef.current) {
+                    setVideoCurrentTime(videoRef.current.currentTime);
+                  }
+                }}
+                onLoadedMetadata={() => {
+                  if (videoRef.current) {
+                    setVideoDuration(videoRef.current.duration);
+                    videoRef.current.volume = isMuted ? 0 : volume;
+                    videoRef.current.muted = isMuted;
+                  }
+                  setIsVideoBuffering(false);
+                }}
+                onWaiting={() => setIsVideoBuffering(true)}
+                onCanPlay={() => setIsVideoBuffering(false)}
+                onPlaying={() => {
+                  setIsVideoPlaying(true);
+                  setIsVideoBuffering(false);
+                }}
+                onEnded={() => {
+                  if (repeatMode === 'one' && videoRef.current) {
+                    videoRef.current.currentTime = 0;
+                    videoRef.current.play().catch(() => {});
+                  } else {
+                    nextTrack();
+                  }
+                }}
               >
                 Your browser does not support direct video playback.
               </video>
+
+              {/* Buffering Spinner Overlay */}
+              {isVideoBuffering && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px] z-20 pointer-events-none">
+                  <div className="w-12 h-12 rounded-full border-4 border-rose-500/30 border-t-rose-500 animate-spin" />
+                </div>
+              )}
+
+              {/* Centered Tap Feedback Overlay (Play/Pause flash effect) */}
+              {showCenterPlayFeedback && (
+                <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none animate-in fade-in zoom-in-75 duration-200">
+                  <div className="w-16 h-16 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl">
+                    {centerAction === 'play' ? (
+                      <Play className="w-8 h-8 fill-white text-white ml-1" />
+                    ) : (
+                      <Pause className="w-8 h-8 fill-white text-white" />
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Paused Overlay Indicator */}
+              {!isVideoPlaying && !showCenterPlayFeedback && !isVideoBuffering && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/30 z-10 pointer-events-none transition-all">
+                  <div className="w-16 h-16 rounded-full bg-rose-600/90 text-white flex items-center justify-center shadow-2xl shadow-rose-900/50 group-hover:scale-110 transition-transform">
+                    <Play className="w-8 h-8 fill-white text-white ml-1" />
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Video Details Bar */}
@@ -408,13 +596,25 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
 
               <div className="flex items-center gap-2 flex-shrink-0">
                 <button
-                  onClick={() => {
-                    setActiveTab('visualizer');
-                    resume();
-                  }}
+                  onClick={handleSwitchToAudio}
                   className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-gray-200 hover:text-white font-medium transition-colors border border-white/10"
                 >
                   Switch to Audio
+                </button>
+                <button
+                  onClick={() => {
+                    const vid = videoRef.current;
+                    if (!vid) return;
+                    if (document.fullscreenElement) {
+                      document.exitFullscreen().catch(() => {});
+                    } else if (vid.requestFullscreen) {
+                      vid.requestFullscreen().catch(() => {});
+                    }
+                  }}
+                  className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-gray-200 hover:text-white transition-colors border border-white/10"
+                  title="Fullscreen"
+                >
+                  <Maximize2 className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -511,10 +711,10 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
             <input
               type="range"
               min={0}
-              max={duration || 100}
+              max={displayDuration || 100}
               step={0.5}
-              value={currentTime}
-              onChange={(e) => seek(parseFloat(e.target.value))}
+              value={displayCurrentTime}
+              onChange={(e) => handleSeek(parseFloat(e.target.value))}
               className="w-full h-1.5 sm:h-2 rounded-full cursor-pointer"
               style={{
                 background: `linear-gradient(to right, var(--accent-primary) 0%, var(--accent-primary) ${progressPercent}%, rgba(255,255,255,0.2) ${progressPercent}%, rgba(255,255,255,0.2) 100%)`,
@@ -523,8 +723,8 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
           </div>
 
           <div className="flex items-center justify-between text-[11px] sm:text-xs text-gray-400 font-mono">
-            <span>{formatTime(currentTime)}</span>
-            <span>-{formatTime(Math.max(0, duration - currentTime))}</span>
+            <span>{formatTime(displayCurrentTime)}</span>
+            <span>-{formatTime(Math.max(0, displayDuration - displayCurrentTime))}</span>
           </div>
         </div>
 
@@ -541,7 +741,7 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
           </button>
 
           <button
-            onClick={previousTrack}
+            onClick={handlePreviousTrack}
             className="p-2.5 sm:p-3 rounded-full text-gray-300 hover:text-white hover:bg-white/10 active:scale-95 transition-all"
             title="Previous track"
           >
@@ -549,11 +749,11 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
           </button>
 
           <button
-            onClick={togglePlay}
+            onClick={handleTogglePlay}
             className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[var(--accent-primary)] hover:brightness-110 active:scale-95 flex items-center justify-center text-white shadow-[0_0_32px_rgba(250,45,72,0.5)] transition-all"
-            title={isPlaying ? 'Pause' : 'Play'}
+            title={displayIsPlaying ? 'Pause' : 'Play'}
           >
-            {isPlaying ? (
+            {displayIsPlaying ? (
               <Pause className="w-7 h-7 sm:w-8 sm:h-8 fill-white text-white" />
             ) : (
               <Play className="w-7 h-7 sm:w-8 sm:h-8 fill-white text-white ml-1" />
@@ -561,7 +761,7 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
           </button>
 
           <button
-            onClick={nextTrack}
+            onClick={handleNextTrack}
             className="p-2.5 sm:p-3 rounded-full text-gray-300 hover:text-white hover:bg-white/10 active:scale-95 transition-all"
             title="Next track"
           >
