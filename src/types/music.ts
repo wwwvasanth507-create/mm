@@ -155,6 +155,10 @@ export interface AudioContextType {
   addTrackToPlaylist: (playlistId: string, trackId: string) => void;
   removeTrackFromPlaylist: (playlistId: string, trackId: string) => void;
 
+  // 24/7 Unlimited Non-Stop Mode (No Sleep, Continuous Autoplay)
+  is24HourNonStop: boolean;
+  toggle24HourNonStop: () => void;
+
   // Diagnostics & Config
   activeAccent: ThemeAccent;
   setActiveAccent: (accent: ThemeAccent) => void;

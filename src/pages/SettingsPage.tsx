@@ -17,6 +17,8 @@ import {
   Copy,
   Check,
   Zap,
+  Globe,
+  Shield,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 import { AUDIO_PRESETS } from '@/config/audio';
@@ -41,6 +43,8 @@ export const SettingsPage: React.FC = () => {
     toggleDolby,
     audioPreset,
     setAudioPreset,
+    is24HourNonStop,
+    toggle24HourNonStop,
   } = useAudio();
 
   const [copiedCatalog, setCopiedCatalog] = useState(false);
@@ -152,6 +156,88 @@ export const SettingsPage: React.FC = () => {
           Manage playback preferences, verify direct audio stream URLs, and customize visual themes
         </p>
       </div>
+
+      {/* 24/7 Unlimited Non-Stop Continuous Playback (No Sleep, Infinite Loop) */}
+      <section className="glass-panel p-6 sm:p-8 rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-[#0c1814]/80 via-[#121217] to-[#121217] space-y-5 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.25)]">
+              <Shield className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-bold text-white">24/7 Unlimited Non-Stop Mode</h2>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-mono text-[10px] font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  ACTIVE
+                </span>
+              </div>
+              <p className="text-xs text-gray-400 mt-0.5">
+                Infinite looping, screen sleep prevention, and 24-hour uninterrupted streaming
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={toggle24HourNonStop}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 self-start sm:self-auto ${
+              is24HourNonStop
+                ? 'bg-emerald-500 text-white shadow-[0_0_16px_rgba(16,185,129,0.4)]'
+                : 'bg-white/10 text-gray-400 hover:text-white'
+            }`}
+          >
+            <span>{is24HourNonStop ? '24/7 Mode Enabled' : 'Enable 24/7 Mode'}</span>
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-xs">
+          <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 space-y-1">
+            <p className="font-bold text-white flex items-center gap-1.5">
+              <span className="text-emerald-400">✓</span> No Sleep / WakeLock
+            </p>
+            <p className="text-gray-400 text-[11px] leading-relaxed">
+              Screen Wake Lock API prevents mobile screens and laptops from timing out or sleeping during playback.
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 space-y-1">
+            <p className="font-bold text-white flex items-center gap-1.5">
+              <span className="text-emerald-400">✓</span> Infinite Loop
+            </p>
+            <p className="text-gray-400 text-[11px] leading-relaxed">
+              When the queue reaches the end of the catalog, it seamlessly restarts from track 1 without ever stopping.
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 space-y-1">
+            <p className="font-bold text-white flex items-center gap-1.5">
+              <span className="text-emerald-400">✓</span> Network Auto-Recovery
+            </p>
+            <p className="text-gray-400 text-[11px] leading-relaxed">
+              If an audio stream encounters a network glitch or timeout, playback automatically recovers within 1.5s.
+            </p>
+          </div>
+        </div>
+
+        {/* Website Link Badge */}
+        <div className="pt-2 flex items-center justify-between text-xs border-t border-white/5">
+          <span className="text-gray-400 flex items-center gap-1.5 font-mono text-[11px]">
+            <Globe className="w-3.5 h-3.5 text-cyan-400" />
+            Official Site:
+            <a
+              href="https://mm.www-vasanth507.workers.dev/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-cyan-400 hover:underline font-semibold"
+            >
+              https://mm.www-vasanth507.workers.dev/
+            </a>
+          </span>
+          <span className="text-emerald-400 text-[11px] font-mono">100% Cloudflare Workers CDN</span>
+        </div>
+      </section>
 
       {/* Manual Song Management Guide Card */}
       <section className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-4">

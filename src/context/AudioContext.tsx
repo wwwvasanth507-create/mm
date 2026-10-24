@@ -87,11 +87,28 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return localStorage.getItem(STORAGE_KEYS.MUTED) === 'true';
   });
 
-  // Playback modes
+  // 24/7 Unlimited Non-Stop Playback (No Sleep, Infinite Loop)
+  const [is24HourNonStop, setIs24HourNonStop] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true;
+    const saved = localStorage.getItem(STORAGE_KEYS.NON_STOP_24H);
+    return saved !== null ? saved === 'true' : true;
+  });
+
+  const toggle24HourNonStop = useCallback(() => {
+    setIs24HourNonStop((prev) => {
+      const next = !prev;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(STORAGE_KEYS.NON_STOP_24H, String(next));
+      }
+      return next;
+    });
+  }, []);
+
+  // Playback modes (Default to 'all' so continuous looping is active by default)
   const [repeatMode, setRepeatMode] = useState<RepeatMode>(() => {
-    if (typeof window === 'undefined') return 'off';
+    if (typeof window === 'undefined') return 'all';
     const saved = localStorage.getItem(STORAGE_KEYS.REPEAT);
-    return saved === 'one' || saved === 'all' || saved === 'off' ? saved : 'off';
+    return saved === 'one' || saved === 'all' || saved === 'off' ? saved : 'all';
   });
   const [shuffle, setShuffle] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
@@ -105,11 +122,10 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return saved || 'coral';
   });
 
-
-  // Queue state
+  // Queue state (Load full catalog so non-stop 24/7 playback flows seamlessly through all tracks)
   const [queue, setQueue] = useState<Track[]>(() => {
     const all = getAllTracks();
-    return all.slice(0, 8);
+    return all;
   });
   const [queueIndex, setQueueIndex] = useState<number>(0);
 
@@ -150,16 +166,34 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     localStorage.setItem(STORAGE_KEYS.THEME_ACCENT, activeAccent);
   }, [activeAccent]);
 
+  const nextTrackRef = useRef<() => void>(() => {});
+
   // Initialize single persistent Audio element
   useEffect(() => {
     const audio = new Audio();
-    audio.preload = AUDIO_CONFIG.preload;
+    audio.preload = 'auto';
+    audio.setAttribute('playsinline', 'true');
+    audio.setAttribute('webkit-playsinline', 'true');
+    // @ts-ignore
+    audio.playsInline = true;
     audio.volume = isMuted ? 0 : volume;
     audio.muted = isMuted;
     audioRef.current = audio;
 
-    const onPlay = () => setIsPlaying(true);
-    const onPause = () => setIsPlaying(false);
+    const onPlay = () => {
+      setIsPlaying(true);
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.playbackState = 'playing';
+      }
+    };
+
+    const onPause = () => {
+      setIsPlaying(false);
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.playbackState = 'paused';
+      }
+    };
+
     const onTimeUpdate = () => {
       setCurrentTime(audio.currentTime);
       // Update media session position
@@ -190,7 +224,6 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const onError = () => {
       setIsBuffering(false);
-      setIsPlaying(false);
       const mediaErr = audio.error;
       let msg = 'Failed to load audio stream.';
       if (mediaErr) {
@@ -200,8 +233,18 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         else if (mediaErr.code === 4)
           msg = 'Audio source unavailable or CORS blocked. Verify that audioUrl is accessible.';
       }
-      console.error('[WaveMusic Audio Error]', msg, audio.src);
+      console.warn('[WaveMusic Audio Error - 24/7 Auto Recovery]', msg, audio.src);
       setError(msg);
+
+      // 24/7 Non-Stop Auto-Recovery: Don't stop! Auto-advance to next song after 1.5 seconds!
+      if (is24HourNonStop) {
+        setTimeout(() => {
+          console.log('[WaveMusic 24/7 Engine] Auto-recovering: advancing to next track...');
+          nextTrackRef.current?.();
+        }, 1500);
+      } else {
+        setIsPlaying(false);
+      }
     };
 
     audio.addEventListener('play', onPlay);
@@ -225,7 +268,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       audio.pause();
       audio.src = '';
     };
-  }, []);
+  }, [is24HourNonStop]);
 
   // Update MediaSession Metadata when current track changes
   useEffect(() => {
@@ -302,9 +345,14 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     [eqSettings, isDolbyEnabled]
   );
 
-  // Next Track Logic
+  // Next Track Logic (24/7 Unlimited Looping)
   const nextTrack = useCallback(() => {
-    if (queue.length === 0) return;
+    let currentQueue = queue;
+    if (currentQueue.length === 0) {
+      currentQueue = getAllTracks();
+      setQueue(currentQueue);
+    }
+    if (currentQueue.length === 0) return;
 
     if (repeatMode === 'one' && currentTrack) {
       if (audioRef.current) {
@@ -316,23 +364,67 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     let nextIdx = queueIndex + 1;
     if (shuffle) {
-      nextIdx = Math.floor(Math.random() * queue.length);
-    } else if (nextIdx >= queue.length) {
-      if (repeatMode === 'all') {
-        nextIdx = 0;
-      } else {
-        // End of queue reached and repeat is off
-        setIsPlaying(false);
-        return;
-      }
+      nextIdx = Math.floor(Math.random() * currentQueue.length);
+    } else if (nextIdx >= currentQueue.length) {
+      // 24/7 UNLIMITED PLAYBACK: Loop back to 0 so the music NEVER stops!
+      nextIdx = 0;
     }
 
     setQueueIndex(nextIdx);
-    const nextSong = queue[nextIdx];
+    const nextSong = currentQueue[nextIdx];
     if (nextSong) {
       loadAndPlayTrack(nextSong);
     }
   }, [queue, queueIndex, repeatMode, shuffle, currentTrack, loadAndPlayTrack]);
+
+  // Keep nextTrackRef updated for auto-recovery
+  useEffect(() => {
+    nextTrackRef.current = nextTrack;
+  }, [nextTrack]);
+
+  // Screen Wake Lock API to prevent screen and CPU sleep during 24/7 playback
+  const wakeLockRef = useRef<any>(null);
+
+  const requestWakeLock = useCallback(async () => {
+    if (typeof navigator !== 'undefined' && 'wakeLock' in navigator && is24HourNonStop) {
+      try {
+        wakeLockRef.current = await (navigator as any).wakeLock.request('screen');
+        console.log('[WaveMusic] 24/7 Screen WakeLock acquired');
+      } catch (err) {
+        // Silently ignore if not supported or granted
+      }
+    }
+  }, [is24HourNonStop]);
+
+  const releaseWakeLock = useCallback(async () => {
+    if (wakeLockRef.current) {
+      try {
+        await wakeLockRef.current.release();
+      } catch {}
+      wakeLockRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isPlaying && is24HourNonStop) {
+      requestWakeLock();
+    } else {
+      releaseWakeLock();
+    }
+  }, [isPlaying, is24HourNonStop, requestWakeLock, releaseWakeLock]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && isPlaying && is24HourNonStop) {
+        requestWakeLock();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisChange);
+    return () => document.removeEventListener('visibilitychange', handleVisChange);
+    function handleVisChange() {
+      handleVisibilityChange();
+    }
+  }, [isPlaying, is24HourNonStop, requestWakeLock]);
 
   // Previous Track Logic
   const previousTrack = useCallback(() => {
@@ -838,6 +930,8 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     removeTrackFromPlaylist,
     activeAccent,
     setActiveAccent,
+    is24HourNonStop,
+    toggle24HourNonStop,
   };
 
   return <AudioContext.Provider value={value}>{children}</AudioContext.Provider>;

@@ -197,22 +197,13 @@ export const SongsPage: React.FC = () => {
 
       {/* Song Table */}
       <div className="glass-panel rounded-2xl border border-white/10 overflow-hidden p-1.5 sm:p-2">
-        {/* Table header (Desktop only to prevent awkward column squishing on mobile) */}
-        <div className="hidden sm:flex items-center justify-between px-3.5 py-2 text-[11px] font-bold text-gray-500 border-b border-white/5 uppercase tracking-wider">
-          <div className="flex items-center gap-3.5 min-w-0 flex-1 pr-4">
-            <span className="w-7 text-center">#</span>
-            <span className="w-12">Cover</span>
-            <span>Title & Artist</span>
-          </div>
-          <div className="hidden md:block flex-1 max-w-[200px] lg:max-w-[260px] px-3">Album</div>
-          <div className="w-20 text-right pr-6">Duration</div>
-        </div>
-
-        {/* Mobile quick count bar */}
-        <div className="sm:hidden px-3 py-1.5 text-[11px] font-medium text-gray-400 border-b border-white/5 flex items-center justify-between">
-          <span>{filteredTracks.length} {filteredTracks.length === 1 ? 'song' : 'songs'}</span>
+        {/* Tracklist Top Bar */}
+        <div className="flex items-center justify-between px-3.5 py-2.5 text-xs font-semibold text-gray-400 border-b border-white/5">
+          <span>{filteredTracks.length} {filteredTracks.length === 1 ? 'Track' : 'Tracks'}</span>
           {selectedLanguage !== 'all' && (
-            <span className="text-[var(--accent-primary)] font-mono">{selectedLanguage}</span>
+            <span className="text-[var(--accent-primary)] font-mono text-[11px] font-bold">
+              {selectedLanguage.toUpperCase()}
+            </span>
           )}
         </div>
 

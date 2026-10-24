@@ -12,11 +12,9 @@ import {
   Settings,
   Search,
   Plus,
-  Radio,
   Keyboard,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
-import { AUDIO_CONFIG } from '@/config/audio';
 import { Track } from '@/types/music';
 import { PlayerBar } from '@/components/player/PlayerBar';
 import { QueueDrawer } from '@/components/player/QueueDrawer';
@@ -25,6 +23,7 @@ import { PlaylistModal } from '@/components/modals/PlaylistModal';
 import { AddToPlaylistModal } from '@/components/modals/AddToPlaylistModal';
 import { ShortcutsModal } from '@/components/modals/ShortcutsModal';
 import { AddSongModal } from '@/components/modals/AddSongModal';
+import { WaveMusicLogo } from '@/components/common/WaveMusicLogo';
 
 export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -66,17 +65,7 @@ export const AppLayout: React.FC = () => {
         {/* Brand Header */}
         <div className="p-5 flex items-center justify-between border-b border-white/5">
           <NavLink to="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[var(--accent-primary)] to-purple-600 flex items-center justify-center shadow-[0_0_16px_var(--accent-glow)] group-hover:scale-105 transition-transform">
-              <Radio className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <span className="font-extrabold text-base tracking-tight text-white block">
-                {AUDIO_CONFIG.siteName}
-              </span>
-              <span className="text-[10px] text-gray-400 font-mono tracking-wider uppercase block">
-                Direct Stream
-              </span>
-            </div>
+            <WaveMusicLogo size="md" />
           </NavLink>
 
           <button
@@ -201,14 +190,9 @@ export const AppLayout: React.FC = () => {
         {/* Top Header Bar */}
         <header className="h-16 px-4 md:px-8 border-b border-white/5 bg-[#0a0a0c]/85 backdrop-blur-xl flex items-center justify-between gap-3 z-20">
           {/* Mobile Header: Logo & Title (visible on < md) */}
-          <div className="md:hidden flex items-center gap-2.5">
-            <NavLink to="/" className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[var(--accent-primary)] to-purple-600 flex items-center justify-center shadow-[0_0_12px_var(--accent-glow)]">
-                <Radio className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-extrabold text-base tracking-tight text-white">
-                {AUDIO_CONFIG.siteName}
-              </span>
+          <div className="md:hidden flex items-center gap-2">
+            <NavLink to="/" className="flex items-center gap-2">
+              <WaveMusicLogo size="sm" />
             </NavLink>
           </div>
 
@@ -229,6 +213,15 @@ export const AppLayout: React.FC = () => {
 
           {/* Header Actions */}
           <div className="flex items-center gap-2">
+            {/* 24/7 Non-Stop Indicator */}
+            <div
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono font-bold select-none"
+              title="24/7 Non-Stop Continuous Mode Active (Screen Sleep Prevented)"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>24/7 NON-STOP</span>
+            </div>
+
             {/* Add Song Shortcut Button */}
             <button
               onClick={() => setIsAddSongOpen(true)}

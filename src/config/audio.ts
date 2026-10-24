@@ -48,6 +48,7 @@ export const STORAGE_KEYS = {
   DOLBY_ENABLED: 'wavemusic_dolby_v1',
   AUDIO_PRESET: 'wavemusic_audio_preset_v1',
   EQ_SETTINGS: 'wavemusic_eq_settings_v1',
+  NON_STOP_24H: 'wavemusic_non_stop_24h_v1',
 };
 
 import { AudioPresetId, EqualizerSettings } from '@/types/music';
