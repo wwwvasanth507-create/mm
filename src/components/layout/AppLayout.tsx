@@ -229,10 +229,10 @@ export const AppLayout: React.FC = () => {
 
           {/* Header Actions */}
           <div className="flex items-center gap-2">
-            {/* Add Song Shortcut Button (Mobile + Desktop) */}
+            {/* Add Song Shortcut Button */}
             <button
               onClick={() => setIsAddSongOpen(true)}
-              className="px-3 py-1.5 rounded-xl bg-[var(--accent-primary)] hover:brightness-110 active:scale-95 text-white font-semibold text-xs flex items-center gap-1.5 shadow-[0_0_14px_var(--accent-glow)] transition-all"
+              className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-[var(--accent-primary)]/15 hover:bg-[var(--accent-primary)]/25 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30 font-semibold text-xs flex items-center gap-1.5 active:scale-95 transition-all shadow-sm"
               title="Add Song Manually"
             >
               <Plus className="w-3.5 h-3.5" />
@@ -240,13 +240,13 @@ export const AppLayout: React.FC = () => {
             </button>
 
             {/* Theme Accent Quick Selector */}
-            <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white/5 border border-white/5">
+            <div className="flex items-center gap-1 sm:gap-1.5 p-1 rounded-xl bg-white/5 border border-white/5">
               {(['coral', 'purple', 'cyan', 'amber'] as const).map((accent) => (
                 <button
                   key={accent}
                   onClick={() => setActiveAccent(accent)}
-                  className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full transition-transform ${
-                    activeAccent === accent ? 'scale-125 ring-2 ring-white/60' : 'opacity-60 hover:opacity-100'
+                  className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full transition-transform ${
+                    activeAccent === accent ? 'scale-125 ring-2 ring-white/70' : 'opacity-40 hover:opacity-100'
                   }`}
                   style={{
                     backgroundColor:

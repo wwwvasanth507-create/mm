@@ -165,26 +165,29 @@ export const HomePage: React.FC = () => {
       )}
 
       {/* Feature Highlight Callout Card */}
-      <section className="glass-panel p-5 rounded-2xl border border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <section className="glass-panel p-4 sm:p-5 rounded-2xl border border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-xl bg-[var(--accent-primary)]/15 border border-[var(--accent-primary)]/30 flex items-center justify-center text-[var(--accent-primary)] flex-shrink-0">
-            <Sparkles className="w-6 h-6" />
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-500/20 to-purple-500/20 border border-cyan-400/30 flex items-center justify-center text-cyan-400 flex-shrink-0 shadow-[0_0_16px_rgba(6,182,212,0.25)]">
+            <Sparkles className="w-5 h-5" />
           </div>
           <div>
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              Direct Audio URL Streaming Engine
+              Dolby Atmos® 3D SoundLab & Lossless Audio
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono font-bold">
+                ACTIVE
+              </span>
             </h3>
             <p className="text-xs text-gray-400 mt-0.5">
-              Add your songs directly to <code className="text-gray-300">src/data/music.json</code> with direct HTTPS URLs from any server or storage provider.
+              Experience dynamic spatial sound, 6-band real-time equalizer, and precision audio filters.
             </p>
           </div>
         </div>
 
         <button
-          onClick={() => navigate('/songs')}
+          onClick={() => navigate('/settings')}
           className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors flex-shrink-0"
         >
-          <span>Browse All Songs</span>
+          <span>Audio Diagnostics</span>
           <ChevronRight className="w-3.5 h-3.5" />
         </button>
       </section>
