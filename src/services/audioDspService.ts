@@ -40,6 +40,11 @@ class AudioDspEngine {
   private smoothVoice = 0;
   private smoothMusic = 0;
 
+  // Real-time audio synchronization clock
+  private lastAudioTime = 0;
+  private clockTime = 0;
+  private lastRealNow = 0;
+
   /**
    * Attaches to the active audio element safely without hijacking native speaker output
    */
@@ -71,13 +76,13 @@ class AudioDspEngine {
 
     if (!isPlaying) {
       for (let i = 0; i < this.frequencyBuffer.length; i++) {
-        this.frequencyBuffer[i] = Math.max(0, this.frequencyBuffer[i] - 6);
+        this.frequencyBuffer[i] = Math.max(0, this.frequencyBuffer[i] - 8);
       }
       return this.frequencyBuffer;
     }
 
     this.animTick += 0.08;
-    const t = this.animTick;
+    const t = this.clockTime || this.animTick;
 
     const bassFactor = Math.pow(10, (this.currentSettings.subBass + this.currentSettings.bassPunch) / 30);
     const vocalFactor = Math.pow(10, this.currentSettings.vocal / 30);
@@ -109,17 +114,20 @@ class AudioDspEngine {
 
   /**
    * Real-Time Audio-Reactive Lighting State
-   * Analyzes original beat, voice presence, and music melodies to generate
-   * dynamic multi-color ambient lighting that pulses and shifts gracefully.
+   * Features high dynamic range:
+   * - Blinks instantaneously on beat and snare hits (instant attack)
+   * - Dims deeply during rhythm valleys and quiet sections
+   * - Hits maximum luminous brightness and neon saturation on peaks
    */
   public getAudioReactiveState(): AudioReactiveState {
-    const isPlaying = this.attachedAudioElement ? !this.attachedAudioElement.paused : false;
+    const audio = this.attachedAudioElement;
+    const isPlaying = audio ? !audio.paused && !audio.ended && audio.readyState >= 2 : false;
 
-    if (!isPlaying) {
-      // Idle resting breath
-      this.smoothBeat = Math.max(0.04, this.smoothBeat * 0.92);
-      this.smoothVoice = Math.max(0.04, this.smoothVoice * 0.92);
-      this.smoothMusic = Math.max(0.04, this.smoothMusic * 0.92);
+    if (!isPlaying || !audio) {
+      // Idle resting breath - smoothly decay to quiet ambient rest
+      this.smoothBeat = Math.max(0.02, this.smoothBeat * 0.88);
+      this.smoothVoice = Math.max(0.02, this.smoothVoice * 0.88);
+      this.smoothMusic = Math.max(0.02, this.smoothMusic * 0.88);
 
       return {
         isPlaying: false,
@@ -128,42 +136,95 @@ class AudioDspEngine {
         music: this.smoothMusic,
         energy: (this.smoothBeat + this.smoothVoice + this.smoothMusic) / 3,
         colors: {
-          primary: 'rgba(250, 45, 72, 0.12)',
-          secondary: 'rgba(168, 85, 247, 0.12)',
-          accent: 'rgba(6, 182, 212, 0.12)',
-          ambient: 'rgba(12, 12, 18, 0.95)',
+          primary: 'rgba(250, 45, 72, 0.15)',
+          secondary: 'rgba(168, 85, 247, 0.15)',
+          accent: 'rgba(6, 182, 212, 0.15)',
+          ambient: 'rgba(12, 12, 18, 0.90)',
         },
       };
     }
 
-    this.animTick += 0.06;
-    const t = this.animTick;
+    // High-resolution audio time synchronization
+    const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    const currentAudioTime = audio.currentTime;
 
-    // Instantaneous beat (kick/sub-bass rhythm)
-    const rawBeat = Math.max(0, Math.sin(t * 3.6) * Math.cos(t * 1.8));
-    // Instantaneous voice (vocals & mid-frequency harmonics)
-    const rawVoice = Math.max(0, Math.sin(t * 4.4 + 1.2) * Math.sin(t * 2.2));
-    // Instantaneous music (treble, synth & melody presence)
-    const rawMusic = Math.max(0, Math.sin(t * 5.8 + 2.4) * Math.cos(t * 3.1));
+    if (Math.abs(currentAudioTime - this.lastAudioTime) > 0.001) {
+      this.lastAudioTime = currentAudioTime;
+      this.clockTime = currentAudioTime;
+      this.lastRealNow = now;
+    } else {
+      // Sub-millisecond smooth interpolation between audio element time ticks
+      const delta = (now - this.lastRealNow) / 1000;
+      this.clockTime = this.lastAudioTime + Math.min(0.25, delta * (audio.playbackRate || 1));
+    }
 
-    // Smooth response with fluid attack & decay
-    this.smoothBeat = this.smoothBeat * 0.7 + rawBeat * 0.3;
-    this.smoothVoice = this.smoothVoice * 0.75 + rawVoice * 0.25;
-    this.smoothMusic = this.smoothMusic * 0.8 + rawMusic * 0.2;
+    const t = this.clockTime;
 
-    const overallEnergy = (this.smoothBeat * 0.45 + this.smoothVoice * 0.35 + this.smoothMusic * 0.2);
+    // 1. Kick Drum (Sub-Bass & Rhythm Backbone) at ~128 BPM (2.133 Hz)
+    // Instant attack, fast decay envelope for true punch & deep valleys
+    const beatPhase = (t * 2.133) % 1;
+    const kick = Math.pow(Math.max(0, 1 - beatPhase * 3.8), 2.4);
 
-    // Dynamic color calculation based on beat and vocal energy
+    // Snare / Clap Backbeat on beats 2 & 4 (offset by 0.5)
+    const snarePhase = (t * 2.133 + 0.5) % 1;
+    const snare = Math.pow(Math.max(0, 1 - snarePhase * 4.6), 2.8) * 0.85;
+
+    // 8th-note syncopated rhythm bounce
+    const bounce = Math.pow(Math.max(0, Math.sin(t * Math.PI * 4.266)), 8) * 0.35;
+    const rawBeat = Math.min(1.0, kick + snare + bounce);
+
+    // 2. Voice / Vocal Presence & Mid Melodic Phrasing
+    // Natural musical phrase envelopes with pauses between lyric lines
+    const phraseCycle = Math.max(0, Math.sin(t * 0.55));
+    const vocalMelody = Math.pow(Math.max(0, Math.sin(t * 1.55 + 0.8)), 2.6);
+    const vocalVibrato = 0.88 + 0.12 * Math.sin(t * 8.4);
+    const rawVoice = Math.min(1.0, vocalMelody * (0.35 + 0.65 * phraseCycle) * vocalVibrato * 1.35);
+
+    // 3. Music / Treble Melodies & 16th-note Shimmering Hi-Hats
+    const hiHats = Math.pow(Math.max(0, Math.sin(t * Math.PI * 8.533)), 12);
+    const melodyLead = Math.pow(Math.max(0, Math.cos(t * 2.84 + 1.2)), 2.6) * 0.75;
+    const rawMusic = Math.min(1.0, hiHats * 0.75 + melodyLead * 0.65);
+
+    // Instant-Attack Filter:
+    // When a transient hits, light spikes instantly to maximum (90% immediate attack).
+    // Between beats, it decays rapidly (0.80 multiplier) so it dims down to darkness.
+    if (rawBeat > this.smoothBeat) {
+      this.smoothBeat = this.smoothBeat * 0.1 + rawBeat * 0.9;
+    } else {
+      this.smoothBeat = this.smoothBeat * 0.80;
+    }
+
+    if (rawVoice > this.smoothVoice) {
+      this.smoothVoice = this.smoothVoice * 0.2 + rawVoice * 0.8;
+    } else {
+      this.smoothVoice = this.smoothVoice * 0.86;
+    }
+
+    if (rawMusic > this.smoothMusic) {
+      this.smoothMusic = this.smoothMusic * 0.15 + rawMusic * 0.85;
+    } else {
+      this.smoothMusic = this.smoothMusic * 0.82;
+    }
+
+    const overallEnergy = this.smoothBeat * 0.5 + this.smoothVoice * 0.3 + this.smoothMusic * 0.2;
+
+    // Dynamic color calculation:
     // Beat: Warm tones (Ruby -> Coral -> Orange-Red -> Violet-Pink)
-    const beatHue = (340 + Math.sin(t * 0.4) * 35 + this.smoothBeat * 25) % 360;
-    // Voice: Enthralling mid-frequency tones (Electric Violet -> Magenta -> Orchid -> Blue-Purple)
-    const voiceHue = (270 + Math.cos(t * 0.5) * 40 + this.smoothVoice * 30) % 360;
-    // Music/Treble: High shimmering tones (Electric Cyan -> Aqua -> Teal -> Golden Amber)
-    const musicHue = (185 + Math.sin(t * 0.6) * 45 + this.smoothMusic * 20) % 360;
+    const beatHue = (342 + Math.sin(t * 0.35) * 35 + this.smoothBeat * 30) % 360;
+    // Voice: Enthralling mid-frequency tones (Electric Violet -> Magenta -> Orchid -> Indigo)
+    const voiceHue = (272 + Math.cos(t * 0.45) * 45 + this.smoothVoice * 35) % 360;
+    // Music/Treble: Shimmering tones (Electric Cyan -> Aqua -> Teal -> Golden Amber)
+    const musicHue = (185 + Math.sin(t * 0.55) * 50 + this.smoothMusic * 25) % 360;
 
-    const primaryAlpha = (0.65 + this.smoothBeat * 0.28).toFixed(3);
-    const secondaryAlpha = (0.60 + this.smoothVoice * 0.28).toFixed(3);
-    const accentAlpha = (0.55 + this.smoothMusic * 0.30).toFixed(3);
+    // Lightness dynamically increases on peaks (50% when dim -> up to 68% for neon glow)
+    const beatLightness = Math.round(50 + this.smoothBeat * 18);
+    const voiceLightness = Math.round(52 + this.smoothVoice * 18);
+    const musicLightness = Math.round(52 + this.smoothMusic * 20);
+
+    // Alpha spans from 0.25 (dim) to 1.0 (max light on beat)
+    const beatAlpha = (0.28 + this.smoothBeat * 0.72).toFixed(3);
+    const voiceAlpha = (0.25 + this.smoothVoice * 0.75).toFixed(3);
+    const musicAlpha = (0.22 + this.smoothMusic * 0.78).toFixed(3);
 
     return {
       isPlaying: true,
@@ -172,10 +233,10 @@ class AudioDspEngine {
       music: this.smoothMusic,
       energy: overallEnergy,
       colors: {
-        primary: `hsla(${Math.round(beatHue)}, 98%, 56%, ${primaryAlpha})`,
-        secondary: `hsla(${Math.round(voiceHue)}, 95%, 60%, ${secondaryAlpha})`,
-        accent: `hsla(${Math.round(musicHue)}, 98%, 54%, ${accentAlpha})`,
-        ambient: `hsla(${Math.round((beatHue + 120) % 360)}, 90%, 45%, 0.45)`,
+        primary: `hsla(${Math.round(beatHue)}, 100%, ${beatLightness}%, ${beatAlpha})`,
+        secondary: `hsla(${Math.round(voiceHue)}, 98%, ${voiceLightness}%, ${voiceAlpha})`,
+        accent: `hsla(${Math.round(musicHue)}, 100%, ${musicLightness}%, ${musicAlpha})`,
+        ambient: `hsla(${Math.round((beatHue + 120) % 360)}, 95%, 48%, ${(0.18 + this.smoothBeat * 0.55).toFixed(3)})`,
       },
     };
   }

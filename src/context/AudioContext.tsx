@@ -181,6 +181,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     audio.volume = isMuted ? 0 : volume;
     audio.muted = isMuted;
     audioRef.current = audio;
+    audioDsp.attach(audio);
 
     const onPlay = () => {
       setIsPlaying(true);
