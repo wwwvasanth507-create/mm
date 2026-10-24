@@ -154,3 +154,23 @@ You can test any audio URL before adding it to `music.json`:
 | <kbd>S</kbd> | Toggle Shuffle |
 | <kbd>R</kbd> | Cycle Repeat Mode (Off → All → One) |
 | <kbd>L</kbd> | Toggle Favourite |
+
+---
+
+## ⚖️ Legal & Copyright Disclaimer
+
+WaveMusic is an **open-source, non-commercial software application** developed strictly for educational, research, and technical demonstration purposes.
+
+- **No Media Stored**: This GitHub repository **does not host, distribute, or store any copyrighted audio (MP3/AAC) or video (MP4) files**. All media streams are fetched at client runtime from external, user-configured HTTPS endpoints.
+- **Intellectual Property**: All musical tracks, song compositions, artist names, album titles, and promotional covers are the exclusive property and trademarks of their respective copyright holders and recording labels (e.g., Sony Music, Think Music, Sun Pictures, T-Series, Saregama, Lyca Productions, etc.).
+- **Fair Use**: Evaluated under Section 107 of the US Copyright Act 1976 and Section 52 of the Indian Copyright Act 1957.
+- **DMCA Takedown**: Copyright owners may request immediate removal of any reference or artwork by opening a GitHub issue or consulting [LEGAL.md](LEGAL.md).
+
+For full details, please read [LEGAL.md](LEGAL.md).
+
+---
+
+## 📄 License
+
+The software source code and client architecture are licensed under the [MIT License](LICENSE). Third-party trademarks and audio catalog metadata remain the property of their respective owners.
+

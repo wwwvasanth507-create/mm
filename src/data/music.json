@@ -9,7 +9,7 @@
       "year": 2026,
       "duration": 194,
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Ravana%20Tandavam.mp3",
-      "thumbnailUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/ramayana%20new%20poster.jpg",
+      "thumbnailUrl": "/covers/ravana-tandavam.jpg",
       "description": "Ravana Tandavam from Ramayana composed by A.R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -23,7 +23,7 @@
       "year": 2018,
       "duration": 434,
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Anthaathi-MassTamilan.com.mp3",
-      "thumbnailUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/96-Original-Motion-Picture-Soundtrack-Tamil-2018-20250905072505-500x500.webp",
+      "thumbnailUrl": "/covers/anthaathi.jpg",
       "description": "Anthaathi from 96 composed by Govind Vasantha",
       "language": "Tamil",
       "isExplicit": false
@@ -84,7 +84,7 @@
       "description": "Agriculture Song (Poliye Poliyere) from Kantara: Chapter 1 composed by B. Ajaneesh Loknath",
       "language": "Tamil",
       "isExplicit": false,
-      "artworkUrl": "https://c.saavncdn.com/618/Kantara-A-Legend-Chapter-1-Kannada-Kannada-2025-20251009171821-500x500.jpg"
+      "artworkUrl": "/covers/agriculture-song.jpg"
     },
     {
       "id": "song-animal-instinct",
@@ -152,7 +152,7 @@
       "year": 2025,
       "duration": 357,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Cheenikkallu.mp3",
-      "thumbnailUrl": "https://c.saavncdn.com/372/Cheenikkallu-From-Bison-Kaalamaadan-Tamil-2025-20250923180128-500x500.jpg",
+      "thumbnailUrl": "/covers/cheenikkallu.jpg",
       "description": "Enchanting romantic melody from Mari Selvaraj's Bison Kaalamaadan starring Dhruv Vikram and Anupama Parameswaran, music composed by Nivas K. Prasanna.",
       "language": "Tamil",
       "isExplicit": false
@@ -311,7 +311,7 @@
       "year": 2025,
       "duration": 297,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Kaalamaadan%20Gaanam.mp3",
-      "thumbnailUrl": "https://c.saavncdn.com/644/Kaalamaadan-Gaanam-From-Bison-Kaalamaadan-Tamil-2025-20251009183739-500x500.jpg",
+      "thumbnailUrl": "/covers/kaalamaadan-gaanam.jpg",
       "description": "Fierce rustic spiritual anthem Kaalamaadan Gaanam sung by V.M. Mahalingam with music by Nivas K. Prasanna for Mari Selvaraj's Bison Kaalamaadan.",
       "language": "Tamil",
       "isExplicit": false
@@ -325,7 +325,7 @@
       "year": 2025,
       "duration": 303,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Rekka%20Rekka.mp3",
-      "thumbnailUrl": "https://c.saavncdn.com/007/Rekka-Rekka-From-Bison-Kaalamaadan-Tamil-2025-20250915194246-500x500.jpg",
+      "thumbnailUrl": "/covers/rekka-rekka.jpg",
       "description": "Adrenaline-fueled rap & folk anthem featuring hard-hitting verses by Arivu and Vedan, composed by Nivas K. Prasanna for Bison Kaalamaadan.",
       "language": "Tamil",
       "isExplicit": false
@@ -339,7 +339,7 @@
       "year": 2025,
       "duration": 363,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Theekkoluthi.mp3",
-      "thumbnailUrl": "https://c.saavncdn.com/758/Theekkoluthi-From-Bison-Tamil-2025-20250901123631-500x500.jpg",
+      "thumbnailUrl": "/covers/theekkoluthi.jpg",
       "description": "Empowering and passionate rural anthem Theekkoluthi written by Mari Selvaraj and composed by Nivas K. Prasanna for Bison Kaalamaadan.",
       "language": "Tamil",
       "isExplicit": false
@@ -353,7 +353,7 @@
       "year": 2025,
       "duration": 301,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Thennaadu.mp3",
-      "thumbnailUrl": "https://c.saavncdn.com/728/Thennaadu-From-Bison-Kaalamaadan-Tamil-2025-20251002172427-500x500.jpg",
+      "thumbnailUrl": "/covers/thennaadu.jpg",
       "description": "Soil-rooted rural tribute anthem Thennaadu composed by Nivas K. Prasanna with lyrics by Mari Selvaraj for Dhruv Vikram's Bison Kaalamaadan.",
       "language": "Tamil",
       "isExplicit": false
@@ -607,7 +607,7 @@
       "duration": 277,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Anju%20Vanna%20Poove.mp3",
       "thumbnailUrl": "/covers/anju-vanna-poove.jpg",
-      "artworkUrl": "https://c.saavncdn.com/880/Thug-Life-Tamil-Tamil-2025-20250604103629-500x500.jpg",
+      "artworkUrl": "/covers/anju-vanna-poove.jpg",
       "description": "Anju Vanna Poove from Thug Life composed by A. R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -622,7 +622,7 @@
       "duration": 223,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Azhage%20Agarame.mp3",
       "thumbnailUrl": "/covers/azhage-agarame.jpg",
-      "artworkUrl": "https://c.saavncdn.com/679/Maaman-Original-Motion-Picture-Soundtrack-Tamil-2025-20250905071908-500x500.jpg",
+      "artworkUrl": "/covers/azhage-agarame.jpg",
       "description": "Azhage Agarame from Maaman composed by Hesham Abdul Wahab",
       "language": "Tamil",
       "isExplicit": false
@@ -637,7 +637,7 @@
       "duration": 202,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Dheivamagane%20Dheivamagane.mp3",
       "thumbnailUrl": "/covers/dheivamagane-dheivamagane.jpg",
-      "artworkUrl": "https://c.saavncdn.com/679/Maaman-Original-Motion-Picture-Soundtrack-Tamil-2025-20250905071908-500x500.jpg",
+      "artworkUrl": "/covers/dheivamagane-dheivamagane.jpg",
       "description": "Dheivamagane Dheivamagane from Maaman composed by Hesham Abdul Wahab",
       "language": "Tamil",
       "isExplicit": false
@@ -652,7 +652,7 @@
       "duration": 176,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Engeyo.mp3",
       "thumbnailUrl": "/covers/engeyo.jpg",
-      "artworkUrl": "https://c.saavncdn.com/880/Thug-Life-Tamil-Tamil-2025-20250604103629-500x500.jpg",
+      "artworkUrl": "/covers/engeyo.jpg",
       "description": "Engeyo from Thug Life composed by A. R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -667,7 +667,7 @@
       "duration": 278,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Ethana%20Saami.mp3",
       "thumbnailUrl": "/covers/ethana-saami.jpg",
-      "artworkUrl": "https://c.saavncdn.com/835/Idli-Kadai-Tamil-2025-20250925113952-500x500.jpg",
+      "artworkUrl": "/covers/ethana-saami.jpg",
       "description": "Ethana Saami from Idli Kadai composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -682,7 +682,7 @@
       "duration": 247,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Grandma%20song%20%20from%20sabtham%20new%20movie.mp3",
       "thumbnailUrl": "/covers/grandma-song.jpg",
-      "artworkUrl": "https://c.saavncdn.com/506/Sabdham-Tamil-2025-20250228125403-500x500.jpg",
+      "artworkUrl": "/covers/grandma-song.jpg",
       "description": "Grandma Song (The Spooky Vibes of Grandma) from Sabdham composed by S. Thaman",
       "language": "Tamil",
       "isExplicit": false
@@ -697,7 +697,7 @@
       "duration": 260,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Jinguchaa.mp3",
       "thumbnailUrl": "/covers/jinguchaa.jpg",
-      "artworkUrl": "https://c.saavncdn.com/880/Thug-Life-Tamil-Tamil-2025-20250604103629-500x500.jpg",
+      "artworkUrl": "/covers/jinguchaa.jpg",
       "description": "Jinguchaa from Thug Life composed by A. R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -712,7 +712,7 @@
       "duration": 308,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kallaliye%20Kallaliye.mp3",
       "thumbnailUrl": "/covers/kallaliye-kallaliye.jpg",
-      "artworkUrl": "https://c.saavncdn.com/679/Maaman-Original-Motion-Picture-Soundtrack-Tamil-2025-20250905071908-500x500.jpg",
+      "artworkUrl": "/covers/kallaliye-kallaliye.jpg",
       "description": "Kallaliye Kallaliye from Maaman composed by Hesham Abdul Wahab",
       "language": "Tamil",
       "isExplicit": false
@@ -727,7 +727,7 @@
       "duration": 212,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kalloorum%20-%20Veera%20Dheera%20Sooran.mp3",
       "thumbnailUrl": "/covers/kalloorum.jpg",
-      "artworkUrl": "https://c.saavncdn.com/736/Veera-Dheera-Sooran-Original-Motion-Picture-Soundtrack-Tamil-2025-20250905071906-500x500.jpg",
+      "artworkUrl": "/covers/kalloorum.jpg",
       "description": "Kalloorum from Veera Dheera Sooran composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -742,7 +742,7 @@
       "duration": 243,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kanimaa.mp3",
       "thumbnailUrl": "/covers/kanimaa.jpg",
-      "artworkUrl": "https://c.saavncdn.com/349/Kanimaa-From-Retro-Tamil-2025-20250321121003-500x500.jpg",
+      "artworkUrl": "/covers/kanimaa.jpg",
       "description": "Kanimaa from Retro composed by Santhosh Narayanan",
       "language": "Tamil",
       "isExplicit": false
@@ -757,7 +757,7 @@
       "duration": 261,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kannadi%20Poove.mp3",
       "thumbnailUrl": "/covers/kannadi-poove.jpg",
-      "artworkUrl": "https://c.saavncdn.com/666/Kannadi-Poove-From-Retro-Tamil-2025-20250212141009-500x500.jpg",
+      "artworkUrl": "/covers/kannadi-poove.jpg",
       "description": "Kannadi Poove from Retro composed by Santhosh Narayanan",
       "language": "Tamil",
       "isExplicit": false
@@ -772,7 +772,7 @@
       "duration": 179,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kannale%20Pesuma.mp3",
       "thumbnailUrl": "/covers/kannale-pesuma.jpg",
-      "artworkUrl": "https://c.saavncdn.com/679/Maaman-Original-Motion-Picture-Soundtrack-Tamil-2025-20250905071908-500x500.jpg",
+      "artworkUrl": "/covers/kannale-pesuma.jpg",
       "description": "Kannale Pesuma from Maaman composed by Hesham Abdul Wahab",
       "language": "Tamil",
       "isExplicit": false
@@ -787,7 +787,7 @@
       "duration": 152,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kanne%20Kalangadha.mp3",
       "thumbnailUrl": "/covers/kanne-kalangadha.jpg",
-      "artworkUrl": "https://c.saavncdn.com/513/Sirai-Original-Motion-Picture-Soundtrack-Tamil-2026-20260105133230-500x500.jpg",
+      "artworkUrl": "/covers/kanne-kalangadha.jpg",
       "description": "Kanne Kalangadha from Sirai composed by Justin Prabhakaran",
       "language": "Tamil",
       "isExplicit": false
@@ -802,7 +802,7 @@
       "duration": 244,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Karma%20Song.mp3",
       "thumbnailUrl": "/covers/karma-song.jpg",
-      "artworkUrl": "https://c.saavncdn.com/618/Kantara-A-Legend-Chapter-1-Kannada-Kannada-2025-20251009171821-500x500.jpg",
+      "artworkUrl": "/covers/karma-song.jpg",
       "description": "Karma Song from Kantara: Chapter 1 composed by B. Ajaneesh Loknath",
       "language": "Tamil",
       "isExplicit": false
@@ -817,7 +817,7 @@
       "duration": 153,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kulasamy%20Kaaval%20Kaaka.mp3",
       "thumbnailUrl": "/covers/kulasamy-kaaval-kaaka.jpg",
-      "artworkUrl": "https://c.saavncdn.com/835/Idli-Kadai-Tamil-2025-20250925113952-500x500.jpg",
+      "artworkUrl": "/covers/kulasamy-kaaval-kaaka.jpg",
       "description": "Kulasamy Kaaval Kaaka from Idli Kadai composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -832,7 +832,7 @@
       "duration": 234,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Mannichiru.mp3",
       "thumbnailUrl": "/covers/mannichiru.jpg",
-      "artworkUrl": "https://c.saavncdn.com/513/Sirai-Original-Motion-Picture-Soundtrack-Tamil-2026-20260105133230-500x500.jpg",
+      "artworkUrl": "/covers/mannichiru.jpg",
       "description": "Mannichiru from Sirai composed by Justin Prabhakaran",
       "language": "Tamil",
       "isExplicit": false
@@ -847,7 +847,7 @@
       "duration": 218,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Minnu%20Vattaam%20Poochi.mp3",
       "thumbnailUrl": "/covers/minnu-vattaam-poochi.jpg",
-      "artworkUrl": "https://c.saavncdn.com/513/Sirai-Original-Motion-Picture-Soundtrack-Tamil-2026-20260105133230-500x500.jpg",
+      "artworkUrl": "/covers/minnu-vattaam-poochi.jpg",
       "description": "Minnu Vattaam Poochi from Sirai composed by Justin Prabhakaran",
       "language": "Tamil",
       "isExplicit": false
@@ -862,7 +862,7 @@
       "duration": 241,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Muththa%20Mazhai.mp3",
       "thumbnailUrl": "/covers/muththa-mazhai.jpg",
-      "artworkUrl": "https://c.saavncdn.com/880/Thug-Life-Tamil-Tamil-2025-20250604103629-500x500.jpg",
+      "artworkUrl": "/covers/muththa-mazhai.jpg",
       "description": "Muththa Mazhai from Thug Life composed by A. R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -877,7 +877,7 @@
       "duration": 153,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/My%20Heartu%20Spinning.mp3",
       "thumbnailUrl": "/covers/my-heartu-spinning.jpg",
-      "artworkUrl": "https://c.saavncdn.com/835/Idli-Kadai-Tamil-2025-20250925113952-500x500.jpg",
+      "artworkUrl": "/covers/my-heartu-spinning.jpg",
       "description": "My Heartu Spinning from Idli Kadai composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -892,7 +892,7 @@
       "duration": 274,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Neelothi.mp3",
       "thumbnailUrl": "/covers/neelothi.jpg",
-      "artworkUrl": "https://c.saavncdn.com/513/Sirai-Original-Motion-Picture-Soundtrack-Tamil-2026-20260105133230-500x500.jpg",
+      "artworkUrl": "/covers/neelothi.jpg",
       "description": "Neelothi from Sirai composed by Justin Prabhakaran",
       "language": "Tamil",
       "isExplicit": false
@@ -907,7 +907,7 @@
       "duration": 198,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Og%20Sambavam.mp3",
       "thumbnailUrl": "/covers/og-sambavam.jpg",
-      "artworkUrl": "https://c.saavncdn.com/960/Og-Sambavam-From-Good-Bad-Ugly-Tamil-2025-20250318111002-500x500.jpg",
+      "artworkUrl": "/covers/og-sambavam.jpg",
       "description": "OG Sambavam from Good Bad Ugly composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -922,7 +922,7 @@
       "duration": 209,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Pathikichu-Vidaamuyarchi%202025.mp3",
       "thumbnailUrl": "/covers/pathikichu.jpg",
-      "artworkUrl": "https://c.saavncdn.com/113/Vidaamuyarchi-Tamil-2025-20250217133052-500x500.jpg",
+      "artworkUrl": "/covers/pathikichu.jpg",
       "description": "Pathikichu from Vidaamuyarchi composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -937,7 +937,7 @@
       "duration": 194,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Ranagalam.mp3",
       "thumbnailUrl": "/covers/ranagalam.jpg",
-      "artworkUrl": "https://c.saavncdn.com/999/Kollywood-Mass-Superhits-Tamil-2026-20260813161233-500x500.jpg",
+      "artworkUrl": "/covers/ranagalam.jpg",
       "description": "Ranagalam from Good Bad Ugly composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -952,7 +952,7 @@
       "duration": 239,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Rebel%20Song.mp3",
       "thumbnailUrl": "/covers/rebel-song.jpg",
-      "artworkUrl": "https://c.saavncdn.com/618/Kantara-A-Legend-Chapter-1-Kannada-Kannada-2025-20251009171821-500x500.jpg",
+      "artworkUrl": "/covers/rebel-song.jpg",
       "description": "Rebel Song from Kantara: Chapter 1 composed by B. Ajaneesh Loknath",
       "language": "Tamil",
       "isExplicit": false
@@ -967,7 +967,7 @@
       "duration": 207,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Salambala.mp3",
       "thumbnailUrl": "/covers/salambala.jpg",
-      "artworkUrl": "https://c.saavncdn.com/071/Madharaasi-Original-Motion-Picture-Soundtrack-Tamil-2025-20250830012902-500x500.jpg",
+      "artworkUrl": "/covers/salambala.jpg",
       "description": "Salambala from Madharaasi composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -982,7 +982,7 @@
       "duration": 236,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Thangapoovey.mp3",
       "thumbnailUrl": "/covers/thangapoovey.jpg",
-      "artworkUrl": "https://c.saavncdn.com/071/Madharaasi-Original-Motion-Picture-Soundtrack-Tamil-2025-20250830012902-500x500.jpg",
+      "artworkUrl": "/covers/thangapoovey.jpg",
       "description": "Thangapoovey from Madharaasi composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -997,7 +997,7 @@
       "duration": 239,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/The%20One.mp3",
       "thumbnailUrl": "/covers/the-one.jpg",
-      "artworkUrl": "https://c.saavncdn.com/945/The-One-From-Retro-Tamil-2025-20250411191133-500x500.jpg",
+      "artworkUrl": "/covers/the-one.jpg",
       "description": "The One from Retro composed by Santhosh Narayanan",
       "language": "Tamil",
       "isExplicit": false
@@ -1012,7 +1012,7 @@
       "duration": 168,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Vaanam%C2%A0Kizhiyuthu.mp3",
       "thumbnailUrl": "/covers/vaanam-kizhiyuthu.jpg",
-      "artworkUrl": "https://c.saavncdn.com/679/Maaman-Original-Motion-Picture-Soundtrack-Tamil-2025-20250905071908-500x500.jpg",
+      "artworkUrl": "/covers/vaanam-kizhiyuthu.jpg",
       "description": "Vaanam Kizhiyuthu from Maaman composed by Hesham Abdul Wahab",
       "language": "Tamil",
       "isExplicit": false
@@ -1027,7 +1027,7 @@
       "duration": 221,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Vaenguzhalil%20Ezhaindayadi.mp3",
       "thumbnailUrl": "/covers/vaenguzhalil-ezhaindayadi.jpg",
-      "artworkUrl": "https://c.saavncdn.com/618/Kantara-A-Legend-Chapter-1-Kannada-Kannada-2025-20251009171821-500x500.jpg",
+      "artworkUrl": "/covers/vaenguzhalil-ezhaindayadi.jpg",
       "description": "Vaenguzhalil Ezhaindayadi from Kantara: Chapter 1 composed by B. Ajaneesh Loknath",
       "language": "Tamil",
       "isExplicit": false
@@ -1042,7 +1042,7 @@
       "duration": 276,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Varaha%20Roopam.mp3",
       "thumbnailUrl": "/covers/varaha-roopam.jpg",
-      "artworkUrl": "https://c.saavncdn.com/887/Radhe-Govind-Shree-Krishna-Bhajan--Hindi-2001-20200903140631-500x500.jpg",
+      "artworkUrl": "/covers/varaha-roopam.jpg",
       "description": "Varaha Roopam (Daiva Va Rishtam) from Kantara composed by B. Ajaneesh Loknath",
       "language": "Tamil",
       "isExplicit": false
@@ -1057,7 +1057,7 @@
       "duration": 184,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Vizhuthe%20Thalavizhuthe.mp3",
       "thumbnailUrl": "/covers/vizhuthe-thalavizhuthe.jpg",
-      "artworkUrl": "https://c.saavncdn.com/679/Maaman-Original-Motion-Picture-Soundtrack-Tamil-2025-20250905071908-500x500.jpg",
+      "artworkUrl": "/covers/vizhuthe-thalavizhuthe.jpg",
       "description": "Vizhuthe Thalavizhuthe from Maaman composed by Hesham Abdul Wahab",
       "language": "Tamil",
       "isExplicit": false
@@ -1072,7 +1072,7 @@
       "duration": 202,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Yedi.mp3",
       "thumbnailUrl": "/covers/yedi.jpg",
-      "artworkUrl": "https://c.saavncdn.com/289/Nilavuku-En-Mel-Ennadi-Kobam-Tamil-2025-20250329114015-500x500.jpg",
+      "artworkUrl": "/covers/yedi.jpg",
       "description": "Yedi from Nilavuku En Mel Ennadi Kobam (NEEK) composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -1087,7 +1087,7 @@
       "duration": 223,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Yen%20Paattan%20Saami%20Varum.mp3",
       "thumbnailUrl": "/covers/yen-paattan-saami-varum.jpg",
-      "artworkUrl": "https://c.saavncdn.com/835/Idli-Kadai-Tamil-2025-20250925113952-500x500.jpg",
+      "artworkUrl": "/covers/yen-paattan-saami-varum.jpg",
       "description": "Yen Paattan Saami Varum from Idli Kadai composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false

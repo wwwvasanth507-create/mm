@@ -2,6 +2,8 @@
   "name": "wavemusic",
   "private": true,
   "version": "1.0.0",
+  "description": "Modern high-performance web audio music streaming platform with progressive playback.",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
