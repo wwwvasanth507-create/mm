@@ -1,8 +1,8 @@
-import musicData from '@/data/music.json';
+﻿import musicData from '@/data/music.json';
 import { Track, Album, Artist, Playlist, PlaybackHistoryItem } from '@/types/music';
 import { AUDIO_CONFIG, STORAGE_KEYS, isValidUrl } from '@/config/audio';
 
-// Extract raw songs from music.json (supporting songs, tracks, or direct array)
+// Extract raw songs from bundled fallback music.json (supporting songs, tracks, or direct array)
 interface RawCatalog {
   songs?: Track[];
   tracks?: Track[];
@@ -10,34 +10,41 @@ interface RawCatalog {
 }
 
 const typedCatalog = musicData as RawCatalog;
-const rawSongs: Track[] = (
+const rawStaticSongs: Track[] = (
   typedCatalog.songs ||
   typedCatalog.tracks ||
   (Array.isArray(musicData) ? musicData : [])
 ) as Track[];
 
-// Normalize catalog items to ensure thumbnailUrl and audioUrl are populated
-const normalizedTracks: Track[] = rawSongs.map((song, idx) => {
+/**
+ * Normalizes catalog items to ensure all required fields are present and sanitized
+ */
+export function normalizeTrack(song: Partial<Track>, idx: number = 0): Track {
   const directVideo = isDirectVideoUrl(song.videoUrl) ? song.videoUrl?.trim() : '';
+  const fallbackId = `song-${idx + 1}`;
   return {
-    ...song,
-    id: song.id || `song-${idx + 1}`,
-    title: song.title || 'Untitled Track',
-    artist: song.artist || 'Unknown Artist',
-    album: song.album || 'Single',
-    genre: song.genre || 'General',
-    year: song.year || new Date().getFullYear(),
-    duration: song.duration || 0,
-    audioUrl: song.audioUrl || '',
-    thumbnailUrl: song.thumbnailUrl || song.artworkUrl || '',
-    artworkUrl: song.thumbnailUrl || song.artworkUrl || '',
-    language: song.language || 'English',
-    description: song.description || '',
+    id: String(song.id || fallbackId).trim(),
+    title: (song.title || 'Untitled Track').trim(),
+    artist: (song.artist || 'Unknown Artist').trim(),
+    album: (song.album || 'Single').trim(),
+    genre: (song.genre || 'General').trim(),
+    year: Number(song.year) || new Date().getFullYear(),
+    duration: Number(song.duration) || 0,
+    audioUrl: (song.audioUrl || '').trim(),
+    thumbnailUrl: (song.thumbnailUrl || song.artworkUrl || '').trim(),
+    artworkUrl: (song.thumbnailUrl || song.artworkUrl || '').trim(),
+    language: (song.language || 'English').trim(),
+    description: (song.description || '').trim(),
     isExplicit: Boolean(song.isExplicit),
     videoUrl: directVideo || '',
     hasVideo: Boolean(directVideo),
+    lyrics: song.lyrics || undefined,
   };
-});
+}
+
+const bundledNormalizedTracks: Track[] = rawStaticSongs.map((song, idx) =>
+  normalizeTrack(song, idx)
+);
 
 /**
  * Normalizes a string into a clean URL-friendly ID slug
@@ -51,8 +58,229 @@ function slugify(text: string): string {
 }
 
 /**
+ * Configurable Remote Catalogue Manifest URL
+ */
+export function getCatalogueUrl(): string {
+  if (typeof window === 'undefined') return AUDIO_CONFIG.defaultCatalogueUrl;
+  return (
+    localStorage.getItem(STORAGE_KEYS.CATALOGUE_URL) || AUDIO_CONFIG.defaultCatalogueUrl
+  );
+}
+
+export function setCatalogueUrl(newUrl: string): boolean {
+  if (typeof window === 'undefined') return false;
+  const trimmed = newUrl.trim();
+  if (!isValidUrl(trimmed)) return false;
+  localStorage.setItem(STORAGE_KEYS.CATALOGUE_URL, trimmed);
+  return true;
+}
+
+export function resetCatalogueUrl(): void {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(STORAGE_KEYS.CATALOGUE_URL);
+}
+
+export function getLastCatalogueSyncTime(): number | null {
+  if (typeof window === 'undefined') return null;
+  const raw = localStorage.getItem(STORAGE_KEYS.CATALOGUE_LAST_SYNC);
+  return raw ? Number(raw) : null;
+}
+
+/**
+ * Cached Remote Catalogue Storage
+ */
+export function getCachedCatalogue(): Track[] {
+  if (typeof window === 'undefined') return bundledNormalizedTracks;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.CACHED_CATALOGUE);
+    if (!raw) return bundledNormalizedTracks;
+    const parsed = JSON.parse(raw);
+    const list: Partial<Track>[] = Array.isArray(parsed)
+      ? parsed
+      : parsed?.songs || parsed?.tracks || [];
+    if (!Array.isArray(list) || list.length === 0) return bundledNormalizedTracks;
+    return list.map((item, idx) => normalizeTrack(item, idx));
+  } catch {
+    return bundledNormalizedTracks;
+  }
+}
+
+/**
+ * Hidden/Removed Catalogue Track IDs (Soft-Delete)
+ */
+export function getHiddenTrackIds(): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.HIDDEN_TRACK_IDS);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function hideTrack(trackId: string): void {
+  if (typeof window === 'undefined') return;
+  const current = getHiddenTrackIds();
+  if (!current.includes(trackId)) {
+    localStorage.setItem(STORAGE_KEYS.HIDDEN_TRACK_IDS, JSON.stringify([...current, trackId]));
+    window.dispatchEvent(new CustomEvent('wavemusic_tracks_updated'));
+  }
+}
+
+export function unhideTrack(trackId: string): void {
+  if (typeof window === 'undefined') return;
+  const current = getHiddenTrackIds();
+  const updated = current.filter((id) => id !== trackId);
+  localStorage.setItem(STORAGE_KEYS.HIDDEN_TRACK_IDS, JSON.stringify(updated));
+  window.dispatchEvent(new CustomEvent('wavemusic_tracks_updated'));
+}
+
+/**
+ * Remote Catalogue Fetch & Synchronization Engine
+ * Fetches the remote manifest without requiring an app rebuild or APK update.
+ */
+export interface SyncCatalogueResult {
+  success: boolean;
+  message: string;
+  count: number;
+  updated: boolean;
+  lastSync?: number;
+}
+
+export async function fetchRemoteCatalogue(
+  forceRefresh: boolean = false
+): Promise<SyncCatalogueResult> {
+  const url = getCatalogueUrl();
+  const cached = getCachedCatalogue();
+
+  try {
+    const lastEtag = localStorage.getItem(STORAGE_KEYS.CATALOGUE_ETAG);
+    const headers: HeadersInit = {
+      Accept: 'application/json',
+    };
+
+    if (lastEtag && !forceRefresh) {
+      headers['If-None-Match'] = lastEtag;
+    }
+
+    // Append cache-busting timestamp query parameter to bypass CDN/proxy caching
+    const urlObj = new URL(url);
+    urlObj.searchParams.set('_wave_t', String(Date.now()));
+
+    const res = await fetch(urlObj.toString(), {
+      method: 'GET',
+      headers,
+      mode: 'cors',
+      cache: 'no-cache',
+    });
+
+    if (res.status === 304) {
+      // 304 Not Modified: Cached catalogue is already up to date
+      const now = Date.now();
+      localStorage.setItem(STORAGE_KEYS.CATALOGUE_LAST_SYNC, String(now));
+      return {
+        success: true,
+        message: 'Catalogue is already up to date',
+        count: cached.length,
+        updated: false,
+        lastSync: now,
+      };
+    }
+
+    if (!res.ok) {
+      throw new Error(`Server returned HTTP ${res.status}: ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    const rawList: Partial<Track>[] = Array.isArray(data)
+      ? data
+      : data?.songs || data?.tracks || [];
+
+    if (!Array.isArray(rawList) || rawList.length === 0) {
+      throw new Error('Remote manifest contains no valid tracks array');
+    }
+
+    // Normalize and sanitize fetched tracks
+    const freshTracks = rawList.map((t, idx) => normalizeTrack(t, idx));
+
+    // Save to local cache
+    localStorage.setItem(STORAGE_KEYS.CACHED_CATALOGUE, JSON.stringify(freshTracks));
+
+    // Store ETag if provided
+    const newEtag = res.headers.get('ETag');
+    if (newEtag) {
+      localStorage.setItem(STORAGE_KEYS.CATALOGUE_ETAG, newEtag);
+    }
+
+    const now = Date.now();
+    localStorage.setItem(STORAGE_KEYS.CATALOGUE_LAST_SYNC, String(now));
+
+    // Notify application components
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('wavemusic_catalogue_updated', {
+          detail: { trackCount: freshTracks.length, source: 'remote' },
+        })
+      );
+      window.dispatchEvent(new CustomEvent('wavemusic_tracks_updated'));
+    }
+
+    return {
+      success: true,
+      message: `Successfully synchronized ${freshTracks.length} tracks`,
+      count: freshTracks.length,
+      updated: true,
+      lastSync: now,
+    };
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : String(err);
+    console.warn('[WaveMusic Catalogue Sync] Network fetch failed, retaining cached catalogue:', errorMsg);
+
+    return {
+      success: false,
+      message: `Using cached catalogue (${cached.length} tracks): ${errorMsg}`,
+      count: cached.length,
+      updated: false,
+      lastSync: getLastCatalogueSyncTime() || undefined,
+    };
+  }
+}
+
+/**
+ * Initializes automatic background catalogue synchronization on app foregrounding & online events
+ */
+let isAutoSyncInitialized = false;
+
+export function initCatalogueAutoSync(): void {
+  if (isAutoSyncInitialized || typeof window === 'undefined') return;
+  isAutoSyncInitialized = true;
+
+  const maybeSync = () => {
+    const lastSync = getLastCatalogueSyncTime();
+    const tenMinutes = 10 * 60 * 1000;
+    if (!lastSync || Date.now() - lastSync > tenMinutes) {
+      fetchRemoteCatalogue().catch(() => {});
+    }
+  };
+
+  // Sync on app startup (after 2 seconds)
+  setTimeout(maybeSync, 2000);
+
+  // Sync when returning from background / phone unlocked
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      maybeSync();
+    }
+  });
+
+  // Sync when phone reconnects to internet
+  window.addEventListener('online', () => {
+    fetchRemoteCatalogue().catch(() => {});
+  });
+}
+
+/**
  * Safely resolves an audio URL for streaming
- * Plays direct HTTPS URLs from any compatible host, including query parameters
  */
 export function resolveAudioUrl(track?: Track | null): string {
   if (!track || !track.audioUrl) return '';
@@ -60,16 +288,18 @@ export function resolveAudioUrl(track?: Track | null): string {
 }
 
 /**
- * Verifies if a URL is a direct media video URL (e.g. Cloudflare R2, direct MP4/WebM/HLS stream)
- * Rejects YouTube, Vimeo, and third-party page links
+ * Verifies if a URL is a direct media video URL
  */
 export function isDirectVideoUrl(url?: string | null): boolean {
   if (!url || typeof url !== 'string') return false;
   const trimmed = url.trim().toLowerCase();
-  if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://') && !trimmed.startsWith('/')) {
+  if (
+    !trimmed.startsWith('http://') &&
+    !trimmed.startsWith('https://') &&
+    !trimmed.startsWith('/')
+  ) {
     return false;
   }
-  // Disallow YouTube and third-party video page links
   if (
     trimmed.includes('youtube.com') ||
     trimmed.includes('youtu.be') ||
@@ -81,14 +311,13 @@ export function isDirectVideoUrl(url?: string | null): boolean {
 }
 
 /**
- * Safely resolves a direct video stream URL (Cloudflare R2, direct MP4/WebM)
+ * Safely resolves a direct video stream URL
  */
 export function resolveVideoUrl(track?: Track | null): string {
   if (!track || !track.videoUrl) return '';
   const trimmed = track.videoUrl.trim();
   return isDirectVideoUrl(trimmed) ? trimmed : '';
 }
-
 
 /**
  * Resolves artwork image URL with graceful SVG gradient fallback
@@ -109,35 +338,23 @@ export function resolveArtworkUrl(item?: {
 }
 
 /**
- * User-Added Tracks (Local Storage)
+ * User-Added Local Tracks (Local Storage)
  */
 export function getUserTracks(): Track[] {
   if (typeof window === 'undefined') return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.USER_TRACKS);
     if (!raw) return [];
-    const list: Track[] = JSON.parse(raw);
-    return list.map((t) => {
-      const directVideo = isDirectVideoUrl(t.videoUrl) ? t.videoUrl?.trim() : '';
-      return {
-        ...t,
-        videoUrl: directVideo || '',
-        hasVideo: Boolean(directVideo),
-      };
-    });
+    const list: Partial<Track>[] = JSON.parse(raw);
+    return list.map((t, idx) => normalizeTrack(t, idx));
   } catch {
     return [];
   }
 }
 
-export function saveUserTrack(track: Track): Track[] {
+export function saveUserTrack(track: Partial<Track>): Track[] {
   const current = getUserTracks();
-  const directVideo = isDirectVideoUrl(track.videoUrl) ? track.videoUrl?.trim() : '';
-  const sanitizedTrack: Track = {
-    ...track,
-    videoUrl: directVideo || '',
-    hasVideo: Boolean(directVideo),
-  };
+  const sanitizedTrack = normalizeTrack(track);
   const existsIndex = current.findIndex((t) => t.id === sanitizedTrack.id);
   let updated: Track[];
   if (existsIndex >= 0) {
@@ -155,23 +372,37 @@ export function saveUserTrack(track: Track): Track[] {
 
 export function deleteUserTrack(trackId: string): Track[] {
   const current = getUserTracks();
-  const updated = current.filter((t) => t.id !== trackId);
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(STORAGE_KEYS.USER_TRACKS, JSON.stringify(updated));
-    window.dispatchEvent(new CustomEvent('wavemusic_tracks_updated'));
+  const isCustom = current.some((t) => t.id === trackId);
+
+  if (isCustom) {
+    const updated = current.filter((t) => t.id !== trackId);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.USER_TRACKS, JSON.stringify(updated));
+      window.dispatchEvent(new CustomEvent('wavemusic_tracks_updated'));
+    }
+    return updated;
+  } else {
+    // Soft delete/hide catalogue track
+    hideTrack(trackId);
+    return current;
   }
-  return updated;
 }
 
 /**
  * Returns complete combined catalog:
- * user-added tracks + tracks from music.json
+ * user-added custom tracks + cached/bundled tracks - hidden tracks
  */
 export function getAllTracks(): Track[] {
   const userTracks = getUserTracks();
+  const catalogueTracks = getCachedCatalogue();
+  const hiddenIds = new Set(getHiddenTrackIds());
+
   const userTrackIds = new Set(userTracks.map((t) => t.id));
-  const staticTracks = normalizedTracks.filter((t) => !userTrackIds.has(t.id));
-  return [...userTracks, ...staticTracks];
+  const activeCatalogueTracks = catalogueTracks.filter(
+    (t) => !userTrackIds.has(t.id) && !hiddenIds.has(t.id)
+  );
+
+  return [...userTracks, ...activeCatalogueTracks];
 }
 
 export function getTrackById(id: string): Track | undefined {
@@ -186,8 +417,7 @@ export function getTracksByIds(ids: string[]): Track[] {
 }
 
 /**
- * Auto-derives unique Album collections from songs metadata
- * No need to maintain duplicate album entries in separate files!
+ * Auto-derives unique Album collections from tracks metadata
  */
 export function getAllAlbums(): Album[] {
   const albumMap = new Map<string, Album>();
@@ -226,8 +456,7 @@ export function getAlbumById(id: string): Album | undefined {
 }
 
 /**
- * Auto-derives unique Artist profiles from songs metadata
- * Automatically links top tracks and albums!
+ * Auto-derives unique Artist profiles from tracks metadata
  */
 export function getAllArtists(): Artist[] {
   const artistMap = new Map<string, Artist>();
@@ -269,21 +498,46 @@ export function getArtistById(id: string): Artist | undefined {
 }
 
 /**
- * Playlists Queries
+ * Curated Playlists
  */
 export function getCuratedPlaylists(): Playlist[] {
-  if (typedCatalog.playlists && Array.isArray(typedCatalog.playlists)) {
-    return typedCatalog.playlists;
-  }
+  const tracks = getAllTracks();
+  const tamilTracks = tracks.filter((t) => t.language?.toLowerCase() === 'tamil');
+  const melodyTracks = tracks.filter((t) =>
+    (t.genre + t.title + t.description).toLowerCase().includes('melody')
+  );
 
-  // Fallback curated playlist
   return [
     {
-      id: 'playlist-featured',
-      name: 'Featured Library Tracks',
-      description: 'Songs available in your catalog',
-      coverUrl: normalizedTracks[0]?.thumbnailUrl,
-      trackIds: normalizedTracks.map((t) => t.id),
+      id: 'playlist-top-hits',
+      name: 'WaveMusic Top Hits',
+      description: 'The most streamed tracks and trending releases',
+      coverUrl: tracks[0]?.thumbnailUrl || '',
+      trackIds: tracks.slice(0, 20).map((t) => t.id),
+      createdAt: '2025-01-01',
+    },
+    {
+      id: 'playlist-tamil-vibes',
+      name: 'Tamil Pure Vibes',
+      description: 'Soulful melodies and timeless Tamil cinema songs',
+      coverUrl: tamilTracks[0]?.thumbnailUrl || tracks[1]?.thumbnailUrl || '',
+      trackIds: tamilTracks.map((t) => t.id),
+      createdAt: '2025-01-01',
+    },
+    {
+      id: 'playlist-night-chill',
+      name: 'Midnight Melodies',
+      description: 'Late night calm, acoustic melodies and soothing vocals',
+      coverUrl: melodyTracks[0]?.thumbnailUrl || tracks[2]?.thumbnailUrl || '',
+      trackIds: melodyTracks.map((t) => t.id),
+      createdAt: '2025-01-01',
+    },
+    {
+      id: 'playlist-all-songs',
+      name: 'Full 24/7 Library Loop',
+      description: 'Continuous uninterrupted stream of all songs in the catalog',
+      coverUrl: tracks[3]?.thumbnailUrl || tracks[0]?.thumbnailUrl || '',
+      trackIds: tracks.map((t) => t.id),
       createdAt: '2025-01-01',
     },
   ];
@@ -457,8 +711,6 @@ export function clearPlaybackHistory(): void {
 
 /**
  * Generic Audio URL Stream Diagnostic Tester
- * Tests any audio URL (including query parameters) for HTTP Range 206 support,
- * Content-Type, latency, and CORS availability.
  */
 export interface AudioDiagnosticResult {
   success: boolean;

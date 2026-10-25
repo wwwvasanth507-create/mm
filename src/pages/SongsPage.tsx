@@ -10,8 +10,12 @@ import {
   X,
   Sparkles,
   Film,
+  RefreshCw,
+  Download,
+  CheckCircle2,
 } from 'lucide-react';
-import { getAllTracks } from '@/services/musicService';
+import { getAllTracks, fetchRemoteCatalogue } from '@/services/musicService';
+import { getAllDownloadedTracks } from '@/services/downloadService';
 import { TrackRow } from '@/components/common/TrackRow';
 import { Track } from '@/types/music';
 import { useAudio } from '@/context/AudioContext';
@@ -21,10 +25,44 @@ type SortOption = 'title' | 'artist' | 'year' | 'duration';
 export const SongsPage: React.FC = () => {
   const [allTracks, setAllTracks] = useState(() => getAllTracks());
   const { playTrack } = useAudio();
-  const { onOpenPlaylistModal, onOpenAddSongModal } = useOutletContext<{
+  const { onOpenPlaylistModal, onOpenAddSongModal, onOpenEditSongModal } = useOutletContext<{
     onOpenPlaylistModal: (track: Track) => void;
     onOpenAddSongModal?: () => void;
+    onOpenEditSongModal?: (track: Track) => void;
   }>();
+
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncToast, setSyncToast] = useState<string | null>(null);
+  const [onlyDownloaded, setOnlyDownloaded] = useState(false);
+  const [downloadedIds, setDownloadedIds] = useState<string[]>([]);
+
+  React.useEffect(() => {
+    getAllDownloadedTracks().then((dl) => setDownloadedIds(dl.map((t) => t.id)));
+    const handleDl = () => getAllDownloadedTracks().then((dl) => setDownloadedIds(dl.map((t) => t.id)));
+    window.addEventListener('wavemusic_download_completed', handleDl);
+    window.addEventListener('wavemusic_download_deleted', handleDl);
+    window.addEventListener('wavemusic_downloads_cleared', handleDl);
+    return () => {
+      window.removeEventListener('wavemusic_download_completed', handleDl);
+      window.removeEventListener('wavemusic_download_deleted', handleDl);
+      window.removeEventListener('wavemusic_downloads_cleared', handleDl);
+    };
+  }, []);
+
+  const handleSyncCatalogue = async () => {
+    setIsSyncing(true);
+    setSyncToast(null);
+    try {
+      const res = await fetchRemoteCatalogue(true);
+      setSyncToast(res.message);
+      setTimeout(() => setSyncToast(null), 4000);
+    } catch {
+      setSyncToast('Sync failed: network unreachable');
+      setTimeout(() => setSyncToast(null), 4000);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
 
   React.useEffect(() => {
     const handleUpdate = () => setAllTracks(getAllTracks());
@@ -64,8 +102,9 @@ export const SongsPage: React.FC = () => {
             : track.language?.toLowerCase() === selectedLanguage.toLowerCase();
 
         const matchesVideo = !onlyVideos || Boolean(track.videoUrl);
+        const matchesDownloaded = !onlyDownloaded || downloadedIds.includes(track.id);
 
-        return matchesQuery && matchesLanguage && matchesVideo;
+        return matchesQuery && matchesLanguage && matchesVideo && matchesDownloaded;
       })
       .sort((a, b) => {
         if (sortBy === 'title') return a.title.localeCompare(b.title);
@@ -74,7 +113,7 @@ export const SongsPage: React.FC = () => {
         if (sortBy === 'duration') return b.duration - a.duration;
         return 0;
       });
-  }, [allTracks, query, selectedLanguage, sortBy, onlyVideos]);
+  }, [allTracks, query, selectedLanguage, sortBy, onlyVideos, onlyDownloaded, downloadedIds]);
 
   const handlePlayAll = () => {
     if (filteredTracks.length > 0) {
@@ -129,14 +168,31 @@ export const SongsPage: React.FC = () => {
           </button>
 
           <button
+            onClick={handleSyncCatalogue}
+            disabled={isSyncing}
+            className="px-4 py-2.5 rounded-full bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 font-semibold text-xs flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+            title="Check remote manifest for new songs without rebuilding app"
+          >
+            <RefreshCw className={"w-3.5 h-3.5 " + (isSyncing ? "animate-spin" : "")} />
+            <span>{isSyncing ? 'Syncing...' : 'Sync Songs'}</span>
+          </button>
+
+          <button
             onClick={() => onOpenAddSongModal?.()}
-            className="px-4 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-gray-200 hover:text-white font-semibold text-xs flex items-center gap-1.5 transition-all"
+            className="px-4 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-gray-200 hover:text-white font-semibold text-xs flex items-center gap-1.5 transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
             <span>Add Song</span>
           </button>
         </div>
       </div>
+
+      {syncToast && (
+        <div className="p-3 rounded-2xl bg-cyan-950/60 border border-cyan-500/40 text-cyan-200 text-xs flex items-center gap-2 animate-in fade-in duration-150">
+          <CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+          <span>{syncToast}</span>
+        </div>
+      )}
 
       {/* Filter and Search Bar */}
       <div className="glass-panel p-3 sm:p-3.5 rounded-2xl border border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
@@ -181,6 +237,18 @@ export const SongsPage: React.FC = () => {
               </button>
             ))}
           </div>
+
+                    {/* Downloaded Songs Filter Toggle */}
+          {downloadedIds.length > 0 && (
+            <button
+              onClick={() => setOnlyDownloaded(!onlyDownloaded)}
+              className={"px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border flex-shrink-0 cursor-pointer " + (onlyDownloaded ? "bg-emerald-600 border-emerald-500 text-white shadow-[0_0_12px_rgba(16,185,129,0.4)]" : "bg-white/5 border-white/10 text-gray-400 hover:text-white")}
+              title="Filter by Offline Downloaded Songs"
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Offline ({downloadedIds.length})</span>
+            </button>
+          )}
 
           {/* Video Songs Quick Filter Toggle */}
           {allTracks.some((t) => Boolean(t.videoUrl)) && (
@@ -266,6 +334,7 @@ export const SongsPage: React.FC = () => {
                 index={idx}
                 contextQueue={filteredTracks}
                 onOpenPlaylistModal={onOpenPlaylistModal}
+                onEditTrack={(t) => onOpenEditSongModal?.(t)}
               />
             ))}
           </div>

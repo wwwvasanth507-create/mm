@@ -39,6 +39,7 @@ export const AppLayout: React.FC = () => {
   const [addToPlaylistTrack, setAddToPlaylistTrack] = useState<Track | null>(null);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [isAddSongOpen, setIsAddSongOpen] = useState(false);
+  const [songToEdit, setSongToEdit] = useState<Track | null>(null);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -290,7 +291,8 @@ export const AppLayout: React.FC = () => {
           <Outlet
             context={{
               onOpenPlaylistModal: (track: Track) => setAddToPlaylistTrack(track),
-              onOpenAddSongModal: () => setIsAddSongOpen(true),
+              onOpenAddSongModal: () => { setSongToEdit(null); setIsAddSongOpen(true); },
+              onOpenEditSongModal: (track: Track) => { setSongToEdit(track); setIsAddSongOpen(true); },
               onOpenVideoModal: (track?: Track) => {
                 if (track) playTrack(track);
                 setNowPlayingTab('video');
@@ -361,7 +363,11 @@ export const AppLayout: React.FC = () => {
       {/* Add Song Manually Modal */}
       <AddSongModal
         isOpen={isAddSongOpen}
-        onClose={() => setIsAddSongOpen(false)}
+        onClose={() => {
+          setIsAddSongOpen(false);
+          setSongToEdit(null);
+        }}
+        trackToEdit={songToEdit}
       />
 
       {/* Playlist Creation / Rename Modal */}

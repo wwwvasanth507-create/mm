@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import {
   Settings,
@@ -17,9 +17,9 @@ import {
   Copy,
   Check,
   Zap,
-  Globe,
   Shield,
-  Smartphone,
+  Cloud,
+  Wifi,
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 import { AUDIO_PRESETS } from '@/config/audio';
@@ -30,7 +30,19 @@ import {
   getUserPlaylists,
   getFavourites,
   getAllTracks,
+  getCatalogueUrl,
+  setCatalogueUrl,
+  resetCatalogueUrl,
+  fetchRemoteCatalogue,
+  getLastCatalogueSyncTime,
+  getUserTracks,
 } from '@/services/musicService';
+import {
+  getTotalStorageUsed,
+  isWifiOnlyDownloads,
+  setWifiOnlyDownloads,
+  clearAllDownloads,
+} from '@/services/downloadService';
 
 export const SettingsPage: React.FC = () => {
   const { onOpenAddSongModal } = useOutletContext<{ onOpenAddSongModal?: () => void }>() || {};
@@ -50,6 +62,90 @@ export const SettingsPage: React.FC = () => {
 
   const [copiedCatalog, setCopiedCatalog] = useState(false);
   const allTracks = getAllTracks();
+  const userTracks = getUserTracks();
+
+  // Remote Catalogue Sync State
+  const [catalogueUrlInput, setCatalogueUrlInput] = useState(() => getCatalogueUrl());
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<string | null>(null);
+  const [lastSyncTime, setLastSyncTime] = useState<number | null>(() => getLastCatalogueSyncTime());
+
+  // Offline Storage State
+  const [storageInfo, setStorageInfo] = useState({ bytes: 0, formatted: '0 MB', count: 0 });
+  const [wifiOnly, setWifiOnly] = useState(() => isWifiOnlyDownloads());
+
+  useEffect(() => {
+    let isMounted = true;
+    getTotalStorageUsed().then((info) => {
+      if (isMounted) setStorageInfo(info);
+    });
+
+    const refreshStorage = () => {
+      getTotalStorageUsed().then((info) => {
+        if (isMounted) setStorageInfo(info);
+      });
+    };
+
+    window.addEventListener('wavemusic_download_completed', refreshStorage);
+    window.addEventListener('wavemusic_download_deleted', refreshStorage);
+    window.addEventListener('wavemusic_downloads_cleared', refreshStorage);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener('wavemusic_download_completed', refreshStorage);
+      window.removeEventListener('wavemusic_download_deleted', refreshStorage);
+      window.removeEventListener('wavemusic_downloads_cleared', refreshStorage);
+    };
+  }, []);
+
+  const handleSyncCatalogue = async () => {
+    setIsSyncing(true);
+    setSyncStatus(null);
+    try {
+      const res = await fetchRemoteCatalogue(true);
+      setLastSyncTime(Date.now());
+      setSyncStatus(
+        res.success
+          ? `Synced ${res.count} songs successfully!`
+          : `Sync status: ${res.message}`
+      );
+    } catch {
+      setSyncStatus('Network error while checking for song updates.');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleSaveCatalogueUrl = () => {
+    if (setCatalogueUrl(catalogueUrlInput)) {
+      setSyncStatus('Remote Catalogue URL updated.');
+      handleSyncCatalogue();
+    } else {
+      alert('Please enter a valid HTTPS URL.');
+    }
+  };
+
+  const handleResetCatalogueUrl = () => {
+    resetCatalogueUrl();
+    const def = getCatalogueUrl();
+    setCatalogueUrlInput(def);
+    setSyncStatus('Reset to default GitHub raw manifest URL.');
+    handleSyncCatalogue();
+  };
+
+  const handleToggleWifiOnly = () => {
+    const next = !wifiOnly;
+    setWifiOnly(next);
+    setWifiOnlyDownloads(next);
+  };
+
+  const handleClearOfflineStorage = async () => {
+    if (window.confirm('Delete all downloaded offline songs? This will free device storage.')) {
+      await clearAllDownloads();
+      setStorageInfo({ bytes: 0, formatted: '0 MB', count: 0 });
+      alert('Offline storage cleared.');
+    }
+  };
 
   // Audio Stream URL Diagnostic State
   const [testUrlInput, setTestUrlInput] = useState<string>(
@@ -58,7 +154,6 @@ export const SettingsPage: React.FC = () => {
   const [isTesting, setIsTesting] = useState<boolean>(false);
   const [testResult, setTestResult] = useState<AudioDiagnosticResult | null>(null);
 
-  // Run live diagnostic test on audio URL
   const handleRunDiagnostic = async () => {
     if (!testUrlInput.trim()) return;
     setIsTesting(true);
@@ -76,7 +171,6 @@ export const SettingsPage: React.FC = () => {
     }
   };
 
-  // Export Catalog as music.json for Git Commits
   const handleExportMusicJson = () => {
     const data = {
       songs: getAllTracks(),
@@ -101,7 +195,6 @@ export const SettingsPage: React.FC = () => {
     setTimeout(() => setCopiedCatalog(false), 2000);
   };
 
-  // Export User Library (Playlists + Favourites)
   const handleExportData = () => {
     const data = {
       version: '1.0',
@@ -118,7 +211,6 @@ export const SettingsPage: React.FC = () => {
     URL.revokeObjectURL(url);
   };
 
-  // Import User Library
   const handleImportData = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -154,11 +246,168 @@ export const SettingsPage: React.FC = () => {
           Settings & Audio Diagnostics
         </h1>
         <p className="text-sm text-gray-400 mt-1">
-          Manage playback preferences, verify direct audio stream URLs, and customize visual themes
+          Manage dynamic catalogue sync, offline storage, background audio, and themes
         </p>
       </div>
 
-      {/* 24/7 Unlimited Non-Stop Continuous Playback (No Sleep, Infinite Loop) */}
+      {/* Dynamic Song Catalogue & Remote Cloud Sync */}
+      <section className="glass-panel p-6 sm:p-8 rounded-3xl border border-cyan-500/20 bg-gradient-to-br from-[#0c141d]/90 via-[#121217] to-[#121217] space-y-5 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.25)]">
+              <Cloud className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-bold text-white">Remote Song Catalogue Sync</h2>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 font-mono text-[10px] font-bold">
+                  NO APP REBUILD NEEDED
+                </span>
+              </div>
+              <p className="text-xs text-gray-400 mt-0.5">
+                Update songs on GitHub or manifest without rebuilding or reinstalling the APK
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleSyncCatalogue}
+            disabled={isSyncing}
+            className="px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 active:scale-95 disabled:opacity-50 text-black font-bold text-xs flex items-center gap-2 self-start sm:self-auto shadow-[0_0_16px_rgba(6,182,212,0.3)] transition-all cursor-pointer"
+          >
+            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+            <span>{isSyncing ? 'Checking Updates...' : 'Check for Song Updates'}</span>
+          </button>
+        </div>
+
+        {/* Sync Status Banner */}
+        {syncStatus && (
+          <div className="p-3.5 rounded-2xl bg-cyan-950/40 border border-cyan-500/30 text-cyan-200 text-xs flex items-center justify-between animate-in fade-in duration-150">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+              <span>{syncStatus}</span>
+            </div>
+            {lastSyncTime && (
+              <span className="text-[10px] text-gray-400 font-mono">
+                {new Date(lastSyncTime).toLocaleTimeString()}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Remote Manifest URL Configuration */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs font-semibold text-gray-300">
+            <span>Remote Catalogue Manifest URL</span>
+            <button
+              onClick={handleResetCatalogueUrl}
+              className="text-[11px] text-cyan-400 hover:underline cursor-pointer"
+            >
+              Reset to Default
+            </button>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <input
+              type="url"
+              value={catalogueUrlInput}
+              onChange={(e) => setCatalogueUrlInput(e.target.value)}
+              placeholder="https://raw.githubusercontent.com/.../music.json"
+              className="flex-1 px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/15 text-xs text-white placeholder-gray-500 font-mono focus:border-cyan-400 outline-none"
+            />
+            <button
+              onClick={handleSaveCatalogueUrl}
+              className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold text-xs transition-colors flex-shrink-0 cursor-pointer"
+            >
+              Save URL
+            </button>
+          </div>
+        </div>
+
+        {/* Statistics Pill Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-xs">
+          <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 space-y-1">
+            <p className="text-gray-400 text-[11px]">Active Songs in Library</p>
+            <p className="text-xl font-black text-white">{allTracks.length} tracks</p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 space-y-1">
+            <p className="text-gray-400 text-[11px]">User Added / Edited</p>
+            <p className="text-xl font-black text-cyan-300">{userTracks.length} custom</p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 space-y-1">
+            <p className="text-gray-400 text-[11px]">Offline Downloaded</p>
+            <p className="text-xl font-black text-emerald-400">{storageInfo.count} songs</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Offline Downloads & Storage Management */}
+      <section className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-6">
+        <div className="flex items-center justify-between pb-4 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <Download className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-white">Offline Downloads & Storage</h2>
+              <p className="text-xs text-gray-400">
+                Manage downloaded songs for offline playback without internet
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-mono px-3 py-1 rounded-full bg-white/10 text-emerald-300 font-bold">
+            {storageInfo.formatted}
+          </span>
+        </div>
+
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-white/5">
+            <div className="flex items-center gap-3">
+              <Wifi className="w-5 h-5 text-gray-400" />
+              <div>
+                <p className="text-sm font-semibold text-white">Wi-Fi Only Downloads</p>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  Prevent mobile data usage when downloading songs
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={handleToggleWifiOnly}
+              className={`relative inline-flex h-7 w-13 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                wifiOnly ? 'bg-emerald-500' : 'bg-gray-700'
+              }`}
+            >
+              <span
+                className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                  wifiOnly ? 'translate-x-6' : 'translate-x-0'
+                }`}
+              />
+            </button>
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-white/5">
+            <div>
+              <p className="text-sm font-semibold text-white">Device Offline Storage</p>
+              <p className="text-xs text-gray-400 mt-0.5">
+                {storageInfo.count} songs stored offline ({storageInfo.formatted})
+              </p>
+            </div>
+            <button
+              onClick={handleClearOfflineStorage}
+              disabled={storageInfo.count === 0}
+              className="px-4 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 font-semibold text-xs flex items-center gap-1.5 transition-colors disabled:opacity-40 self-start sm:self-auto cursor-pointer"
+            >
+              <Trash2 className="w-4 h-4 text-rose-400" />
+              <span>Clear Downloads</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 24/7 Unlimited Non-Stop Continuous Playback */}
       <section className="glass-panel p-6 sm:p-8 rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-[#0c1814]/80 via-[#121217] to-[#121217] space-y-5 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -183,7 +432,7 @@ export const SettingsPage: React.FC = () => {
 
           <button
             onClick={toggle24HourNonStop}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 self-start sm:self-auto ${
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 self-start sm:self-auto cursor-pointer ${
               is24HourNonStop
                 ? 'bg-emerald-500 text-white shadow-[0_0_16px_rgba(16,185,129,0.4)]'
                 : 'bg-white/10 text-gray-400 hover:text-white'
@@ -221,113 +470,6 @@ export const SettingsPage: React.FC = () => {
             </p>
           </div>
         </div>
-
-        {/* Website Link Badge */}
-        <div className="pt-2 flex items-center justify-between text-xs border-t border-white/5">
-          <span className="text-gray-400 flex items-center gap-1.5 font-mono text-[11px]">
-            <Globe className="w-3.5 h-3.5 text-cyan-400" />
-            Official Site:
-            <a
-              href="https://mm.www-vasanth507.workers.dev/"
-              target="_blank"
-              rel="noreferrer"
-              className="text-cyan-400 hover:underline font-semibold"
-            >
-              https://mm.www-vasanth507.workers.dev/
-            </a>
-          </span>
-          <span className="text-emerald-400 text-[11px] font-mono">100% Cloudflare Workers CDN</span>
-        </div>
-      </section>
-
-      {/* Android Mobile App (APK) & PWA Installation */}
-      <section className="glass-panel p-6 sm:p-8 rounded-3xl border border-purple-500/30 bg-gradient-to-br from-[#180d24]/90 via-[#121217] to-[#0c1322] space-y-6 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-purple-600/15 via-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 pb-5 border-b border-white/10 relative z-10">
-          <div className="flex items-center gap-4">
-            <div className="relative w-16 h-16 rounded-2xl overflow-hidden p-[2px] bg-gradient-to-tr from-[#fa2d48] via-[#a855f7] to-[#06b6d4] shadow-[0_0_24px_rgba(168,85,247,0.4)] flex-shrink-0 animate-in zoom-in-95">
-              <img
-                src="/logo.png"
-                alt="WaveMusic App Icon"
-                className="w-full h-full object-cover rounded-[14px]"
-              />
-            </div>
-            <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-xl font-extrabold text-white">WaveMusic Android App (APK)</h2>
-                <span className="px-2 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 font-mono text-[10px] font-bold">
-                  v1.0.0 NATIVE
-                </span>
-              </div>
-              <p className="text-xs text-gray-300 mt-1">
-                Install directly on your Android phone for 24/7 background audio and zero screen timeouts
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2.5 flex-wrap self-start sm:self-auto">
-            <a
-              href="/WaveMusic.apk"
-              download="WaveMusic.apk"
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[var(--accent-primary)] via-purple-600 to-cyan-500 hover:opacity-95 text-white font-bold text-xs flex items-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.35)] transition-all active:scale-95"
-            >
-              <Download className="w-4 h-4" />
-              <span>Download APK</span>
-            </a>
-
-            <a
-              href="https://github.com/wwwvasanth507-create/mm/releases"
-              target="_blank"
-              rel="noreferrer"
-              className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-gray-200 border border-white/10 font-bold text-xs flex items-center gap-2 transition-all active:scale-95"
-            >
-              <Globe className="w-4 h-4 text-cyan-400" />
-              <span>Releases</span>
-            </a>
-          </div>
-        </div>
-
-        {/* Feature Highlights Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-xs relative z-10">
-          <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/5 space-y-1.5">
-            <p className="font-bold text-white flex items-center gap-2">
-              <Smartphone className="w-4 h-4 text-purple-400" />
-              Standalone App Experience
-            </p>
-            <p className="text-gray-400 text-[11px] leading-relaxed">
-              Full-screen immersive audio player with high-fidelity cover art and instant response.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/5 space-y-1.5">
-            <p className="font-bold text-white flex items-center gap-2">
-              <Zap className="w-4 h-4 text-emerald-400" />
-              24-Hour Continuous Play
-            </p>
-            <p className="text-gray-400 text-[11px] leading-relaxed">
-              Screen Wake Lock & background media playback service prevent Android OS from sleeping the audio engine.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/5 space-y-1.5">
-            <p className="font-bold text-white flex items-center gap-2">
-              <Globe className="w-4 h-4 text-cyan-400" />
-              Progressive Web App (PWA)
-            </p>
-            <p className="text-gray-400 text-[11px] leading-relaxed">
-              On Android Chrome or Brave, tap ⋮ and choose <strong>"Add to Home screen"</strong> to install in 2 seconds.
-            </p>
-          </div>
-        </div>
-
-        {/* Instructions footer */}
-        <div className="pt-3 border-t border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-gray-400">
-          <span>
-            💡 <strong>How to install APK:</strong> Download the .apk file, open it in your Android notification/downloads, and tap &ldquo;Install&rdquo;.
-          </span>
-          <span className="font-mono text-purple-400">Package: com.wavemusic.app</span>
-        </div>
       </section>
 
       {/* Manual Song Management Guide Card */}
@@ -337,48 +479,25 @@ export const SettingsPage: React.FC = () => {
             <FileCode2 className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Manual Song Management</h2>
+            <h2 className="text-lg font-bold text-white">Song Metadata Management</h2>
             <p className="text-xs text-gray-400">
-              Add, edit, or delete songs directly in <code className="text-white font-mono">src/data/music.json</code>
+              Add new tracks or export catalog JSON for backup
             </p>
           </div>
         </div>
 
-        <p className="text-xs text-gray-300 leading-relaxed">
-          WaveMusic plays audio directly from any HTTPS audio URL you supply. Albums and artist profiles are automatically derived from song metadata.
-        </p>
-
-        <pre className="p-4 rounded-xl bg-black/60 border border-white/10 text-xs font-mono text-gray-300 overflow-x-auto leading-relaxed">
-{`// Example song entry in src/data/music.json:
-{
-  "id": "my-song-01",
-  "title": "My Tamil Song",
-  "artist": "My Favourite Artist",
-  "album": "My Album",
-  "genre": "Melody",
-  "year": 2025,
-  "duration": 240,
-  "audioUrl": "https://your-host.com/audio/song.mp3",
-  "thumbnailUrl": "https://your-host.com/images/cover.jpg",
-  "description": "Tamil melody song",
-  "language": "Tamil",
-  "isExplicit": false
-}`}
-        </pre>
-
-        {/* Action Controls for Catalog */}
         <div className="flex flex-wrap items-center gap-3 pt-2">
           <button
             onClick={() => onOpenAddSongModal?.()}
-            className="px-5 py-2.5 rounded-full bg-[var(--accent-primary)] hover:brightness-110 active:scale-95 text-white font-bold text-xs inline-flex items-center gap-2 shadow-[0_0_16px_var(--accent-glow)] transition-all"
+            className="px-5 py-2.5 rounded-full bg-[var(--accent-primary)] hover:brightness-110 active:scale-95 text-white font-bold text-xs inline-flex items-center gap-2 shadow-[0_0_16px_var(--accent-glow)] transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            <span>Add Song to Catalog</span>
+            <span>Add Song to Library</span>
           </button>
 
           <button
             onClick={handleExportMusicJson}
-            className="px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs inline-flex items-center gap-1.5 transition-colors"
+            className="px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Download className="w-4 h-4 text-emerald-400" />
             <span>Download music.json</span>
@@ -386,7 +505,7 @@ export const SettingsPage: React.FC = () => {
 
           <button
             onClick={handleCopyMusicJson}
-            className="px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs inline-flex items-center gap-1.5 transition-colors"
+            className="px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             {copiedCatalog ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
             <span>{copiedCatalog ? 'Copied to Clipboard!' : 'Copy music.json'}</span>
@@ -417,10 +536,6 @@ export const SettingsPage: React.FC = () => {
         </div>
 
         <div className="space-y-4">
-          <p className="text-xs text-gray-400">
-            Paste any direct HTTPS audio URL to verify that it supports progressive seeking and can be streamed by web browsers.
-          </p>
-
           <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="text"
@@ -432,7 +547,7 @@ export const SettingsPage: React.FC = () => {
             <button
               onClick={handleRunDiagnostic}
               disabled={isTesting || !testUrlInput.trim()}
-              className="px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 active:scale-95 disabled:opacity-50 text-white font-semibold text-xs flex items-center justify-center gap-2 transition-all flex-shrink-0"
+              className="px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 active:scale-95 disabled:opacity-50 text-white font-semibold text-xs flex items-center justify-center gap-2 transition-all flex-shrink-0 cursor-pointer"
             >
               {isTesting ? (
                 <>
@@ -448,41 +563,6 @@ export const SettingsPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Quick presets */}
-          <div className="flex flex-wrap items-center gap-2 text-[11px] text-gray-400">
-            <span>Sample URLs:</span>
-            <button
-              onClick={() => {
-                setTestUrlInput('https://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.mp3');
-                setTestResult(null);
-              }}
-              className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 transition-colors"
-            >
-              Google Storage MP3
-            </button>
-            <button
-              onClick={() => {
-                setTestUrlInput('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-                setTestResult(null);
-              }}
-              className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 transition-colors"
-            >
-              SoundHelix MP3
-            </button>
-            {allTracks[0]?.audioUrl && (
-              <button
-                onClick={() => {
-                  setTestUrlInput(allTracks[0].audioUrl);
-                  setTestResult(null);
-                }}
-                className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 transition-colors"
-              >
-                First Catalog Song URL
-              </button>
-            )}
-          </div>
-
-          {/* Diagnostic Result Card */}
           {testResult && (
             <div
               className={`p-4 rounded-xl border text-xs space-y-2 animate-in fade-in duration-200 ${
@@ -508,29 +588,6 @@ export const SettingsPage: React.FC = () => {
               </div>
 
               <p className="leading-relaxed">{testResult.message}</p>
-
-              {testResult.success && (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-emerald-500/20 text-[11px] font-mono">
-                  <div>
-                    <span className="text-gray-400 block">HTTP Status:</span>
-                    <span className="text-white font-bold">{testResult.status}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400 block">Byte-Ranges (206):</span>
-                    <span className={testResult.byteRangeSupport ? 'text-emerald-300' : 'text-amber-300'}>
-                      {testResult.byteRangeSupport ? 'Supported' : 'Not Detected'}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400 block">Content-Type:</span>
-                    <span className="text-white truncate block">{testResult.contentType || 'audio/mpeg'}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400 block">CORS Headers:</span>
-                    <span className="text-emerald-300">Accepted</span>
-                  </div>
-                </div>
-              )}
             </div>
           )}
         </div>
@@ -562,7 +619,7 @@ export const SettingsPage: React.FC = () => {
               <button
                 key={theme.id}
                 onClick={() => setActiveAccent(theme.id as any)}
-                className={`p-4 rounded-2xl border text-left transition-all ${
+                className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
                   isSelected
                     ? 'bg-white/15 border-white shadow-xl scale-[1.02]'
                     : 'bg-white/5 border-white/10 hover:bg-white/10'
@@ -580,11 +637,11 @@ export const SettingsPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Dolby Atmos & Apple Music High-Fidelity DSP */}
-      <section className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-6">
+      {/* Dolby Atmos & Audio Mastering Settings */}
+      <section className="glass-panel p-6 sm:p-8 rounded-3xl border border-cyan-500/20 bg-gradient-to-br from-[#0c141d]/70 via-[#101018] to-[#121217] space-y-6 shadow-2xl">
         <div className="flex items-center justify-between pb-4 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-purple-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300">
               <Zap className="w-6 h-6" />
             </div>
             <div>
@@ -629,7 +686,7 @@ export const SettingsPage: React.FC = () => {
                 <button
                   key={pid}
                   onClick={() => setAudioPreset(pid)}
-                  className={`p-3.5 rounded-2xl text-left border transition-all ${
+                  className={`p-3.5 rounded-2xl text-left border transition-all cursor-pointer ${
                     isSelected
                       ? 'bg-gradient-to-br from-white/15 to-white/5 border-white/30 text-white shadow-[0_0_16px_rgba(6,182,212,0.25)]'
                       : 'bg-white/5 hover:bg-white/10 border-white/10 text-gray-400'
@@ -680,18 +737,6 @@ export const SettingsPage: React.FC = () => {
               </span>
             </div>
           </div>
-
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-white/5">
-            <div>
-              <p className="text-sm font-semibold text-white">Preload Strategy</p>
-              <p className="text-xs text-gray-400 mt-0.5">
-                Set to <code className="text-sky-300 font-mono">metadata</code> for fast responsiveness without downloading entire files upfront
-              </p>
-            </div>
-            <span className="px-3 py-1 rounded-lg bg-white/10 text-xs font-mono text-gray-300">
-              metadata (progressive)
-            </span>
-          </div>
         </div>
       </section>
 
@@ -712,7 +757,7 @@ export const SettingsPage: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button
             onClick={handleExportData}
-            className="p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 flex flex-col items-center text-center gap-2 transition-colors"
+            className="p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 flex flex-col items-center text-center gap-2 transition-colors cursor-pointer"
           >
             <Download className="w-5 h-5 text-emerald-400" />
             <div>
@@ -742,7 +787,7 @@ export const SettingsPage: React.FC = () => {
                 alert('History cleared.');
               }
             }}
-            className="p-4 rounded-2xl bg-white/5 hover:bg-rose-500/15 border border-white/10 flex flex-col items-center text-center gap-2 transition-colors"
+            className="p-4 rounded-2xl bg-white/5 hover:bg-rose-500/15 border border-white/10 flex flex-col items-center text-center gap-2 transition-colors cursor-pointer"
           >
             <Trash2 className="w-5 h-5 text-rose-400" />
             <div>
@@ -755,9 +800,9 @@ export const SettingsPage: React.FC = () => {
 
       {/* System Info */}
       <footer className="text-center py-6 text-xs text-gray-500 space-y-1">
-        <p>WaveMusic • High Fidelity Manual Audio Streaming</p>
+        <p>WaveMusic Premium • Native Android & Progressive Web Experience</p>
         <p className="font-mono text-[11px] text-gray-600">
-          React 19 • Vite • Tailwind CSS • HTML5 Web Audio API
+          React 19 • Vite • Capacitor 8 • MediaSession & Background Service
         </p>
       </footer>
     </div>

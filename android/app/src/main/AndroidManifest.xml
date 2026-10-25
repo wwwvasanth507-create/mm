@@ -25,6 +25,16 @@
 
         </activity>
 
+        <!-- Native Android Background Media Playback & Lock-Screen Notification Service -->
+        <service
+            android:name=".WaveMediaService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </service>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -36,10 +46,11 @@
         </provider>
     </application>
 
-    <!-- Permissions for 24/7 Non-Stop Hi-Fi Audio Streaming -->
+    <!-- Permissions for 24/7 Persistent Hi-Fi Audio Streaming & Lock-Screen Controls -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 </manifest>

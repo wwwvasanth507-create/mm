@@ -24,7 +24,6 @@ import {
 import { audioDsp } from '@/services/audioDspService';
 import {
   getAllTracks,
-  resolveAudioUrl,
   resolveArtworkUrl,
   getFavourites as fetchFavourites,
   toggleFavourite as svcToggleFavourite,
@@ -37,7 +36,10 @@ import {
   getPlaybackHistory as fetchHistory,
   addToPlaybackHistory as svcAddToHistory,
   clearPlaybackHistory as svcClearHistory,
+  initCatalogueAutoSync,
 } from '@/services/musicService';
+import { getPlayableAudioUrl } from '@/services/downloadService';
+import { nativeMediaService } from '@/services/nativeMediaService';
 
 const AudioContext = createContext<AudioContextType | null>(null);
 
@@ -104,7 +106,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   }, []);
 
-  // Playback modes (Default to 'all' so continuous looping is active by default)
+  // Playback modes
   const [repeatMode, setRepeatMode] = useState<RepeatMode>(() => {
     if (typeof window === 'undefined') return 'all';
     const saved = localStorage.getItem(STORAGE_KEYS.REPEAT);
@@ -122,10 +124,9 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return saved || 'coral';
   });
 
-  // Queue state (Load full catalog so non-stop 24/7 playback flows seamlessly through all tracks)
+  // Queue state
   const [queue, setQueue] = useState<Track[]>(() => {
-    const all = getAllTracks();
-    return all;
+    return getAllTracks();
   });
   const [queueIndex, setQueueIndex] = useState<number>(0);
 
@@ -167,8 +168,56 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [activeAccent]);
 
   const nextTrackRef = useRef<() => void>(() => {});
-  // Rolling memory of recently played IDs to prevent immediate song repetition
+  const previousTrackRef = useRef<() => void>(() => {});
+  const togglePlayRef = useRef<() => void>(() => {});
+  const seekRef = useRef<(pos: number) => void>(() => {});
   const recentPlayedIdsRef = useRef<string[]>([]);
+  const lastNativeUpdateTimeRef = useRef<number>(0);
+
+  // Initialize Catalogue Auto-Sync on Mount
+  useEffect(() => {
+    initCatalogueAutoSync();
+
+    const handleTracksUpdated = () => {
+      const all = getAllTracks();
+      setQueue((prevQ) => {
+        if (prevQ.length <= 1 || prevQ.length === all.length - 1 || prevQ.length === all.length + 1) {
+          return all;
+        }
+        return prevQ;
+      });
+    };
+
+    window.addEventListener('wavemusic_tracks_updated', handleTracksUpdated);
+    window.addEventListener('wavemusic_catalogue_updated', handleTracksUpdated);
+    return () => {
+      window.removeEventListener('wavemusic_tracks_updated', handleTracksUpdated);
+      window.removeEventListener('wavemusic_catalogue_updated', handleTracksUpdated);
+    };
+  }, []);
+
+  // Initialize Native Android Media Session & Lock Screen Action Listeners
+  useEffect(() => {
+    nativeMediaService.initActionListener((action, position) => {
+      switch (action) {
+        case 'play':
+        case 'pause':
+          togglePlayRef.current?.();
+          break;
+        case 'next':
+          nextTrackRef.current?.();
+          break;
+        case 'previous':
+          previousTrackRef.current?.();
+          break;
+        case 'seek':
+          if (position !== undefined) {
+            seekRef.current?.(position);
+          }
+          break;
+      }
+    });
+  }, []);
 
   // Initialize single persistent Audio element
   useEffect(() => {
@@ -188,12 +237,18 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if ('mediaSession' in navigator) {
         navigator.mediaSession.playbackState = 'playing';
       }
+      if (currentTrack) {
+        nativeMediaService.updatePlayback(currentTrack, true, audio.currentTime, audio.duration);
+      }
     };
 
     const onPause = () => {
       setIsPlaying(false);
       if ('mediaSession' in navigator) {
         navigator.mediaSession.playbackState = 'paused';
+      }
+      if (currentTrack) {
+        nativeMediaService.updatePlayback(currentTrack, false, audio.currentTime, audio.duration);
       }
     };
 
@@ -204,7 +259,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const onTimeUpdate = () => {
       setCurrentTime(audio.currentTime);
-      // Update media session position
+
       if ('mediaSession' in navigator && audio.duration && !isNaN(audio.duration)) {
         try {
           navigator.mediaSession.setPositionState({
@@ -212,9 +267,13 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             playbackRate: audio.playbackRate,
             position: audio.currentTime,
           });
-        } catch {
-          // Ignore unsupported browser edge cases
-        }
+        } catch {}
+      }
+
+      const now = Date.now();
+      if (now - lastNativeUpdateTimeRef.current > 3000 && currentTrack) {
+        lastNativeUpdateTimeRef.current = now;
+        nativeMediaService.updatePlayback(currentTrack, true, audio.currentTime, audio.duration);
       }
     };
 
@@ -224,6 +283,9 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
       setIsBuffering(false);
       setError(null);
+      if (currentTrack) {
+        nativeMediaService.updatePlayback(currentTrack, true, audio.currentTime, audio.duration);
+      }
     };
 
     const onWaiting = () => setIsBuffering(true);
@@ -244,7 +306,6 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       console.warn('[WaveMusic Audio Error - 24/7 Auto Recovery]', msg, audio.src);
       setError(msg);
 
-      // 24/7 Non-Stop Auto-Recovery: Don't stop! Auto-advance to next song after 1.5 seconds!
       if (is24HourNonStop) {
         setTimeout(() => {
           console.log('[WaveMusic 24/7 Engine] Auto-recovering: advancing to next track...');
@@ -278,26 +339,29 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       audio.pause();
       audio.src = '';
     };
-  }, [is24HourNonStop]);
+  }, [is24HourNonStop, currentTrack]);
 
   // Update MediaSession Metadata when current track changes
   useEffect(() => {
-    if (!currentTrack || typeof window === 'undefined' || !('mediaSession' in navigator)) {
-      return;
-    }
+    if (!currentTrack || typeof window === 'undefined') return;
 
     const artwork = resolveArtworkUrl(currentTrack);
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: currentTrack.title,
-      artist: currentTrack.artist,
-      album: currentTrack.album,
-      artwork: [
-        { src: artwork, sizes: '96x96', type: 'image/jpeg' },
-        { src: artwork, sizes: '128x128', type: 'image/jpeg' },
-        { src: artwork, sizes: '256x256', type: 'image/jpeg' },
-        { src: artwork, sizes: '512x512', type: 'image/jpeg' },
-      ],
-    });
+
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: currentTrack.title,
+        artist: currentTrack.artist,
+        album: currentTrack.album,
+        artwork: [
+          { src: artwork, sizes: '96x96', type: 'image/jpeg' },
+          { src: artwork, sizes: '128x128', type: 'image/jpeg' },
+          { src: artwork, sizes: '256x256', type: 'image/jpeg' },
+          { src: artwork, sizes: '512x512', type: 'image/jpeg' },
+        ],
+      });
+    }
+
+    nativeMediaService.updatePlayback(currentTrack, isPlaying, currentTime, duration || currentTrack.duration);
   }, [currentTrack]);
 
   // Load and play track
@@ -306,8 +370,8 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       const audio = audioRef.current;
       if (!audio) return;
 
-      const streamUrl = resolveAudioUrl(track);
-      if (!streamUrl) {
+      const playableUrl = await getPlayableAudioUrl(track);
+      if (!playableUrl) {
         setError(`Unable to resolve audio stream for "${track.title}". Please verify its audioUrl.`);
         return;
       }
@@ -318,32 +382,28 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setDuration(track.duration || 0);
       setCurrentTrack(track);
 
-      // Register into rolling recent memory to guarantee no immediate song repetition
       recentPlayedIdsRef.current = [
         track.id,
         ...recentPlayedIdsRef.current.filter((id) => id !== track.id),
       ].slice(0, 6);
 
-      // Record to history
       const updatedHistory = svcAddToHistory(track);
       setHistory(updatedHistory);
 
-      // Remove crossOrigin attribute to ensure browser never blocks or silences direct playback
       audio.removeAttribute('crossOrigin');
-      audio.src = streamUrl;
+      audio.src = playableUrl;
       audio.load();
 
-      // Ensure volume is properly applied to audio element
       audio.volume = isMuted ? 0 : volume;
       audio.muted = isMuted;
 
-      // Update Audio DSP state & visualization
       audioDsp.attach(audio);
       audioDsp.applySettings(eqSettings, isDolbyEnabled);
 
       try {
         await audio.play();
         setIsPlaying(true);
+        nativeMediaService.updatePlayback(track, true, 0, track.duration || 0);
       } catch (err: unknown) {
         const errorMsg = err instanceof Error ? err.message : String(err);
         if (errorMsg.includes('NotAllowedError')) {
@@ -358,10 +418,10 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setIsBuffering(false);
       }
     },
-    [eqSettings, isDolbyEnabled]
+    [eqSettings, isDolbyEnabled, isMuted, volume]
   );
 
-  // Next Track Logic (Strict Non-Repeating & 24/7 Unlimited Looping)
+  // Next Track Logic
   const nextTrack = useCallback(() => {
     let currentQueue = queue;
     if (currentQueue.length === 0) {
@@ -370,7 +430,6 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
     if (currentQueue.length === 0) return;
 
-    // Filter out the currently playing song so it CANNOT play immediately again in any mode
     const differentCandidates = currentQueue
       .map((t, idx) => ({ track: t, idx }))
       .filter(
@@ -380,13 +439,11 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       );
 
     if (differentCandidates.length === 0) {
-      // If queue has only 1 track total in the entire list
       const singleTrack = currentQueue[0];
       if (singleTrack) loadAndPlayTrack(singleTrack);
       return;
     }
 
-    // Prefer candidates that were NOT recently played
     const freshCandidates = differentCandidates.filter(
       (item) => !recentPlayedIdsRef.current.includes(item.track.id)
     );
@@ -395,16 +452,13 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     let chosenItem: { track: Track; idx: number };
 
     if (shuffle) {
-      // Pick randomly from non-repeating candidates
       const randIdx = Math.floor(Math.random() * pool.length);
       chosenItem = pool[randIdx];
     } else {
-      // Sequential: find next candidate after current queueIndex
       const nextInLine = pool.find((item) => item.idx > queueIndex);
       if (nextInLine) {
         chosenItem = nextInLine;
       } else {
-        // Wrap around to start of queue with distinct track
         chosenItem = pool[0];
       }
     }
@@ -413,60 +467,10 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     loadAndPlayTrack(chosenItem.track);
   }, [queue, queueIndex, shuffle, currentTrack, loadAndPlayTrack]);
 
-  // Keep nextTrackRef updated for auto-recovery
-  useEffect(() => {
-    nextTrackRef.current = nextTrack;
-  }, [nextTrack]);
-
-  // Screen Wake Lock API to prevent screen and CPU sleep during 24/7 playback
-  const wakeLockRef = useRef<any>(null);
-
-  const requestWakeLock = useCallback(async () => {
-    if (typeof navigator !== 'undefined' && 'wakeLock' in navigator && is24HourNonStop) {
-      try {
-        wakeLockRef.current = await (navigator as any).wakeLock.request('screen');
-        console.log('[WaveMusic] 24/7 Screen WakeLock acquired');
-      } catch (err) {
-        // Silently ignore if not supported or granted
-      }
-    }
-  }, [is24HourNonStop]);
-
-  const releaseWakeLock = useCallback(async () => {
-    if (wakeLockRef.current) {
-      try {
-        await wakeLockRef.current.release();
-      } catch {}
-      wakeLockRef.current = null;
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isPlaying && is24HourNonStop) {
-      requestWakeLock();
-    } else {
-      releaseWakeLock();
-    }
-  }, [isPlaying, is24HourNonStop, requestWakeLock, releaseWakeLock]);
-
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible' && isPlaying && is24HourNonStop) {
-        requestWakeLock();
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisChange);
-    return () => document.removeEventListener('visibilitychange', handleVisChange);
-    function handleVisChange() {
-      handleVisibilityChange();
-    }
-  }, [isPlaying, is24HourNonStop, requestWakeLock]);
-
   // Previous Track Logic
   const previousTrack = useCallback(() => {
     if (!audioRef.current || queue.length === 0) return;
 
-    // If track has been playing for more than 3 seconds, restart it
     if (audioRef.current.currentTime > 3) {
       audioRef.current.currentTime = 0;
       setCurrentTime(0);
@@ -485,75 +489,68 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, [queue, queueIndex, repeatMode, loadAndPlayTrack]);
 
-  // Audio 'ended' listener
   useEffect(() => {
+    nextTrackRef.current = nextTrack;
+  }, [nextTrack]);
+
+  useEffect(() => {
+    previousTrackRef.current = previousTrack;
+  }, [previousTrack]);
+
+  // Playback Control Actions
+  const togglePlay = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const handleEnded = () => {
-      nextTrack();
-    };
-
-    audio.addEventListener('ended', handleEnded);
-    return () => {
-      audio.removeEventListener('ended', handleEnded);
-    };
-  }, [nextTrack]);
-
-  // Setup MediaSession Action Handlers
-  useEffect(() => {
-    if (typeof window === 'undefined' || !('mediaSession' in navigator)) return;
-
-    const ms = navigator.mediaSession;
-
-    ms.setActionHandler('play', () => {
-      if (audioRef.current && currentTrack) {
-        audioRef.current.play().catch(console.error);
+    if (isPlaying) {
+      audio.pause();
+      setIsPlaying(false);
+      nativeMediaService.updatePlayback(currentTrack, false, audio.currentTime, audio.duration);
+    } else {
+      if (!currentTrack && queue.length > 0) {
+        loadAndPlayTrack(queue[0]);
+      } else {
+        audio.play().catch(console.error);
         setIsPlaying(true);
+        nativeMediaService.updatePlayback(currentTrack, true, audio.currentTime, audio.duration);
       }
-    });
+    }
+  }, [isPlaying, currentTrack, queue, loadAndPlayTrack]);
 
-    ms.setActionHandler('pause', () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        setIsPlaying(false);
+  useEffect(() => {
+    togglePlayRef.current = togglePlay;
+  }, [togglePlay]);
+
+  const pause = useCallback(() => {
+    if (audioRef.current && isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+      nativeMediaService.updatePlayback(currentTrack, false, audioRef.current.currentTime, audioRef.current.duration);
+    }
+  }, [isPlaying, currentTrack]);
+
+  const resume = useCallback(() => {
+    if (audioRef.current && !isPlaying) {
+      audioRef.current.play().catch(console.error);
+      setIsPlaying(true);
+      nativeMediaService.updatePlayback(currentTrack, true, audioRef.current.currentTime, audioRef.current.duration);
+    }
+  }, [isPlaying, currentTrack]);
+
+  const seek = useCallback((time: number) => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = time;
+      setCurrentTime(time);
+      if (currentTrack) {
+        nativeMediaService.updatePlayback(currentTrack, isPlaying, time, audioRef.current.duration);
       }
-    });
+    }
+  }, [currentTrack, isPlaying]);
 
-    ms.setActionHandler('previoustrack', () => {
-      previousTrack();
-    });
+  useEffect(() => {
+    seekRef.current = seek;
+  }, [seek]);
 
-    ms.setActionHandler('nexttrack', () => {
-      nextTrack();
-    });
-
-    ms.setActionHandler('seekto', (details) => {
-      if (details.seekTime !== undefined && audioRef.current) {
-        audioRef.current.currentTime = details.seekTime;
-        setCurrentTime(details.seekTime);
-      }
-    });
-
-    ms.setActionHandler('seekforward', (details) => {
-      if (audioRef.current) {
-        const offset = details.seekOffset || 10;
-        audioRef.current.currentTime = Math.min(
-          audioRef.current.duration || 0,
-          audioRef.current.currentTime + offset
-        );
-      }
-    });
-
-    ms.setActionHandler('seekbackward', (details) => {
-      if (audioRef.current) {
-        const offset = details.seekOffset || 10;
-        audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - offset);
-      }
-    });
-  }, [currentTrack, nextTrack, previousTrack]);
-
-  // Play a specific track (and optionally supply a new queue)
   const playTrack = useCallback(
     (track: Track, newQueue?: Track[]) => {
       if (newQueue && newQueue.length > 0) {
@@ -561,10 +558,9 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         const idx = newQueue.findIndex((t) => t.id === track.id);
         setQueueIndex(idx >= 0 ? idx : 0);
       } else {
-        // If not in current queue, prepend or append
-        const existingIdx = queue.findIndex((t) => t.id === track.id);
-        if (existingIdx !== -1) {
-          setQueueIndex(existingIdx);
+        const idx = queue.findIndex((t) => t.id === track.id);
+        if (idx >= 0) {
+          setQueueIndex(idx);
         } else {
           setQueue((prev) => [track, ...prev]);
           setQueueIndex(0);
@@ -574,105 +570,6 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     },
     [queue, loadAndPlayTrack]
   );
-
-  // Toggle play/pause
-  const togglePlay = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (!currentTrack) {
-      if (queue.length > 0) {
-        playTrack(queue[0]);
-      }
-      return;
-    }
-
-    if (isPlaying) {
-      audio.pause();
-      setIsPlaying(false);
-    } else {
-      audio.volume = isMuted ? 0 : volume;
-      audio.muted = isMuted;
-      audioDsp.attach(audio);
-      audioDsp.applySettings(eqSettings, isDolbyEnabled);
-      audio.play().catch((err) => {
-        console.error('Play failed:', err);
-      });
-      setIsPlaying(true);
-    }
-  }, [currentTrack, isPlaying, queue, playTrack, isMuted, volume, eqSettings, isDolbyEnabled]);
-
-  const pause = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    }
-  }, []);
-
-  const resume = useCallback(() => {
-    if (audioRef.current && currentTrack) {
-      audioRef.current.volume = isMuted ? 0 : volume;
-      audioRef.current.muted = isMuted;
-      audioDsp.attach(audioRef.current);
-      audioDsp.applySettings(eqSettings, isDolbyEnabled);
-      audioRef.current.play().catch(console.error);
-      setIsPlaying(true);
-    }
-  }, [currentTrack, isMuted, volume, eqSettings, isDolbyEnabled]);
-
-  // Dolby Atmos & Equalizer Control Handlers
-  const setAudioPreset = useCallback(
-    (preset: AudioPresetId) => {
-      setAudioPresetState(preset);
-      localStorage.setItem(STORAGE_KEYS.AUDIO_PRESET, preset);
-      if (AUDIO_PRESETS[preset]) {
-        const newSettings = { ...AUDIO_PRESETS[preset].settings };
-        setEqSettings(newSettings);
-        localStorage.setItem(STORAGE_KEYS.EQ_SETTINGS, JSON.stringify(newSettings));
-        audioDsp.applySettings(newSettings, isDolbyEnabled);
-      }
-    },
-    [isDolbyEnabled]
-  );
-
-  const toggleDolby = useCallback(() => {
-    setIsDolbyEnabled((prev) => {
-      const next = !prev;
-      localStorage.setItem(STORAGE_KEYS.DOLBY_ENABLED, String(next));
-      audioDsp.applySettings(eqSettings, next);
-      return next;
-    });
-  }, [eqSettings]);
-
-  const setEqBand = useCallback(
-    (band: keyof EqualizerSettings, value: number) => {
-      setAudioPresetState('custom');
-      localStorage.setItem(STORAGE_KEYS.AUDIO_PRESET, 'custom');
-      setEqSettings((prev) => {
-        const next = { ...prev, [band]: value };
-        localStorage.setItem(STORAGE_KEYS.EQ_SETTINGS, JSON.stringify(next));
-        audioDsp.applySettings(next, isDolbyEnabled);
-        return next;
-      });
-    },
-    [isDolbyEnabled]
-  );
-
-  const resetEq = useCallback(() => {
-    setAudioPreset('dolby-atmos');
-  }, [setAudioPreset]);
-
-  const getFrequencyData = useCallback(() => {
-    return audioDsp.getFrequencyData();
-  }, []);
-
-  // Seek to specific timestamp
-  const seek = useCallback((time: number) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = time;
-      setCurrentTime(time);
-    }
-  }, []);
 
   // Volume & Mute handlers
   const setVolume = useCallback((newVol: number) => {
@@ -697,7 +594,6 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   }, []);
 
-  // Shuffle & Repeat handlers
   const toggleShuffle = useCallback(() => {
     setShuffle((prev) => {
       const next = !prev;
@@ -752,7 +648,6 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (index < queueIndex) {
           setQueueIndex((qi) => Math.max(0, qi - 1));
         } else if (index === queueIndex && nextQ.length > 0) {
-          // If removing currently playing track, load the next or previous
           const newIdx = Math.min(queueIndex, nextQ.length - 1);
           setQueueIndex(newIdx);
           loadAndPlayTrack(nextQ[newIdx]);
@@ -821,15 +716,66 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setUserPlaylists(fetchUserPlaylists());
   }, []);
 
-
   const setActiveAccent = useCallback((accent: ThemeAccent) => {
     setActiveAccentState(accent);
+  }, []);
+
+  // Equalizer & Preset controls
+  const setAudioPreset = useCallback((preset: AudioPresetId) => {
+    setAudioPresetState(preset);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.AUDIO_PRESET, preset);
+    }
+    const presetConfig = AUDIO_PRESETS[preset];
+    if (presetConfig) {
+      setEqSettings(presetConfig.settings);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(STORAGE_KEYS.EQ_SETTINGS, JSON.stringify(presetConfig.settings));
+      }
+    }
+  }, []);
+
+  const toggleDolby = useCallback(() => {
+    setIsDolbyEnabled((prev) => {
+      const next = !prev;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(STORAGE_KEYS.DOLBY_ENABLED, String(next));
+      }
+      return next;
+    });
+  }, []);
+
+  const setEqBand = useCallback((band: keyof EqualizerSettings, value: number) => {
+    setEqSettings((prev) => {
+      const next = { ...prev, [band]: value };
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(STORAGE_KEYS.EQ_SETTINGS, JSON.stringify(next));
+      }
+      return next;
+    });
+    setAudioPresetState('custom');
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.AUDIO_PRESET, 'custom');
+    }
+  }, []);
+
+  const resetEq = useCallback(() => {
+    const defaultSettings = AUDIO_PRESETS['dolby-atmos'].settings;
+    setEqSettings(defaultSettings);
+    setAudioPresetState('dolby-atmos');
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.EQ_SETTINGS, JSON.stringify(defaultSettings));
+      localStorage.setItem(STORAGE_KEYS.AUDIO_PRESET, 'dolby-atmos');
+    }
+  }, []);
+
+  const getFrequencyData = useCallback((): Uint8Array | null => {
+    return audioDsp.getFrequencyData();
   }, []);
 
   // Global Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore if user is typing in input or textarea
       const target = e.target as HTMLElement;
       if (
         target.tagName === 'INPUT' ||

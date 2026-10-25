@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
-import { X, Music, Check, Copy, RefreshCw, AlertCircle, Image, Sparkles, Film } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Music, Check, Copy, RefreshCw, AlertCircle, Sparkles, Trash2 } from 'lucide-react';
 import { Track } from '@/types/music';
-import { saveUserTrack, testAudioUrl, isDirectVideoUrl } from '@/services/musicService';
+import { saveUserTrack, deleteUserTrack, testAudioUrl, isDirectVideoUrl } from '@/services/musicService';
 
 interface AddSongModalProps {
   isOpen: boolean;
   onClose: () => void;
   onTrackAdded?: (track: Track) => void;
+  trackToEdit?: Track | null;
 }
 
-export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onTrackAdded }) => {
+export const AddSongModal: React.FC<AddSongModalProps> = ({
+  isOpen,
+  onClose,
+  onTrackAdded,
+  trackToEdit,
+}) => {
+  const isEditing = Boolean(trackToEdit);
+
   const [title, setTitle] = useState('');
   const [artist, setArtist] = useState('');
   const [album, setAlbum] = useState('');
@@ -24,6 +32,33 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
   const [copied, setCopied] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
+  // Pre-fill fields when editing
+  useEffect(() => {
+    if (trackToEdit) {
+      setTitle(trackToEdit.title || '');
+      setArtist(trackToEdit.artist || '');
+      setAlbum(trackToEdit.album || '');
+      setGenre(trackToEdit.genre || 'Melody');
+      setLanguage(trackToEdit.language || 'Tamil');
+      setAudioUrl(trackToEdit.audioUrl || '');
+      setVideoUrl(trackToEdit.videoUrl || '');
+      setThumbnailUrl(trackToEdit.thumbnailUrl || trackToEdit.artworkUrl || '');
+      setDuration(trackToEdit.duration || 180);
+    } else {
+      setTitle('');
+      setArtist('');
+      setAlbum('');
+      setGenre('Melody');
+      setLanguage('Tamil');
+      setAudioUrl('');
+      setVideoUrl('');
+      setThumbnailUrl('');
+      setDuration(180);
+    }
+    setTestResult(null);
+    setErrorMsg('');
+  }, [trackToEdit, isOpen]);
+
   if (!isOpen) return null;
 
   const handleTestAudio = async () => {
@@ -35,7 +70,6 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
     setIsTestingUrl(true);
     setTestResult(null);
 
-    // Try testing via HTML5 Audio to get real duration & confirm playability
     try {
       const audio = new Audio();
       audio.preload = 'metadata';
@@ -65,7 +99,13 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
       setTestResult({
         success: diag.success || detectedDuration > 0,
         message: diag.success
-          ? `Audio verified! ${detectedDuration > 0 ? `Duration: ${Math.floor(detectedDuration / 60)}:${String(detectedDuration % 60).padStart(2, '0')}` : 'Ready to stream.'}`
+          ? `Audio verified! ${
+              detectedDuration > 0
+                ? `Duration: ${Math.floor(detectedDuration / 60)}:${String(
+                    detectedDuration % 60
+                  ).padStart(2, '0')}`
+                : 'Ready to stream.'
+            }`
           : 'Stream test finished. Check URL format.',
       });
     } catch {
@@ -87,25 +127,36 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
 
     if (videoUrl.trim()) {
       const vLower = videoUrl.trim().toLowerCase();
-      if (vLower.includes('youtube.com') || vLower.includes('youtu.be') || vLower.includes('vimeo.com')) {
-        setErrorMsg('YouTube & Vimeo links are not supported. Only direct video stream URLs (e.g. Cloudflare R2, MP4, WebM) are allowed.');
+      if (
+        vLower.includes('youtube.com') ||
+        vLower.includes('youtu.be') ||
+        vLower.includes('vimeo.com')
+      ) {
+        setErrorMsg(
+          'YouTube & Vimeo links are not supported. Only direct video stream URLs (e.g. Cloudflare R2, MP4, WebM) are allowed.'
+        );
         return;
       }
       if (!isDirectVideoUrl(videoUrl.trim())) {
-        setErrorMsg('Invalid direct video URL. Please provide a direct HTTPS video link (e.g. .mp4, .webm, or Cloudflare stream).');
+        setErrorMsg(
+          'Invalid direct video URL. Please provide a direct HTTPS video link (e.g. .mp4, .webm, or Cloudflare stream).'
+        );
         return;
       }
     }
 
     const cleanVideoUrl = isDirectVideoUrl(videoUrl.trim()) ? videoUrl.trim() : undefined;
 
-    const newTrack: Track = {
-      id: `song-${Date.now()}`,
+    const trackId = isEditing && trackToEdit ? trackToEdit.id : `song-${Date.now()}`;
+
+    const updatedTrack: Track = {
+      ...(trackToEdit || {}),
+      id: trackId,
       title: title.trim(),
       artist: artist.trim(),
       album: album.trim() || 'Singles',
       genre: genre.trim() || 'Melody',
-      year: new Date().getFullYear(),
+      year: trackToEdit?.year || new Date().getFullYear(),
       duration: Number(duration) || 180,
       audioUrl: audioUrl.trim(),
       videoUrl: cleanVideoUrl,
@@ -113,36 +164,35 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
       thumbnailUrl: thumbnailUrl.trim() || '',
       artworkUrl: thumbnailUrl.trim() || '',
       language: language.trim() || 'Tamil',
-      isExplicit: false,
+      isExplicit: trackToEdit?.isExplicit || false,
     };
 
-    saveUserTrack(newTrack);
+    saveUserTrack(updatedTrack);
     if (onTrackAdded) {
-      onTrackAdded(newTrack);
+      onTrackAdded(updatedTrack);
     }
 
-    // Reset and close
-    setTitle('');
-    setArtist('');
-    setAlbum('');
-    setAudioUrl('');
-    setVideoUrl('');
-    setThumbnailUrl('');
-    setTestResult(null);
-    setErrorMsg('');
     onClose();
+  };
+
+  const handleDelete = () => {
+    if (!trackToEdit) return;
+    if (window.confirm(`Are you sure you want to remove "${trackToEdit.title}"?`)) {
+      deleteUserTrack(trackToEdit.id);
+      onClose();
+    }
   };
 
   const handleCopyJson = () => {
     const cleanVideoUrl = isDirectVideoUrl(videoUrl.trim()) ? videoUrl.trim() : undefined;
     const jsonSnippet = JSON.stringify(
       {
-        id: `song-${Date.now()}`,
+        id: isEditing && trackToEdit ? trackToEdit.id : `song-${Date.now()}`,
         title: title.trim() || 'Your Song Title',
         artist: artist.trim() || 'Artist Name',
         album: album.trim() || 'Album Name',
         genre: genre || 'Melody',
-        year: new Date().getFullYear(),
+        year: trackToEdit?.year || new Date().getFullYear(),
         duration: Number(duration) || 240,
         audioUrl: audioUrl.trim() || 'https://example.com/song.mp3',
         ...(cleanVideoUrl ? { videoUrl: cleanVideoUrl, hasVideo: true } : {}),
@@ -169,67 +219,107 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
               <Music className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-base sm:text-lg">Add Song Manually</h3>
-              <p className="text-xs text-gray-400">Stream directly from any audio URL</p>
+              <h3 className="font-bold text-base text-white">
+                {isEditing ? 'Edit Song Metadata' : 'Add Song to Library'}
+              </h3>
+              <p className="text-xs text-gray-400">
+                {isEditing
+                  ? 'Update track details and direct audio URL'
+                  : 'Add direct audio URL to stream instantly'}
+              </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+            className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {errorMsg && (
-          <div className="p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="p-3 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-200 text-xs flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
             <span>{errorMsg}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Song Title & Artist */}
+        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+          {/* Title & Artist */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-gray-300 mb-1">
-                Song Title *
+              <label className="block text-gray-400 font-medium mb-1.5">
+                Song Title <span className="text-rose-400">*</span>
               </label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. Kanmani Anbodu"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-[var(--accent-primary)] outline-none text-xs sm:text-sm text-white placeholder-gray-500"
+                placeholder="e.g. Enna Sona"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-[var(--accent-primary)] outline-none"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-300 mb-1">
-                Artist / Singer *
+              <label className="block text-gray-400 font-medium mb-1.5">
+                Artist / Singer <span className="text-rose-400">*</span>
               </label>
               <input
                 type="text"
                 required
                 value={artist}
                 onChange={(e) => setArtist(e.target.value)}
-                placeholder="e.g. S.P. Balasubrahmanyam"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-[var(--accent-primary)] outline-none text-xs sm:text-sm text-white placeholder-gray-500"
+                placeholder="e.g. A.R. Rahman"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-[var(--accent-primary)] outline-none"
               />
             </div>
           </div>
 
-          {/* Audio Stream URL & Test Button */}
+          {/* Album, Genre, Language */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label className="block text-gray-400 font-medium mb-1.5">Album / Movie</label>
+              <input
+                type="text"
+                value={album}
+                onChange={(e) => setAlbum(e.target.value)}
+                placeholder="Album name"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-[var(--accent-primary)] outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-400 font-medium mb-1.5">Genre</label>
+              <input
+                type="text"
+                value={genre}
+                onChange={(e) => setGenre(e.target.value)}
+                placeholder="e.g. Melody, Pop"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-[var(--accent-primary)] outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-400 font-medium mb-1.5">Language</label>
+              <input
+                type="text"
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                placeholder="e.g. Tamil"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-[var(--accent-primary)] outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Audio Stream URL */}
           <div>
-            <div className="flex items-center justify-between mb-1">
-              <label className="block text-xs font-semibold text-gray-300">
-                Direct Audio Stream URL *
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-gray-400 font-medium">
+                Direct Audio Stream URL <span className="text-rose-400">*</span>
               </label>
               <button
                 type="button"
                 onClick={handleTestAudio}
                 disabled={isTestingUrl || !audioUrl.trim()}
-                className="text-[11px] text-[var(--accent-primary)] hover:underline flex items-center gap-1 disabled:opacity-50"
+                className="text-[11px] font-semibold text-[var(--accent-primary)] hover:underline flex items-center gap-1 disabled:opacity-50"
               >
                 {isTestingUrl ? (
                   <RefreshCw className="w-3 h-3 animate-spin" />
@@ -244,138 +334,106 @@ export const AddSongModal: React.FC<AddSongModalProps> = ({ isOpen, onClose, onT
               required
               value={audioUrl}
               onChange={(e) => setAudioUrl(e.target.value)}
-              placeholder="https://example.com/audio/song.mp3"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-[var(--accent-primary)] outline-none text-xs font-mono text-white placeholder-gray-500"
+              placeholder="https://example.com/stream.mp3"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 font-mono focus:border-[var(--accent-primary)] outline-none"
             />
-            {testResult && (
-              <p
-                className={`text-[11px] mt-1.5 flex items-center gap-1 font-mono ${
-                  testResult.success ? 'text-emerald-400' : 'text-amber-400'
-                }`}
-              >
-                {testResult.success ? <Check className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
-                {testResult.message}
-              </p>
-            )}
           </div>
 
-          {/* Direct Video Stream URL (Cloudflare R2 / MP4 - Optional) */}
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <label className="block text-xs font-semibold text-gray-300 flex items-center gap-1.5">
-                <Film className="w-3.5 h-3.5 text-rose-500" />
-                <span>Direct Video URL (Cloudflare R2 / MP4 - Optional)</span>
-              </label>
-              <span className="text-[10px] text-gray-400">Direct media files only (No YouTube)</span>
+          {/* Test Feedback */}
+          {testResult && (
+            <div
+              className={`p-3 rounded-xl border flex items-center gap-2 ${
+                testResult.success
+                  ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-200'
+                  : 'bg-amber-500/20 border-amber-500/40 text-amber-200'
+              }`}
+            >
+              {testResult.success ? (
+                <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+              ) : (
+                <AlertCircle className="w-4 h-4 flex-shrink-0 text-amber-400" />
+              )}
+              <span>{testResult.message}</span>
             </div>
+          )}
+
+          {/* Thumbnail / Cover Art URL */}
+          <div>
+            <label className="block text-gray-400 font-medium mb-1.5">
+              Album Artwork URL (Optional)
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="url"
+                value={thumbnailUrl}
+                onChange={(e) => setThumbnailUrl(e.target.value)}
+                placeholder="https://example.com/cover.jpg"
+                className="flex-1 px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 font-mono focus:border-[var(--accent-primary)] outline-none"
+              />
+              {thumbnailUrl && (
+                <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 flex-shrink-0 bg-black/40">
+                  <img
+                    src={thumbnailUrl}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) => ((e.target as HTMLElement).style.display = 'none')}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Direct Video URL (Optional) */}
+          <div>
+            <label className="block text-gray-400 font-medium mb-1.5">
+              Direct Video Stream URL (Optional, .mp4 / .webm / Cloudflare R2)
+            </label>
             <input
               type="url"
               value={videoUrl}
               onChange={(e) => setVideoUrl(e.target.value)}
-              placeholder="https://pub-xxxxxx.r2.dev/videos/song.mp4"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-rose-500 outline-none text-xs font-mono text-white placeholder-gray-500"
+              placeholder="https://example.com/video.mp4"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 font-mono focus:border-[var(--accent-primary)] outline-none"
             />
-            <p className="text-[10px] text-gray-400 mt-1">
-              Plays in native video player. Only direct video links are supported (Cloudflare R2, MP4, WebM). YouTube is disallowed.
-            </p>
           </div>
 
-          {/* Album & Genre */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label className="block text-xs font-semibold text-gray-300 mb-1">
-                Album / Movie
-              </label>
-              <input
-                type="text"
-                value={album}
-                onChange={(e) => setAlbum(e.target.value)}
-                placeholder="e.g. Gunaa (or Singles)"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-[var(--accent-primary)] outline-none text-xs sm:text-sm text-white placeholder-gray-500"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-300 mb-1">
-                Genre
-              </label>
-              <input
-                type="text"
-                value={genre}
-                onChange={(e) => setGenre(e.target.value)}
-                placeholder="e.g. Melody, Classical"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-[var(--accent-primary)] outline-none text-xs sm:text-sm text-white placeholder-gray-500"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-300 mb-1">
-                Language
-              </label>
-              <input
-                type="text"
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-                placeholder="e.g. Tamil"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-[var(--accent-primary)] outline-none text-xs sm:text-sm text-white placeholder-gray-500"
-              />
-            </div>
-          </div>
+          {/* Buttons */}
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/10">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleCopyJson}
+                className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 font-medium flex items-center gap-1.5 transition-colors"
+              >
+                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                <span>{copied ? 'Copied JSON!' : 'Copy JSON'}</span>
+              </button>
 
-          {/* Cover Artwork URL & Duration */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-semibold text-gray-300 mb-1">
-                Cover Image URL (Optional)
-              </label>
-              <div className="relative">
-                <input
-                  type="url"
-                  value={thumbnailUrl}
-                  onChange={(e) => setThumbnailUrl(e.target.value)}
-                  placeholder="https://example.com/cover.jpg"
-                  className="w-full pl-9 pr-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-[var(--accent-primary)] outline-none text-xs text-white placeholder-gray-500"
-                />
-                <Image className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
-              </div>
+              {isEditing && (
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  className="px-3.5 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 font-medium flex items-center gap-1.5 transition-colors"
+                >
+                  <Trash2 className="w-3.5 h-3.5 text-rose-400" />
+                  <span>Delete</span>
+                </button>
+              )}
             </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-300 mb-1">
-                Duration (seconds)
-              </label>
-              <input
-                type="number"
-                min={1}
-                value={duration}
-                onChange={(e) => setDuration(parseInt(e.target.value) || 0)}
-                placeholder="240"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-[var(--accent-primary)] outline-none text-xs sm:text-sm text-white font-mono"
-              />
-            </div>
-          </div>
 
-          {/* Bottom Actions */}
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <button
-              type="button"
-              onClick={handleCopyJson}
-              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-xs text-gray-300 hover:text-white flex items-center justify-center gap-1.5 transition-colors font-medium"
-            >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copied ? 'Copied JSON!' : 'Copy JSON for music.json'}</span>
-            </button>
-
-            <div className="w-full sm:w-auto flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-gray-400 hover:text-white transition-colors"
+                className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-gray-300 font-semibold transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-[var(--accent-primary)] hover:brightness-110 active:scale-95 text-white font-bold text-xs shadow-lg transition-all"
+                className="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl bg-[var(--accent-primary)] hover:brightness-110 active:scale-95 text-white font-bold transition-all shadow-[0_0_16px_var(--accent-glow)]"
               >
-                Add Song
+                {isEditing ? 'Save Changes' : 'Add Song'}
               </button>
             </div>
           </div>

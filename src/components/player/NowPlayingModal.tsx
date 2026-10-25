@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
+  Download,
+  CheckCircle2,
+  RefreshCw,
   ChevronDown,
   Play,
   Pause,
@@ -22,6 +25,11 @@ import {
 } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 import { resolveArtworkUrl, isDirectVideoUrl } from '@/services/musicService';
+import {
+  isTrackDownloaded,
+  downloadTrack,
+  deleteDownloadedTrack,
+} from '@/services/downloadService';
 import { formatTime } from '@/utils/formatters';
 import { SoundLabTab } from './SoundLabTab';
 import { PwaInstallModal } from '@/components/modals/PwaInstallModal';
@@ -64,6 +72,60 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
     resume,
     isDolbyEnabled,
   } = useAudio();
+
+  const [isDownloaded, setIsDownloaded] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState(0);
+
+  useEffect(() => {
+    if (!currentTrack) return;
+    let isMounted = true;
+    isTrackDownloaded(currentTrack.id).then((dl) => {
+      if (isMounted) setIsDownloaded(dl);
+    });
+
+    const handleDlCompleted = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.trackId === currentTrack.id) {
+        setIsDownloaded(true);
+        setIsDownloading(false);
+      }
+    };
+    const handleDlDeleted = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.trackId === currentTrack.id) {
+        setIsDownloaded(false);
+      }
+    };
+
+    window.addEventListener('wavemusic_download_completed', handleDlCompleted);
+    window.addEventListener('wavemusic_download_deleted', handleDlDeleted);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('wavemusic_download_completed', handleDlCompleted);
+      window.removeEventListener('wavemusic_download_deleted', handleDlDeleted);
+    };
+  }, [currentTrack]);
+
+  const handleDownloadToggle = async () => {
+    if (!currentTrack || isDownloading) return;
+    if (isDownloaded) {
+      if (window.confirm("Remove offline download for " + currentTrack.title + "?")) {
+        await deleteDownloadedTrack(currentTrack.id);
+        setIsDownloaded(false);
+      }
+    } else {
+      setIsDownloading(true);
+      setDownloadProgress(0);
+      const res = await downloadTrack(currentTrack, (pct) => setDownloadProgress(pct));
+      setIsDownloading(false);
+      if (res.success) {
+        setIsDownloaded(true);
+      } else if (res.error && !res.error.includes('cancel')) {
+        alert(res.error);
+      }
+    }
+  };
 
   const [activeTab, setActiveTab] = useState<'visualizer' | 'video' | 'lyrics' | 'queue' | 'soundlab'>(
     initialTab
@@ -439,16 +501,43 @@ export const NowPlayingModal: React.FC<NowPlayingModalProps> = ({
                 </p>
               </div>
 
-              <button
-                onClick={() => toggleFavourite(currentTrack.id)}
-                className={`p-3 rounded-full transition-transform active:scale-90 ${
-                  liked
-                    ? 'text-[var(--accent-primary)]'
-                    : 'text-gray-400 hover:text-white hover:bg-white/10'
-                }`}
-              >
-                <Heart className={`w-7 h-7 ${liked ? 'fill-[var(--accent-primary)]' : ''}`} />
-              </button>
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                <button
+                  onClick={handleDownloadToggle}
+                  className={`p-3 rounded-full transition-transform active:scale-90 ${
+                    isDownloaded
+                      ? 'text-emerald-400'
+                      : isDownloading
+                      ? 'text-cyan-400'
+                      : 'text-gray-400 hover:text-white hover:bg-white/10'
+                  }`}
+                  title={
+                    isDownloaded
+                      ? 'Offline Available (Click to remove)'
+                      : isDownloading
+                      ? `Downloading ${downloadProgress}%`
+                      : 'Download for offline playback'
+                  }
+                >
+                  {isDownloading ? (
+                    <RefreshCw className="w-6 h-6 animate-spin" />
+                  ) : isDownloaded ? (
+                    <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+                  ) : (
+                    <Download className="w-6 h-6" />
+                  )}
+                </button>
+                <button
+                  onClick={() => toggleFavourite(currentTrack.id)}
+                  className={`p-3 rounded-full transition-transform active:scale-90 ${
+                    liked
+                      ? 'text-[var(--accent-primary)]'
+                      : 'text-gray-400 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  <Heart className={`w-7 h-7 ${liked ? 'fill-[var(--accent-primary)]' : ''}`} />
+                </button>
+              </div>
             </div>
 
             {/* Apple Music & Dolby Atmos Badges */}

@@ -1,10 +1,11 @@
-/**
+﻿/**
  * Central Audio Streaming Configuration
  *
  * NOTE:
- * - Songs and audio URLs are manually configured in src/data/music.json.
- * - Audio URLs can be hosted on any HTTPS server, public storage bucket, or CDN.
- * - Native browser HTML5 streaming is used with HTTP Range requests.
+ * - Songs and audio URLs are dynamically loaded from remote/local manifest.
+ * - Default remote catalogue points to GitHub raw repository:
+ *   https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/src/data/music.json
+ * - Song updates in the remote manifest appear automatically in the app WITHOUT rebuilding!
  */
 
 export interface AudioConfig {
@@ -13,11 +14,12 @@ export interface AudioConfig {
   defaultVolume: number;
   supportedFormats: readonly string[];
   maxHistoryItems: number;
+  defaultCatalogueUrl: string;
 }
 
 export const AUDIO_CONFIG: AudioConfig = {
   // Website Brand Name (configurable via VITE_SITE_NAME or default)
-  siteName: (import.meta.env.VITE_SITE_NAME as string) || 'WaveMusic',
+  siteName: (import.meta.env.VITE_SITE_NAME as string) || 'WaveMusic Premium',
 
   // Stream progressively with metadata preloaded (never download entire audio file upfront)
   preload: 'metadata',
@@ -30,6 +32,9 @@ export const AUDIO_CONFIG: AudioConfig = {
 
   // Maximum recently played tracks to remember in localStorage
   maxHistoryItems: 50,
+
+  // Default remote catalogue manifest URL on GitHub
+  defaultCatalogueUrl: 'https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/src/data/music.json',
 };
 
 /**
@@ -37,6 +42,14 @@ export const AUDIO_CONFIG: AudioConfig = {
  */
 export const STORAGE_KEYS = {
   USER_TRACKS: 'wavemusic_user_tracks_v1',
+  CACHED_CATALOGUE: 'wavemusic_cached_catalogue_v1',
+  CATALOGUE_URL: 'wavemusic_catalogue_url_v1',
+  CATALOGUE_ETAG: 'wavemusic_catalogue_etag_v1',
+  CATALOGUE_LAST_SYNC: 'wavemusic_catalogue_last_sync_v1',
+  CATALOGUE_VERSION: 'wavemusic_catalogue_version_v1',
+  HIDDEN_TRACK_IDS: 'wavemusic_hidden_track_ids_v1',
+  DOWNLOADED_TRACKS_META: 'wavemusic_downloaded_tracks_meta_v1',
+  WIFI_ONLY_DOWNLOAD: 'wavemusic_wifi_only_download_v1',
   FAVOURITES: 'wavemusic_favourites_v1',
   PLAYLISTS: 'wavemusic_playlists_v1',
   HISTORY: 'wavemusic_history_v1',
@@ -150,7 +163,7 @@ export function isValidUrl(url?: string): boolean {
   if (!url) return false;
   try {
     const parsed = new URL(url);
-    return parsed.protocol === 'https:' || parsed.protocol === 'http:' || url.startsWith('data:') || url.startsWith('/');
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:' || url.startsWith('data:') || url.startsWith('/') || url.startsWith('blob:');
   } catch {
     return false;
   }
