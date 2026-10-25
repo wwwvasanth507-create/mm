@@ -42,7 +42,14 @@ export function normalizeTrack(song: Partial<Track>, idx: number = 0): Track {
   };
 }
 
-const bundledNormalizedTracks: Track[] = rawStaticSongs.map((song, idx) =>
+export function isTempTestSong(song: Partial<Track>): boolean {
+  const id = (song.id || '').toLowerCase();
+  const title = (song.title || '').toLowerCase();
+  const artist = (song.artist || '').toLowerCase();
+  return id.startsWith('wave-starter-') || title.includes('soundhelix') || artist.includes('soundhelix');
+}
+
+const bundledNormalizedTracks: Track[] = rawStaticSongs.filter(s => !isTempTestSong(s)).map((song, idx) =>
   normalizeTrack(song, idx)
 );
 
@@ -99,7 +106,7 @@ export function getCachedCatalogue(): Track[] {
       ? parsed
       : parsed?.songs || parsed?.tracks || [];
     if (!Array.isArray(list) || list.length === 0) return bundledNormalizedTracks;
-    return list.map((item, idx) => normalizeTrack(item, idx));
+    return list.filter(s => !isTempTestSong(s)).map((item, idx) => normalizeTrack(item, idx));
   } catch {
     return bundledNormalizedTracks;
   }
@@ -201,7 +208,7 @@ export async function fetchRemoteCatalogue(
     }
 
     // Normalize and sanitize fetched tracks
-    const freshTracks = rawList.map((t, idx) => normalizeTrack(t, idx));
+    const freshTracks = rawList.filter(t => !isTempTestSong(t)).map((t, idx) => normalizeTrack(t, idx));
 
     // Save to local cache
     localStorage.setItem(STORAGE_KEYS.CACHED_CATALOGUE, JSON.stringify(freshTracks));
@@ -256,15 +263,11 @@ export function initCatalogueAutoSync(): void {
   isAutoSyncInitialized = true;
 
   const maybeSync = () => {
-    const lastSync = getLastCatalogueSyncTime();
-    const tenMinutes = 10 * 60 * 1000;
-    if (!lastSync || Date.now() - lastSync > tenMinutes) {
-      fetchRemoteCatalogue().catch(() => {});
-    }
+    fetchRemoteCatalogue().catch(() => {});
   };
 
-  // Sync on app startup (after 2 seconds)
-  setTimeout(maybeSync, 2000);
+  // Immediate sync on app startup
+  maybeSync();
 
   // Sync when returning from background / phone unlocked
   document.addEventListener('visibilitychange', () => {
