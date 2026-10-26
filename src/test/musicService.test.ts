@@ -13,6 +13,8 @@ import {
   addTrackToPlaylist,
   removeTrackFromPlaylist,
   deleteUserPlaylist,
+  getCuratedPlaylists,
+  getPlaylistById,
   toggleFavourite,
   isFavourite,
   addToPlaybackHistory,
@@ -102,6 +104,24 @@ describe('Music Catalog and Audio URL Resolution', () => {
 
     deleteUserPlaylist(playlist.id);
     expect(getUserPlaylists().find((p) => p.id === playlist.id)).toBeUndefined();
+  });
+
+  it('includes Ayothi playlist with correct cover URL and tracks', () => {
+    const playlists = getCuratedPlaylists();
+    const ayothi = playlists.find((p) => p.name.toLowerCase() === 'ayothi');
+    expect(ayothi).toBeDefined();
+    expect(ayothi?.coverUrl).toBe(
+      'https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/kaatrodu-pattam-pola.jpg'
+    );
+    expect(ayothi?.trackIds).toContain('song-kaatrodu-pattam-pola');
+
+    const byId = getPlaylistById('playlist-ayothi');
+    expect(byId).toBeDefined();
+    expect(byId?.id).toBe('playlist-ayothi');
+
+    const byName = getPlaylistById('ayothi');
+    expect(byName).toBeDefined();
+    expect(byName?.id).toBe('playlist-ayothi');
   });
 
   it('toggles favourites accurately', () => {

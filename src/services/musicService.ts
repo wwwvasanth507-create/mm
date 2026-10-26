@@ -1,4 +1,4 @@
-﻿import musicData from '@/data/music.json';
+import musicData from '@/data/music.json';
 import { Track, Album, Artist, Playlist, PlaybackHistoryItem } from '@/types/music';
 import { AUDIO_CONFIG, STORAGE_KEYS, isValidUrl } from '@/config/audio';
 
@@ -509,8 +509,19 @@ export function getCuratedPlaylists(): Playlist[] {
   const melodyTracks = tracks.filter((t) =>
     (t.genre + t.title + t.description).toLowerCase().includes('melody')
   );
+  const ayothiTracks = tracks.filter(
+    (t) => t.album.toLowerCase().includes('ayothi') || t.id === 'song-kaatrodu-pattam-pola'
+  );
 
-  return [
+  const defaultPlaylists: Playlist[] = [
+    {
+      id: 'playlist-ayothi',
+      name: 'Ayothi',
+      description: 'Soundtrack and soulful songs from Ayothi composed by N.R. Raghunanthan',
+      coverUrl: 'https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/kaatrodu-pattam-pola.jpg',
+      trackIds: ayothiTracks.length > 0 ? ayothiTracks.map((t) => t.id) : ['song-kaatrodu-pattam-pola'],
+      createdAt: '2025-01-01',
+    },
     {
       id: 'playlist-top-hits',
       name: 'WaveMusic Top Hits',
@@ -544,12 +555,30 @@ export function getCuratedPlaylists(): Playlist[] {
       createdAt: '2025-01-01',
     },
   ];
+
+  const catalogPlaylists = typedCatalog.playlists || [];
+  const merged = [...defaultPlaylists];
+  for (const cp of catalogPlaylists) {
+    const existingIndex = merged.findIndex((p) => p.id === cp.id);
+    if (existingIndex >= 0) {
+      merged[existingIndex] = { ...merged[existingIndex], ...cp };
+    } else {
+      merged.push(cp);
+    }
+  }
+
+  return merged;
 }
 
 export function getPlaylistById(id: string): Playlist | undefined {
-  const curated = getCuratedPlaylists().find((p) => p.id === id);
+  const normId = id.toLowerCase();
+  const curated = getCuratedPlaylists().find(
+    (p) => p.id.toLowerCase() === normId || p.id.toLowerCase() === `playlist-${normId}` || p.name.toLowerCase() === normId
+  );
   if (curated) return curated;
-  const user = getUserPlaylists().find((p) => p.id === id);
+  const user = getUserPlaylists().find(
+    (p) => p.id.toLowerCase() === normId || p.name.toLowerCase() === normId
+  );
   return user;
 }
 
