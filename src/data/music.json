@@ -1862,6 +1862,20 @@
       "description": "Yolo from Kanguva composed by Devi Sri Prasad",
       "language": "Tamil",
       "isExplicit": false
+    },
+    {
+      "id": "song-kaatrodu-pattam-pola",
+      "title": "Kaatrodu Pattam Pola",
+      "artist": "N.R. Raghunanthan, Pradeep Kumar",
+      "album": "Ayothi",
+      "genre": "Soulful Melody",
+      "year": 2023,
+      "duration": 304,
+      "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/ayothi/Kaatrodu-Pattam-Pola-MassTamilan.dev.mp3",
+      "thumbnailUrl": "/covers/kaatrodu-pattam-pola.jpg",
+      "description": "Kaatrodu Pattam Pola from Ayothi composed by N.R. Raghunanthan",
+      "language": "Tamil",
+      "isExplicit": false
     }
   ]
 }
