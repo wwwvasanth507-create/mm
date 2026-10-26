@@ -1,6 +1,52 @@
 {
   "playlists": [
     {
+      "id": "playlist-featured",
+      "name": "Featured Library Tracks",
+      "description": "Top hand-picked songs from your library",
+      "coverUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ravana-tandavam.jpg",
+      "trackIds": [
+        "song-ravana-tandavam",
+        "song-anthaathi",
+        "song-aga-naga",
+        "song-animal-instinct",
+        "song-cheenikkallu",
+        "song-chikitu",
+        "song-enjaami-thandhaane",
+        "song-yaaro-ivan-yaaro"
+      ],
+      "createdAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "playlist-anirudh-vibes",
+      "name": "Anirudh Energetic Hits",
+      "description": "High-octane mass beats & themes by Anirudh",
+      "coverUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/coolie-disco.jpg",
+      "trackIds": [
+        "song-animal-instinct",
+        "song-arasan-theme",
+        "song-chikitu",
+        "song-coolie-disco"
+      ],
+      "createdAt": "2025-01-02T00:00:00Z"
+    },
+    {
+      "id": "playlist-pure-melodies",
+      "name": "Soulful Melodies",
+      "description": "Heartfelt acoustic and romantic Tamil melodies",
+      "coverUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/anthaathi.jpg",
+      "trackIds": [
+        "song-anthaathi",
+        "song-aga-naga",
+        "song-agayam-theepiditha",
+        "song-cheenikkallu",
+        "song-edharkaga-marubadi",
+        "song-enna-sugam",
+        "song-yaaro-ivan-yaaro"
+      ],
+      "createdAt": "2025-01-03T00:00:00Z"
+    },
+    {
       "id": "playlist-ayothi",
       "name": "Ayothi",
       "description": "Soundtrack and songs from Ayothi composed by N.R. Raghunanthan",
@@ -21,7 +67,7 @@
       "year": 2026,
       "duration": 194,
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Ravana%20Tandavam.mp3",
-      "thumbnailUrl": "/covers/ravana-tandavam.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ravana-tandavam.jpg",
       "description": "Ravana Tandavam from Ramayana composed by A.R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -35,7 +81,7 @@
       "year": 2018,
       "duration": 434,
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Anthaathi-MassTamilan.com.mp3",
-      "thumbnailUrl": "/covers/anthaathi.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/anthaathi.jpg",
       "description": "Anthaathi from 96 composed by Govind Vasantha",
       "language": "Tamil",
       "isExplicit": false
@@ -49,11 +95,11 @@
       "year": 2025,
       "duration": 203,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/AK%20-%20The%20Tiger.mp3",
-      "thumbnailUrl": "/covers/ak-the-tiger.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ak-the-tiger.jpg",
       "description": "AK - The Tiger from Good Bad Ugly composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false,
-      "artworkUrl": "/covers/ak-the-tiger.jpg"
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ak-the-tiger.jpg"
     },
     {
       "id": "song-aga-naga",
@@ -64,7 +110,7 @@
       "year": 2023,
       "duration": 243,
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Aga-Naga-MassTamilan.dev.mp3",
-      "thumbnailUrl": "/covers/aga-naga.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/aga-naga.jpg",
       "description": "Enchanting romantic melody from Mani Ratnam's Ponniyin Selvan Part 2 composed by A. R. Rahman.",
       "language": "Tamil",
       "isExplicit": false
@@ -78,7 +124,7 @@
       "year": 2014,
       "duration": 215,
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Agayam-Theepiditha.mp3",
-      "thumbnailUrl": "/covers/agayam-theepiditha.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/agayam-theepiditha.jpg",
       "description": "Soul-stirring melody from Madras starring Karthi, composed by Santhosh Narayanan.",
       "language": "Tamil",
       "isExplicit": false
@@ -92,11 +138,11 @@
       "year": 2025,
       "duration": 144,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Agriculture%20Song.mp3",
-      "thumbnailUrl": "/covers/agriculture-song.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/agriculture-song.jpg",
       "description": "Agriculture Song (Poliye Poliyere) from Kantara: Chapter 1 composed by B. Ajaneesh Loknath",
       "language": "Tamil",
       "isExplicit": false,
-      "artworkUrl": "/covers/agriculture-song.jpg"
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/agriculture-song.jpg"
     },
     {
       "id": "song-animal-instinct",
@@ -107,7 +153,7 @@
       "year": 2025,
       "duration": 168,
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Animal%20Instinct.mp3",
-      "thumbnailUrl": "/covers/animal-instinct.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/animal-instinct.jpg",
       "description": "High-octane mass theme composed by Anirudh Ravichander for A.R. Murugadoss's Madharaasi starring Sivakarthikeyan.",
       "language": "Tamil",
       "isExplicit": false
@@ -121,7 +167,7 @@
       "year": 2025,
       "duration": 144,
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Arasan-Theme-MassTamilan.dev.mp3",
-      "thumbnailUrl": "/covers/arasan-theme.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/arasan-theme.jpg",
       "description": "Fierce promo theme composed by Anirudh Ravichander for Vetrimaaran's Arasan starring Silambarasan TR.",
       "language": "Tamil",
       "isExplicit": false
@@ -135,7 +181,7 @@
       "year": 2025,
       "duration": 232,
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Aththaan.mp3",
-      "thumbnailUrl": "/covers/aththaan.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/aththaan.jpg",
       "description": "Catchy and breezy romantic track from Aan Paavam Pollathathu starring Rio Raj.",
       "language": "Tamil",
       "isExplicit": false
@@ -149,11 +195,11 @@
       "year": 2025,
       "duration": 344,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Brahmakalasha.mp3",
-      "thumbnailUrl": "/covers/brahmakalasha.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/brahmakalasha.jpg",
       "description": "Brahmakalasha from Kantara: Chapter 1 composed by B. Ajaneesh Loknath",
       "language": "Tamil",
       "isExplicit": false,
-      "artworkUrl": "/covers/brahmakalasha.jpg"
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/brahmakalasha.jpg"
     },
     {
       "id": "song-cheenikkallu",
@@ -164,7 +210,7 @@
       "year": 2025,
       "duration": 357,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Cheenikkallu.mp3",
-      "thumbnailUrl": "/covers/cheenikkallu.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/cheenikkallu.jpg",
       "description": "Enchanting romantic melody from Mari Selvaraj's Bison Kaalamaadan starring Dhruv Vikram and Anupama Parameswaran, music composed by Nivas K. Prasanna.",
       "language": "Tamil",
       "isExplicit": false
@@ -178,7 +224,7 @@
       "year": 2025,
       "duration": 189,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Chikitu.mp3",
-      "thumbnailUrl": "/covers/chikitu.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/chikitu.jpg",
       "description": "Chikitu from Coolie composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -192,7 +238,7 @@
       "year": 2025,
       "duration": 105,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Coolie%20Disco.mp3",
-      "thumbnailUrl": "/covers/coolie-disco.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/coolie-disco.jpg",
       "description": "Coolie Disco from Coolie composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -206,11 +252,11 @@
       "year": 2025,
       "duration": 257,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Edharkaga%20Marubadi.mp3",
-      "thumbnailUrl": "/covers/edharkaga-marubadi.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/edharkaga-marubadi.jpg",
       "description": "Edharkaga Marubadi from Retro composed by Santhosh Narayanan",
       "language": "Tamil",
       "isExplicit": false,
-      "artworkUrl": "/covers/edharkaga-marubadi.jpg"
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/edharkaga-marubadi.jpg"
     },
     {
       "id": "song-enjaami-thandhaane",
@@ -221,11 +267,11 @@
       "year": 2025,
       "duration": 292,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Enjaami%20Thandhaane.mp3",
-      "thumbnailUrl": "/covers/enjaami-thandhaane.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/enjaami-thandhaane.jpg",
       "description": "Enjaami Thandhaane from Idli Kadai composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false,
-      "artworkUrl": "/covers/enjaami-thandhaane.jpg"
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/enjaami-thandhaane.jpg"
     },
     {
       "id": "song-enna-sugam",
@@ -236,11 +282,11 @@
       "year": 2025,
       "duration": 222,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Enna%20Sugam.mp3",
-      "thumbnailUrl": "/covers/enna-sugam.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/enna-sugam.jpg",
       "description": "Enna Sugam from Idli Kadai composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false,
-      "artworkUrl": "/covers/enna-sugam.jpg"
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/enna-sugam.jpg"
     },
     {
       "id": "song-god-bless-u",
@@ -251,11 +297,11 @@
       "year": 2025,
       "duration": 240,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/God%20Bless%20U.mp3",
-      "thumbnailUrl": "/covers/god-bless-u.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/god-bless-u.jpg",
       "description": "God Bless U from Good Bad Ugly composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false,
-      "artworkUrl": "/covers/god-bless-u.jpg"
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/god-bless-u.jpg"
     },
     {
       "id": "song-golden-sparrow",
@@ -266,11 +312,11 @@
       "year": 2024,
       "duration": 230,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Golden%20Sparrow.mp3",
-      "thumbnailUrl": "/covers/golden-sparrow.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/golden-sparrow.jpg",
       "description": "Golden Sparrow from Nilavuku En Mel Ennadi Kobam (NEEK) composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false,
-      "artworkUrl": "/covers/golden-sparrow.jpg"
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/golden-sparrow.jpg"
     },
     {
       "id": "song-iraivaa",
@@ -281,7 +327,7 @@
       "year": 2025,
       "duration": 160,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Iraivaa.mp3",
-      "thumbnailUrl": "/covers/iraivaa.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/iraivaa.jpg",
       "description": "Iraivaa from Dragon composed by Leon James",
       "language": "Tamil",
       "isExplicit": false
@@ -295,7 +341,7 @@
       "year": 2018,
       "duration": 221,
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Iravingu_Theevai-MassTamilan.com.mp3",
-      "thumbnailUrl": "/covers/iravingu-theevai.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/iravingu-theevai.jpg",
       "description": "Nocturnal and intimate musical masterpiece from Vijay Sethupathi and Trisha's classic 96.",
       "language": "Tamil",
       "isExplicit": false
@@ -309,7 +355,7 @@
       "year": 2018,
       "duration": 193,
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Kaathalae_Kaathalae-MassTamilan.com.mp3",
-      "thumbnailUrl": "/covers/kaathalae-kaathalae.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kaathalae-kaathalae.jpg",
       "description": "Timeless anthem of eternal love from the cult classic romance 96.",
       "language": "Tamil",
       "isExplicit": false
@@ -323,7 +369,7 @@
       "year": 2025,
       "duration": 297,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Kaalamaadan%20Gaanam.mp3",
-      "thumbnailUrl": "/covers/kaalamaadan-gaanam.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kaalamaadan-gaanam.jpg",
       "description": "Fierce rustic spiritual anthem Kaalamaadan Gaanam sung by V.M. Mahalingam with music by Nivas K. Prasanna for Mari Selvaraj's Bison Kaalamaadan.",
       "language": "Tamil",
       "isExplicit": false
@@ -337,7 +383,7 @@
       "year": 2025,
       "duration": 303,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Rekka%20Rekka.mp3",
-      "thumbnailUrl": "/covers/rekka-rekka.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/rekka-rekka.jpg",
       "description": "Adrenaline-fueled rap & folk anthem featuring hard-hitting verses by Arivu and Vedan, composed by Nivas K. Prasanna for Bison Kaalamaadan.",
       "language": "Tamil",
       "isExplicit": false
@@ -351,7 +397,7 @@
       "year": 2025,
       "duration": 363,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Theekkoluthi.mp3",
-      "thumbnailUrl": "/covers/theekkoluthi.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/theekkoluthi.jpg",
       "description": "Empowering and passionate rural anthem Theekkoluthi written by Mari Selvaraj and composed by Nivas K. Prasanna for Bison Kaalamaadan.",
       "language": "Tamil",
       "isExplicit": false
@@ -365,7 +411,7 @@
       "year": 2025,
       "duration": 301,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/Thennaadu.mp3",
-      "thumbnailUrl": "/covers/thennaadu.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/thennaadu.jpg",
       "description": "Soil-rooted rural tribute anthem Thennaadu composed by Nivas K. Prasanna with lyrics by Mari Selvaraj for Dhruv Vikram's Bison Kaalamaadan.",
       "language": "Tamil",
       "isExplicit": false
@@ -379,7 +425,7 @@
       "year": 2025,
       "duration": 178,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/I%20Am%20The%20Danger.mp3",
-      "thumbnailUrl": "/covers/i-am-the-danger.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/i-am-the-danger.jpg",
       "description": "I Am The Danger from Coolie composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -393,7 +439,7 @@
       "year": 2025,
       "duration": 201,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Kokki.mp3",
-      "thumbnailUrl": "/covers/kokki.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kokki.jpg",
       "description": "Kokki from Coolie composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -407,7 +453,7 @@
       "year": 2025,
       "duration": 91,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Mobsta.mp3",
-      "thumbnailUrl": "/covers/mobsta.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/mobsta.jpg",
       "description": "Mobsta Theme from Coolie composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -422,7 +468,7 @@
       "duration": 179,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Monica.mp3",
       "videoUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/videos/Monica%20-%20Lyric%20Video_%20COOLIE%20_%20Superstar%20Rajinikanth%20_%20Sun%20Pictures%20_%20Lokesh%20_%20Anirudh%20_%20Pooja%20Hegde(720P_HD).mp4",
-      "thumbnailUrl": "/covers/monica.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/monica.jpg",
       "description": "Monica from Coolie composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -436,7 +482,7 @@
       "year": 2025,
       "duration": 176,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Powerhouse.mp3",
-      "thumbnailUrl": "/covers/powerhouse.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/powerhouse.jpg",
       "description": "Powerhouse from Coolie composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -450,7 +496,7 @@
       "year": 2025,
       "duration": 181,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Uyirnaadi%20Nanbane.mp3",
-      "thumbnailUrl": "/covers/uyirnaadi-nanbane.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/uyirnaadi-nanbane.jpg",
       "description": "Uyirnaadi Nanbane from Coolie composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -464,7 +510,7 @@
       "year": 2025,
       "duration": 63,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Blud%20Is%20On%20His%20Way.mp3",
-      "thumbnailUrl": "/covers/blud-is-on-his-way.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/blud-is-on-his-way.jpg",
       "description": "Blud Is On His Way from Dude composed by Sai Abhyankkar",
       "language": "Tamil",
       "isExplicit": false
@@ -478,7 +524,7 @@
       "year": 2025,
       "duration": 129,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Dude%20Trailer%20Blast%20(Theme).mp3",
-      "thumbnailUrl": "/covers/dude-trailer-blast.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/dude-trailer-blast.jpg",
       "description": "Dude Trailer Blast (Theme) composed by Sai Abhyankkar",
       "language": "Tamil",
       "isExplicit": false
@@ -492,7 +538,7 @@
       "year": 2025,
       "duration": 216,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Kannukulla.mp3",
-      "thumbnailUrl": "/covers/kannukulla.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kannukulla.jpg",
       "description": "Kannukulla from Dude composed by Sai Abhyankkar",
       "language": "Tamil",
       "isExplicit": false
@@ -506,7 +552,7 @@
       "year": 2025,
       "duration": 188,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Nallaru%20Po.mp3",
-      "thumbnailUrl": "/covers/nallaru-po.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/nallaru-po.jpg",
       "description": "Nallaru Po from Dude composed by Sai Abhyankkar",
       "language": "Tamil",
       "isExplicit": false
@@ -520,7 +566,7 @@
       "year": 2025,
       "duration": 195,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Oorum%20Blood.mp3",
-      "thumbnailUrl": "/covers/oorum-blood.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/oorum-blood.jpg",
       "description": "Oorum Blood from Dude composed by Sai Abhyankkar",
       "language": "Tamil",
       "isExplicit": false
@@ -534,7 +580,7 @@
       "year": 2025,
       "duration": 170,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Singari.mp3",
-      "thumbnailUrl": "/covers/singari.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/singari.jpg",
       "description": "Singari from Dude composed by Sai Abhyankkar",
       "language": "Tamil",
       "isExplicit": false
@@ -548,7 +594,7 @@
       "year": 2025,
       "duration": 169,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Maatikkinaaru%20Orutharu.mp3",
-      "thumbnailUrl": "/covers/maatikkinaaru-orutharu.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/maatikkinaaru-orutharu.jpg",
       "description": "Maatikkinaaru Orutharu from Dragon composed by Leon James",
       "language": "Tamil",
       "isExplicit": false
@@ -562,7 +608,7 @@
       "year": 2025,
       "duration": 206,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Maname%20Maname.mp3",
-      "thumbnailUrl": "/covers/maname-maname.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/maname-maname.jpg",
       "description": "Maname Maname from Dragon composed by Leon James",
       "language": "Tamil",
       "isExplicit": false
@@ -576,7 +622,7 @@
       "year": 2025,
       "duration": 176,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Rise%20Of%20Dragon.mp3",
-      "thumbnailUrl": "/covers/rise-of-dragon.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/rise-of-dragon.jpg",
       "description": "Rise Of Dragon from Dragon composed by Leon James",
       "language": "Tamil",
       "isExplicit": false
@@ -590,7 +636,7 @@
       "year": 2025,
       "duration": 179,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Vazhithunaiye.mp3",
-      "thumbnailUrl": "/covers/vazhithunaiye.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/vazhithunaiye.jpg",
       "description": "Vazhithunaiye from Dragon composed by Leon James",
       "language": "Tamil",
       "isExplicit": false
@@ -604,7 +650,7 @@
       "year": 2025,
       "duration": 210,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Yendi%20Vittu%20Pona.mp3",
-      "thumbnailUrl": "/covers/yendi-vittu-pona.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/yendi-vittu-pona.jpg",
       "description": "Yendi Vittu Pona from Dragon composed by Leon James",
       "language": "Tamil",
       "isExplicit": false
@@ -618,8 +664,8 @@
       "year": 2025,
       "duration": 277,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Anju%20Vanna%20Poove.mp3",
-      "thumbnailUrl": "/covers/anju-vanna-poove.jpg",
-      "artworkUrl": "/covers/anju-vanna-poove.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/anju-vanna-poove.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/anju-vanna-poove.jpg",
       "description": "Anju Vanna Poove from Thug Life composed by A. R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -633,8 +679,8 @@
       "year": 2025,
       "duration": 223,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Azhage%20Agarame.mp3",
-      "thumbnailUrl": "/covers/azhage-agarame.jpg",
-      "artworkUrl": "/covers/azhage-agarame.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/azhage-agarame.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/azhage-agarame.jpg",
       "description": "Azhage Agarame from Maaman composed by Hesham Abdul Wahab",
       "language": "Tamil",
       "isExplicit": false
@@ -648,8 +694,8 @@
       "year": 2025,
       "duration": 202,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Dheivamagane%20Dheivamagane.mp3",
-      "thumbnailUrl": "/covers/dheivamagane-dheivamagane.jpg",
-      "artworkUrl": "/covers/dheivamagane-dheivamagane.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/dheivamagane-dheivamagane.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/dheivamagane-dheivamagane.jpg",
       "description": "Dheivamagane Dheivamagane from Maaman composed by Hesham Abdul Wahab",
       "language": "Tamil",
       "isExplicit": false
@@ -663,8 +709,8 @@
       "year": 2025,
       "duration": 176,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Engeyo.mp3",
-      "thumbnailUrl": "/covers/engeyo.jpg",
-      "artworkUrl": "/covers/engeyo.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/engeyo.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/engeyo.jpg",
       "description": "Engeyo from Thug Life composed by A. R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -678,8 +724,8 @@
       "year": 2025,
       "duration": 278,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Ethana%20Saami.mp3",
-      "thumbnailUrl": "/covers/ethana-saami.jpg",
-      "artworkUrl": "/covers/ethana-saami.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ethana-saami.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ethana-saami.jpg",
       "description": "Ethana Saami from Idli Kadai composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -693,8 +739,8 @@
       "year": 2025,
       "duration": 247,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Grandma%20song%20%20from%20sabtham%20new%20movie.mp3",
-      "thumbnailUrl": "/covers/grandma-song.jpg",
-      "artworkUrl": "/covers/grandma-song.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/grandma-song.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/grandma-song.jpg",
       "description": "Grandma Song (The Spooky Vibes of Grandma) from Sabdham composed by S. Thaman",
       "language": "Tamil",
       "isExplicit": false
@@ -708,8 +754,8 @@
       "year": 2025,
       "duration": 260,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Jinguchaa.mp3",
-      "thumbnailUrl": "/covers/jinguchaa.jpg",
-      "artworkUrl": "/covers/jinguchaa.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/jinguchaa.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/jinguchaa.jpg",
       "description": "Jinguchaa from Thug Life composed by A. R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -723,8 +769,8 @@
       "year": 2025,
       "duration": 308,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kallaliye%20Kallaliye.mp3",
-      "thumbnailUrl": "/covers/kallaliye-kallaliye.jpg",
-      "artworkUrl": "/covers/kallaliye-kallaliye.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kallaliye-kallaliye.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kallaliye-kallaliye.jpg",
       "description": "Kallaliye Kallaliye from Maaman composed by Hesham Abdul Wahab",
       "language": "Tamil",
       "isExplicit": false
@@ -738,8 +784,8 @@
       "year": 2025,
       "duration": 212,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kalloorum%20-%20Veera%20Dheera%20Sooran.mp3",
-      "thumbnailUrl": "/covers/kalloorum.jpg",
-      "artworkUrl": "/covers/kalloorum.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kalloorum.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kalloorum.jpg",
       "description": "Kalloorum from Veera Dheera Sooran composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -753,8 +799,8 @@
       "year": 2025,
       "duration": 243,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kanimaa.mp3",
-      "thumbnailUrl": "/covers/kanimaa.jpg",
-      "artworkUrl": "/covers/kanimaa.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kanimaa.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kanimaa.jpg",
       "description": "Kanimaa from Retro composed by Santhosh Narayanan",
       "language": "Tamil",
       "isExplicit": false
@@ -768,8 +814,8 @@
       "year": 2025,
       "duration": 261,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kannadi%20Poove.mp3",
-      "thumbnailUrl": "/covers/kannadi-poove.jpg",
-      "artworkUrl": "/covers/kannadi-poove.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kannadi-poove.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kannadi-poove.jpg",
       "description": "Kannadi Poove from Retro composed by Santhosh Narayanan",
       "language": "Tamil",
       "isExplicit": false
@@ -783,8 +829,8 @@
       "year": 2025,
       "duration": 179,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kannale%20Pesuma.mp3",
-      "thumbnailUrl": "/covers/kannale-pesuma.jpg",
-      "artworkUrl": "/covers/kannale-pesuma.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kannale-pesuma.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kannale-pesuma.jpg",
       "description": "Kannale Pesuma from Maaman composed by Hesham Abdul Wahab",
       "language": "Tamil",
       "isExplicit": false
@@ -798,8 +844,8 @@
       "year": 2025,
       "duration": 152,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kanne%20Kalangadha.mp3",
-      "thumbnailUrl": "/covers/kanne-kalangadha.jpg",
-      "artworkUrl": "/covers/kanne-kalangadha.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kanne-kalangadha.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kanne-kalangadha.jpg",
       "description": "Kanne Kalangadha from Sirai composed by Justin Prabhakaran",
       "language": "Tamil",
       "isExplicit": false
@@ -813,8 +859,8 @@
       "year": 2025,
       "duration": 244,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Karma%20Song.mp3",
-      "thumbnailUrl": "/covers/karma-song.jpg",
-      "artworkUrl": "/covers/karma-song.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/karma-song.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/karma-song.jpg",
       "description": "Karma Song from Kantara: Chapter 1 composed by B. Ajaneesh Loknath",
       "language": "Tamil",
       "isExplicit": false
@@ -828,8 +874,8 @@
       "year": 2025,
       "duration": 153,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Kulasamy%20Kaaval%20Kaaka.mp3",
-      "thumbnailUrl": "/covers/kulasamy-kaaval-kaaka.jpg",
-      "artworkUrl": "/covers/kulasamy-kaaval-kaaka.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kulasamy-kaaval-kaaka.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kulasamy-kaaval-kaaka.jpg",
       "description": "Kulasamy Kaaval Kaaka from Idli Kadai composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -843,8 +889,8 @@
       "year": 2025,
       "duration": 234,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Mannichiru.mp3",
-      "thumbnailUrl": "/covers/mannichiru.jpg",
-      "artworkUrl": "/covers/mannichiru.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/mannichiru.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/mannichiru.jpg",
       "description": "Mannichiru from Sirai composed by Justin Prabhakaran",
       "language": "Tamil",
       "isExplicit": false
@@ -858,8 +904,8 @@
       "year": 2025,
       "duration": 218,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Minnu%20Vattaam%20Poochi.mp3",
-      "thumbnailUrl": "/covers/minnu-vattaam-poochi.jpg",
-      "artworkUrl": "/covers/minnu-vattaam-poochi.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/minnu-vattaam-poochi.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/minnu-vattaam-poochi.jpg",
       "description": "Minnu Vattaam Poochi from Sirai composed by Justin Prabhakaran",
       "language": "Tamil",
       "isExplicit": false
@@ -873,8 +919,8 @@
       "year": 2025,
       "duration": 241,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Muththa%20Mazhai.mp3",
-      "thumbnailUrl": "/covers/muththa-mazhai.jpg",
-      "artworkUrl": "/covers/muththa-mazhai.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/muththa-mazhai.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/muththa-mazhai.jpg",
       "description": "Muththa Mazhai from Thug Life composed by A. R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -888,8 +934,8 @@
       "year": 2025,
       "duration": 153,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/My%20Heartu%20Spinning.mp3",
-      "thumbnailUrl": "/covers/my-heartu-spinning.jpg",
-      "artworkUrl": "/covers/my-heartu-spinning.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/my-heartu-spinning.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/my-heartu-spinning.jpg",
       "description": "My Heartu Spinning from Idli Kadai composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -903,8 +949,8 @@
       "year": 2025,
       "duration": 274,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Neelothi.mp3",
-      "thumbnailUrl": "/covers/neelothi.jpg",
-      "artworkUrl": "/covers/neelothi.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/neelothi.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/neelothi.jpg",
       "description": "Neelothi from Sirai composed by Justin Prabhakaran",
       "language": "Tamil",
       "isExplicit": false
@@ -918,8 +964,8 @@
       "year": 2025,
       "duration": 198,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Og%20Sambavam.mp3",
-      "thumbnailUrl": "/covers/og-sambavam.jpg",
-      "artworkUrl": "/covers/og-sambavam.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/og-sambavam.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/og-sambavam.jpg",
       "description": "OG Sambavam from Good Bad Ugly composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -933,8 +979,8 @@
       "year": 2025,
       "duration": 209,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Pathikichu-Vidaamuyarchi%202025.mp3",
-      "thumbnailUrl": "/covers/pathikichu.jpg",
-      "artworkUrl": "/covers/pathikichu.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/pathikichu.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/pathikichu.jpg",
       "description": "Pathikichu from Vidaamuyarchi composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -948,8 +994,8 @@
       "year": 2025,
       "duration": 194,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Ranagalam.mp3",
-      "thumbnailUrl": "/covers/ranagalam.jpg",
-      "artworkUrl": "/covers/ranagalam.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ranagalam.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ranagalam.jpg",
       "description": "Ranagalam from Good Bad Ugly composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -963,8 +1009,8 @@
       "year": 2025,
       "duration": 239,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Rebel%20Song.mp3",
-      "thumbnailUrl": "/covers/rebel-song.jpg",
-      "artworkUrl": "/covers/rebel-song.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/rebel-song.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/rebel-song.jpg",
       "description": "Rebel Song from Kantara: Chapter 1 composed by B. Ajaneesh Loknath",
       "language": "Tamil",
       "isExplicit": false
@@ -978,8 +1024,8 @@
       "year": 2025,
       "duration": 207,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Salambala.mp3",
-      "thumbnailUrl": "/covers/salambala.jpg",
-      "artworkUrl": "/covers/salambala.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/salambala.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/salambala.jpg",
       "description": "Salambala from Madharaasi composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -993,8 +1039,8 @@
       "year": 2025,
       "duration": 236,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Thangapoovey.mp3",
-      "thumbnailUrl": "/covers/thangapoovey.jpg",
-      "artworkUrl": "/covers/thangapoovey.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/thangapoovey.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/thangapoovey.jpg",
       "description": "Thangapoovey from Madharaasi composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -1008,8 +1054,8 @@
       "year": 2025,
       "duration": 239,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/The%20One.mp3",
-      "thumbnailUrl": "/covers/the-one.jpg",
-      "artworkUrl": "/covers/the-one.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/the-one.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/the-one.jpg",
       "description": "The One from Retro composed by Santhosh Narayanan",
       "language": "Tamil",
       "isExplicit": false
@@ -1023,8 +1069,8 @@
       "year": 2025,
       "duration": 168,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Vaanam%C2%A0Kizhiyuthu.mp3",
-      "thumbnailUrl": "/covers/vaanam-kizhiyuthu.jpg",
-      "artworkUrl": "/covers/vaanam-kizhiyuthu.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/vaanam-kizhiyuthu.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/vaanam-kizhiyuthu.jpg",
       "description": "Vaanam Kizhiyuthu from Maaman composed by Hesham Abdul Wahab",
       "language": "Tamil",
       "isExplicit": false
@@ -1038,8 +1084,8 @@
       "year": 2025,
       "duration": 221,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Vaenguzhalil%20Ezhaindayadi.mp3",
-      "thumbnailUrl": "/covers/vaenguzhalil-ezhaindayadi.jpg",
-      "artworkUrl": "/covers/vaenguzhalil-ezhaindayadi.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/vaenguzhalil-ezhaindayadi.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/vaenguzhalil-ezhaindayadi.jpg",
       "description": "Vaenguzhalil Ezhaindayadi from Kantara: Chapter 1 composed by B. Ajaneesh Loknath",
       "language": "Tamil",
       "isExplicit": false
@@ -1053,8 +1099,8 @@
       "year": 2022,
       "duration": 276,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Varaha%20Roopam.mp3",
-      "thumbnailUrl": "/covers/varaha-roopam.jpg",
-      "artworkUrl": "/covers/varaha-roopam.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/varaha-roopam.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/varaha-roopam.jpg",
       "description": "Varaha Roopam (Daiva Va Rishtam) from Kantara composed by B. Ajaneesh Loknath",
       "language": "Tamil",
       "isExplicit": false
@@ -1068,8 +1114,8 @@
       "year": 2025,
       "duration": 184,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Vizhuthe%20Thalavizhuthe.mp3",
-      "thumbnailUrl": "/covers/vizhuthe-thalavizhuthe.jpg",
-      "artworkUrl": "/covers/vizhuthe-thalavizhuthe.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/vizhuthe-thalavizhuthe.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/vizhuthe-thalavizhuthe.jpg",
       "description": "Vizhuthe Thalavizhuthe from Maaman composed by Hesham Abdul Wahab",
       "language": "Tamil",
       "isExplicit": false
@@ -1083,8 +1129,8 @@
       "year": 2025,
       "duration": 202,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Yedi.mp3",
-      "thumbnailUrl": "/covers/yedi.jpg",
-      "artworkUrl": "/covers/yedi.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/yedi.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/yedi.jpg",
       "description": "Yedi from Nilavuku En Mel Ennadi Kobam (NEEK) composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -1098,8 +1144,8 @@
       "year": 2025,
       "duration": 223,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/24-10-26-4-34-pm/Music/Yen%20Paattan%20Saami%20Varum.mp3",
-      "thumbnailUrl": "/covers/yen-paattan-saami-varum.jpg",
-      "artworkUrl": "/covers/yen-paattan-saami-varum.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/yen-paattan-saami-varum.jpg",
+      "artworkUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/yen-paattan-saami-varum.jpg",
       "description": "Yen Paattan Saami Varum from Idli Kadai composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -1113,7 +1159,7 @@
       "year": 2024,
       "duration": 227,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Aasa%20Orave.mp3",
-      "thumbnailUrl": "/covers/aasa-orave.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/aasa-orave.jpg",
       "description": "Aasa Orave from Lubber Pandhu composed by Sean Roldan",
       "language": "Tamil",
       "isExplicit": false
@@ -1127,7 +1173,7 @@
       "year": 2024,
       "duration": 193,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Achacho.mp3",
-      "thumbnailUrl": "/covers/achacho.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/achacho.jpg",
       "description": "Achacho from Aranmanai 4 composed by Hiphop Tamizha",
       "language": "Tamil",
       "isExplicit": false
@@ -1141,7 +1187,7 @@
       "year": 2024,
       "duration": 249,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Adangaatha%20Asuran.mp3",
-      "thumbnailUrl": "/covers/adangaatha-asuran.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/adangaatha-asuran.jpg",
       "description": "Adangaatha Asuran from Raayan composed by A.R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -1155,7 +1201,7 @@
       "year": 2024,
       "duration": 166,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Amara.mp3",
-      "thumbnailUrl": "/covers/amara.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/amara.jpg",
       "description": "Amara from Amaran composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -1169,7 +1215,7 @@
       "year": 2024,
       "duration": 282,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Amman%20song.mp3",
-      "thumbnailUrl": "/covers/amman-song.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/amman-song.jpg",
       "description": "Amman Song from Aranmanai 4 composed by Hiphop Tamizha",
       "language": "Tamil",
       "isExplicit": false
@@ -1183,7 +1229,7 @@
       "year": 2024,
       "duration": 267,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Ayalaa%20Ayalaa.mp3",
-      "thumbnailUrl": "/covers/ayalaa-ayalaa.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ayalaa-ayalaa.jpg",
       "description": "Ayalaa Ayalaa from Ayalaan composed by A.R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -1197,7 +1243,7 @@
       "year": 2024,
       "duration": 247,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Chillanjirukkiye.mp3",
-      "thumbnailUrl": "/covers/chillanjirukkiye.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/chillanjirukkiye.jpg",
       "description": "Chillanjirukkiye from Lubber Pandhu composed by Sean Roldan",
       "language": "Tamil",
       "isExplicit": false
@@ -1211,7 +1257,7 @@
       "year": 2024,
       "duration": 269,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Chinna%20Chinna%20Kangal.mp3",
-      "thumbnailUrl": "/covers/chinna-chinna-kangal.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/chinna-chinna-kangal.jpg",
       "description": "Chinna Chinna Kangal from The Greatest of All Time (GOAT) composed by Yuvan Shankar Raja",
       "language": "Tamil",
       "isExplicit": false
@@ -1225,7 +1271,7 @@
       "year": 2024,
       "duration": 217,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Come%20Back%20Indian.mp3",
-      "thumbnailUrl": "/covers/come-back-indian.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/come-back-indian.jpg",
       "description": "Come Back Indian from Indian 2 composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -1239,7 +1285,7 @@
       "year": 2024,
       "duration": 195,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Ezhutha%20Kadhaiyo.mp3",
-      "thumbnailUrl": "/covers/ezhutha-kadhaiyo.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ezhutha-kadhaiyo.jpg",
       "description": "Ezhutha Kadhaiyo from Lover composed by Sean Roldan",
       "language": "Tamil",
       "isExplicit": false
@@ -1253,7 +1299,7 @@
       "year": 2024,
       "duration": 207,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Fire-Song-MassTamilan.dev.mp3",
-      "thumbnailUrl": "/covers/fire-song.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/fire-song.jpg",
       "description": "Fire Song from Kanguva composed by Devi Sri Prasad",
       "language": "Tamil",
       "isExplicit": false
@@ -1267,7 +1313,7 @@
       "year": 2024,
       "duration": 156,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Ghost%20Theme.mp3",
-      "thumbnailUrl": "/covers/ghost-theme.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ghost-theme.jpg",
       "description": "Ghost Theme from Aranmanai 4 composed by Hiphop Tamizha",
       "language": "Tamil",
       "isExplicit": false
@@ -1281,7 +1327,7 @@
       "year": 2024,
       "duration": 230,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Hey%20Minnale.mp3",
-      "thumbnailUrl": "/covers/hey-minnale.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/hey-minnale.jpg",
       "description": "Hey Minnale from Amaran composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -1295,7 +1341,7 @@
       "year": 2024,
       "duration": 193,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Hunter%20Vantaar.mp3",
-      "thumbnailUrl": "/covers/hunter-vantaar.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/hunter-vantaar.jpg",
       "description": "Hunter Vantaar from Vettaiyan composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -1309,7 +1355,7 @@
       "year": 2024,
       "duration": 206,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Jo%20Jo.mp3",
-      "thumbnailUrl": "/covers/jo-jo.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/jo-jo.jpg",
       "description": "Jo Jo from Aranmanai 4 composed by Hiphop Tamizha",
       "language": "Tamil",
       "isExplicit": false
@@ -1323,7 +1369,7 @@
       "year": 2024,
       "duration": 234,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Kadharalz.mp3",
-      "thumbnailUrl": "/covers/kadharalz.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kadharalz.jpg",
       "description": "Kadharalz from Indian 2 composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -1337,7 +1383,7 @@
       "year": 2024,
       "duration": 233,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Kanave.mp3",
-      "thumbnailUrl": "/covers/kanave.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kanave.jpg",
       "description": "Kanave from Amaran composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -1351,7 +1397,7 @@
       "year": 2024,
       "duration": 137,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Kanguva-Glimpse-MassTamilan.dev.mp3",
-      "thumbnailUrl": "/covers/kanguva-glimpse.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kanguva-glimpse.jpg",
       "description": "Kanguva Glimpse from Kanguva composed by Devi Sri Prasad",
       "language": "Tamil",
       "isExplicit": false
@@ -1365,7 +1411,7 @@
       "year": 2024,
       "duration": 73,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Kanguva-Title-Announcement-MassTamilan.dev.mp3",
-      "thumbnailUrl": "/covers/kanguva-title-announcement.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kanguva-title-announcement.jpg",
       "description": "Kanguva Title Announcement from Kanguva composed by Devi Sri Prasad",
       "language": "Tamil",
       "isExplicit": false
@@ -1379,7 +1425,7 @@
       "year": 2024,
       "duration": 247,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Kissik.mp3",
-      "thumbnailUrl": "/covers/kissik.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/kissik.jpg",
       "description": "Kissik from Pushpa 2: The Rule composed by Devi Sri Prasad",
       "language": "Tamil",
       "isExplicit": false
@@ -1393,7 +1439,7 @@
       "year": 2024,
       "duration": 236,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Maayoney-%20Inga%20Naan%20Thaan%20Kingu%202024%20tami.mp3",
-      "thumbnailUrl": "/covers/maayoney.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/maayoney.jpg",
       "description": "Maayoney from Inga Naan Thaan Kingu composed by D. Imman",
       "language": "Tamil",
       "isExplicit": false
@@ -1407,7 +1453,7 @@
       "year": 2024,
       "duration": 254,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Makkamishi.mp3",
-      "thumbnailUrl": "/covers/makkamishi.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/makkamishi.jpg",
       "description": "Makkamishi from Brother composed by Harris Jayaraj",
       "language": "Tamil",
       "isExplicit": false
@@ -1421,7 +1467,7 @@
       "year": 2024,
       "duration": 236,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Manasilaayo.mp3",
-      "thumbnailUrl": "/covers/manasilaayo.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/manasilaayo.jpg",
       "description": "Manasilaayo from Vettaiyan composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -1435,7 +1481,7 @@
       "year": 2024,
       "duration": 317,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Mannippu-MassTamilan.dev.mp3",
-      "thumbnailUrl": "/covers/mannippu.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/mannippu.jpg",
       "description": "Mannippu from Kanguva composed by Devi Sri Prasad",
       "language": "Tamil",
       "isExplicit": false
@@ -1449,7 +1495,7 @@
       "year": 2024,
       "duration": 212,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Matta.mp3",
-      "thumbnailUrl": "/covers/matta.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/matta.jpg",
       "description": "Matta from The Greatest of All Time (GOAT) composed by Yuvan Shankar Raja",
       "language": "Tamil",
       "isExplicit": false
@@ -1463,7 +1509,7 @@
       "year": 2024,
       "duration": 166,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Odatha%20da%20Odatha%20da.mp3",
-      "thumbnailUrl": "/covers/odatha-da-odatha-da.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/odatha-da-odatha-da.jpg",
       "description": "Odatha da Odatha da from Raayan composed by A.R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -1477,7 +1523,7 @@
       "year": 2024,
       "duration": 207,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Oh%20Raaya.mp3",
-      "thumbnailUrl": "/covers/oh-raaya.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/oh-raaya.jpg",
       "description": "Oh Raaya from Raayan composed by A.R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -1491,7 +1537,7 @@
       "year": 2024,
       "duration": 242,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Oru%20Oorula%20Raaja.mp3",
-      "thumbnailUrl": "/covers/oru-oorula-raaja.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/oru-oorula-raaja.jpg",
       "description": "Oru Oorula Raaja from Vaazhai composed by Santhosh Narayanan",
       "language": "Tamil",
       "isExplicit": false
@@ -1505,7 +1551,7 @@
       "year": 2024,
       "duration": 221,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Otha%20Satti%20Soru.mp3",
-      "thumbnailUrl": "/covers/otha-satti-soru.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/otha-satti-soru.jpg",
       "description": "Otha Satti Soru from Vaazhai composed by Santhosh Narayanan",
       "language": "Tamil",
       "isExplicit": false
@@ -1519,7 +1565,7 @@
       "year": 2024,
       "duration": 259,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Othapada%20Veriyattam-Garudan%202024%20tamil.mp3",
-      "thumbnailUrl": "/covers/othapada-veriyattam.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/othapada-veriyattam.jpg",
       "description": "Othapada Veriyattam from Garudan composed by Yuvan Shankar Raja",
       "language": "Tamil",
       "isExplicit": false
@@ -1533,7 +1579,7 @@
       "year": 2024,
       "duration": 158,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Oyile%20Oyile.mp3",
-      "thumbnailUrl": "/covers/oyile-oyile.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/oyile-oyile.jpg",
       "description": "Oyile Oyile from Aranmanai 4 composed by Hiphop Tamizha",
       "language": "Tamil",
       "isExplicit": false
@@ -1547,7 +1593,7 @@
       "year": 2024,
       "duration": 306,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Paadhavathi.mp3",
-      "thumbnailUrl": "/covers/paadhavathi.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/paadhavathi.jpg",
       "description": "Paadhavathi from Vaazhai composed by Santhosh Narayanan",
       "language": "Tamil",
       "isExplicit": false
@@ -1561,7 +1607,7 @@
       "year": 2024,
       "duration": 252,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Paaraa.mp3",
-      "thumbnailUrl": "/covers/paaraa.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/paaraa.jpg",
       "description": "Paaraa from Indian 2 composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -1575,7 +1621,7 @@
       "year": 2024,
       "duration": 247,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Peelings.mp3",
-      "thumbnailUrl": "/covers/peelings.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/peelings.jpg",
       "description": "Peelings from Pushpa 2: The Rule composed by Devi Sri Prasad",
       "language": "Tamil",
       "isExplicit": false
@@ -1589,7 +1635,7 @@
       "year": 2024,
       "duration": 194,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Por%20Veeran%20(Azadi).mp3",
-      "thumbnailUrl": "/covers/por-veeran-azadi.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/por-veeran-azadi.jpg",
       "description": "Por Veeran (Azadi) from Amaran composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -1603,7 +1649,7 @@
       "year": 2024,
       "duration": 306,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Poraen%20Naa%20Poraen-Meiyazhagan%202024%20tamil.mp3",
-      "thumbnailUrl": "/covers/poraen-naa-poraen.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/poraen-naa-poraen.jpg",
       "description": "Poraen Naa Poraen from Meiyazhagan composed by Govind Vasantha",
       "language": "Tamil",
       "isExplicit": false
@@ -1617,7 +1663,7 @@
       "year": 2024,
       "duration": 256,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Pushpa%20Pushpa.mp3",
-      "thumbnailUrl": "/covers/pushpa-pushpa.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/pushpa-pushpa.jpg",
       "description": "Pushpa Pushpa from Pushpa 2: The Rule composed by Devi Sri Prasad",
       "language": "Tamil",
       "isExplicit": false
@@ -1631,7 +1677,7 @@
       "year": 2024,
       "duration": 211,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Raayan%20Rumble.mp3",
-      "thumbnailUrl": "/covers/raayan-rumble.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/raayan-rumble.jpg",
       "description": "Raayan Rumble from Raayan composed by A.R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -1645,7 +1691,7 @@
       "year": 2024,
       "duration": 60,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Sai%20Pallavi's%20Intro.mp3",
-      "thumbnailUrl": "/covers/sai-pallavi-s-intro.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/sai-pallavi-s-intro.jpg",
       "description": "Sai Pallavi's Intro from Amaran composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -1659,7 +1705,7 @@
       "year": 2024,
       "duration": 314,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Sidu%20Sidu-%20Romeo%202024%20tamil.mp3",
-      "thumbnailUrl": "/covers/sidu-sidu.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/sidu-sidu.jpg",
       "description": "Sidu Sidu from Romeo composed by Barath Dhanasekar",
       "language": "Tamil",
       "isExplicit": false
@@ -1673,7 +1719,7 @@
       "year": 2024,
       "duration": 260,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Soodaana.mp3",
-      "thumbnailUrl": "/covers/soodaana.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/soodaana.jpg",
       "description": "Soodaana from Pushpa 2: The Rule composed by Devi Sri Prasad",
       "language": "Tamil",
       "isExplicit": false
@@ -1687,11 +1733,11 @@
       "year": 2024,
       "duration": 250,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Spark.mp3",
-      "videoUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/videos/Full%20Video_%20Spark%20_%20The%20Greatest%20Of%20All%20Time%20_%20Thalapathy%20Vijay%20_%20Venkat%20Prabhu%20_%20Yuvan%20Shankar%20Raja(360P).mp4",
-      "thumbnailUrl": "/covers/spark.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/spark.jpg",
       "description": "Spark from The Greatest of All Time (GOAT) composed by Yuvan Shankar Raja",
       "language": "Tamil",
-      "isExplicit": false
+      "isExplicit": false,
+      "videoUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/videos/Full%20Video_%20Spark%20_%20The%20Greatest%20Of%20All%20Time%20_%20Thalapathy%20Vijay%20_%20Venkat%20Prabhu%20_%20Yuvan%20Shankar%20Raja(360P).mp4"
     },
     {
       "id": "song-suro-suro",
@@ -1702,7 +1748,7 @@
       "year": 2024,
       "duration": 232,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Suro%20Suro.mp3",
-      "thumbnailUrl": "/covers/suro-suro.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/suro-suro.jpg",
       "description": "Suro Suro from Ayalaan composed by A.R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -1716,7 +1762,7 @@
       "year": 2024,
       "duration": 192,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Thalaivane-MassTamilan.dev.mp3",
-      "thumbnailUrl": "/covers/thalaivane.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/thalaivane.jpg",
       "description": "Thalaivane from Kanguva composed by Devi Sri Prasad",
       "language": "Tamil",
       "isExplicit": false
@@ -1730,7 +1776,7 @@
       "year": 2024,
       "duration": 217,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Theansudare.mp3",
-      "thumbnailUrl": "/covers/theansudare.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/theansudare.jpg",
       "description": "Theansudare from Lover composed by Sean Roldan",
       "language": "Tamil",
       "isExplicit": false
@@ -1744,7 +1790,7 @@
       "year": 2024,
       "duration": 263,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Thenkizhakku.mp3",
-      "thumbnailUrl": "/covers/thenkizhakku.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/thenkizhakku.jpg",
       "description": "Thenkizhakku from Vaazhai composed by Santhosh Narayanan",
       "language": "Tamil",
       "isExplicit": false
@@ -1758,7 +1804,7 @@
       "year": 2024,
       "duration": 192,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Uchathila%20suriyana.mp3",
-      "thumbnailUrl": "/covers/uchathila.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/uchathila.jpg",
       "description": "Uchathila from Vettaiyan composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -1772,7 +1818,7 @@
       "year": 2024,
       "duration": 210,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Uyirey.mp3",
-      "thumbnailUrl": "/covers/uyirey.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/uyirey.jpg",
       "description": "Uyirey from Amaran composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -1786,7 +1832,7 @@
       "year": 2024,
       "duration": 286,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Vaane%20Vaane.mp3",
-      "thumbnailUrl": "/covers/vaane-vaane.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/vaane-vaane.jpg",
       "description": "Vaane Vaane from Amaran composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -1800,7 +1846,7 @@
       "year": 2024,
       "duration": 112,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Vaazh%20Veesum.mp3",
-      "thumbnailUrl": "/covers/vaazh-veesum.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/vaazh-veesum.jpg",
       "description": "Vaazh Veesum from Vettaiyan composed by Anirudh Ravichander",
       "language": "Tamil",
       "isExplicit": false
@@ -1814,7 +1860,7 @@
       "year": 2024,
       "duration": 213,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Vennilavu%20Saaral.mp3",
-      "thumbnailUrl": "/covers/vennilavu-saaral.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/vennilavu-saaral.jpg",
       "description": "Vennilavu Saaral from Amaran composed by G. V. Prakash Kumar",
       "language": "Tamil",
       "isExplicit": false
@@ -1828,7 +1874,7 @@
       "year": 2024,
       "duration": 246,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Water%20Packet.mp3",
-      "thumbnailUrl": "/covers/water-packet.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/water-packet.jpg",
       "description": "Water Packet from Raayan composed by A.R. Rahman",
       "language": "Tamil",
       "isExplicit": false
@@ -1842,7 +1888,7 @@
       "year": 2024,
       "duration": 281,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Whistle%20Podu.mp3",
-      "thumbnailUrl": "/covers/whistle-podu.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/whistle-podu.jpg",
       "description": "Whistle Podu from The Greatest of All Time (GOAT) composed by Yuvan Shankar Raja",
       "language": "Tamil",
       "isExplicit": false
@@ -1856,7 +1902,7 @@
       "year": 2024,
       "duration": 245,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Yaaro%20Ivan%20Yaaro-Meiyazhagan%202024%20tamil.mp3",
-      "thumbnailUrl": "/covers/yaaro-ivan-yaaro.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/yaaro-ivan-yaaro.jpg",
       "description": "Yaaro Ivan Yaaro from Meiyazhagan composed by Govind Vasantha",
       "language": "Tamil",
       "isExplicit": false
@@ -1870,7 +1916,7 @@
       "year": 2024,
       "duration": 238,
       "audioUrl": "https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Yolo-MassTamilan.dev.mp3",
-      "thumbnailUrl": "/covers/yolo.jpg",
+      "thumbnailUrl": "https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/yolo.jpg",
       "description": "Yolo from Kanguva composed by Devi Sri Prasad",
       "language": "Tamil",
       "isExplicit": false

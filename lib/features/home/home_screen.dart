@@ -1,0 +1,512 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_typography.dart';
+import '../../core/utilities/url_resolver.dart';
+import '../../data/models/song_model.dart';
+import '../../data/models/playlist_model.dart';
+import '../../data/repositories/music_repository.dart';
+import '../../data/services/audio_player_service.dart';
+import '../../shared/widgets/brand_logo.dart';
+import '../../shared/widgets/empty_state.dart';
+import '../../shared/widgets/song_tile.dart';
+import '../playlists/playlist_details_screen.dart';
+import '../playlists/widgets/add_to_playlist_dialog.dart';
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final repository = context.read<MusicRepository>();
+    final playerService = context.read<AudioPlayerService>();
+
+    return Scaffold(
+      body: SafeArea(
+        child: RefreshIndicator(
+          color: AppColors.primary,
+          onRefresh: () => repository.syncWithRemoteCatalogue(),
+          child: CustomScrollView(
+            cacheExtent: 300.0,
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            slivers: [
+              // Top Bar
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const BrandLogo(size: 34),
+                      IconButton(
+                        icon: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: AppColors.divider),
+                          ),
+                          child: const Icon(Icons.sync_rounded, color: AppColors.textSecondary, size: 22),
+                        ),
+                        tooltip: 'Sync Songs from Repo',
+                        onPressed: () async {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Syncing songs from repository...'),
+                              duration: Duration(seconds: 1),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                          await repository.syncWithRemoteCatalogue();
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Synced ${repository.songs.length} songs successfully!'),
+                                backgroundColor: AppColors.primary,
+                                duration: const Duration(seconds: 2),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Greeting
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(_getGreeting(), style: AppTypography.heading1),
+                      Text(
+                        'Stream high-fidelity music & offline downloads',
+                        style: AppTypography.bodySecondary,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Quick Category Shortcuts (Liked, Downloads, Playlists)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Selector<MusicRepository, (int, int, List<Playlist>)>(
+                    selector: (_, repo) => (
+                      repo.favoriteSongs.length,
+                      repo.downloadedSongs.length,
+                      repo.playlists,
+                    ),
+                    builder: (context, data, _) {
+                      final favCount = data.$1;
+                      final dlCount = data.$2;
+                      final playlists = data.$3;
+
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: _buildQuickCard(
+                              title: 'Liked',
+                              count: '$favCount songs',
+                              icon: Icons.favorite_rounded,
+                              gradient: AppColors.primaryGradient,
+                              onTap: () {
+                                final favs = context.read<MusicRepository>().favoriteSongs;
+                                if (favs.isNotEmpty) {
+                                  playerService.playQueue(favs, initialIndex: 0);
+                                }
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: _buildQuickCard(
+                              title: 'Offline',
+                              count: '$dlCount songs',
+                              icon: Icons.offline_pin_rounded,
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF00B09B), Color(0xFF96C93D)],
+                              ),
+                              onTap: () {
+                                final dls = context.read<MusicRepository>().downloadedSongs;
+                                if (dls.isNotEmpty) {
+                                  playerService.playQueue(dls, initialIndex: 0);
+                                }
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: _buildQuickCard(
+                              title: 'Playlists',
+                              count: '${playlists.length} lists',
+                              icon: Icons.queue_music_rounded,
+                              gradient: AppColors.waveGradient,
+                              onTap: () {
+                                if (playlists.isNotEmpty) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => PlaylistDetailsScreen(playlist: playlists.first),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+
+              // Continue Listening / Recently Played (isolated selector)
+              Selector<MusicRepository, List<Song>>(
+                selector: (_, repo) => repo.recentSongs,
+                builder: (context, recentSongs, _) {
+                  if (recentSongs.isEmpty) {
+                    return const SliverToBoxAdapter(child: SizedBox.shrink());
+                  }
+                  return SliverMainAxisGroup(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Continue Listening', style: AppTypography.heading3),
+                              Text(
+                                '${recentSongs.length} played',
+                                style: AppTypography.caption.copyWith(color: AppColors.textMuted),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 170,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            itemCount: recentSongs.length,
+                            cacheExtent: 240.0,
+                            itemBuilder: (context, index) {
+                              final song = recentSongs[index];
+                              return _buildSongCard(context, song, recentSongs, playerService);
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+
+              // Recently Added Section (isolated selector)
+              Selector<MusicRepository, List<Song>>(
+                selector: (_, repo) => repo.songs.take(10).toList(),
+                builder: (context, topSongs, _) {
+                  if (topSongs.isEmpty) {
+                    return const SliverToBoxAdapter(child: SizedBox.shrink());
+                  }
+                  return SliverMainAxisGroup(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Recently Added', style: AppTypography.heading3),
+                              Text(
+                                'Trending',
+                                style: AppTypography.caption.copyWith(color: AppColors.textMuted),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 170,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            itemCount: topSongs.length,
+                            cacheExtent: 240.0,
+                            itemBuilder: (context, index) {
+                              final song = topSongs[index];
+                              return _buildSongCard(context, song, topSongs, playerService);
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+
+              // All Songs Section Header (Randomly Shuffled for each session)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Text('All Songs', style: AppTypography.heading3),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.shuffle_rounded, size: 12, color: AppColors.primary),
+                                SizedBox(width: 4),
+                                Text(
+                                  'SHUFFLED',
+                                  style: TextStyle(
+                                    color: AppColors.primary,
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Selector<MusicRepository, int>(
+                        selector: (_, repo) => repo.shuffledSongs.length,
+                        builder: (context, songCount, _) {
+                          if (songCount == 0) return const SizedBox.shrink();
+                          return TextButton.icon(
+                            onPressed: () {
+                              final all = context.read<MusicRepository>().shuffledSongs;
+                              playerService.playQueue(all, initialIndex: 0);
+                            },
+                            icon: const Icon(Icons.play_circle_filled_rounded, color: AppColors.primary, size: 20),
+                            label: const Text('Play All', style: TextStyle(color: AppColors.primary)),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // All Songs Virtualized List (isolated selector displaying shuffled session songs)
+              Selector<MusicRepository, List<Song>>(
+                selector: (_, repo) => repo.shuffledSongs,
+                builder: (context, allSongs, _) {
+                  if (allSongs.isEmpty) {
+                    return SliverToBoxAdapter(
+                      child: EmptyState(
+                        icon: Icons.music_note_rounded,
+                        title: 'Your Catalogue is Empty',
+                        message: 'Sync your catalogue to stream music and download tracks.',
+                        actionText: 'Sync Now',
+                        onAction: () => repository.syncWithRemoteCatalogue(),
+                      ),
+                    );
+                  }
+
+                  return SliverFixedExtentList(
+                    itemExtent: 68.0,
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final song = allSongs[index];
+                        return SongTile(
+                          song: song,
+                          onTap: () => playerService.playSong(song, queue: allSongs),
+                          onAddToPlaylist: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) => AddToPlaylistDialog(song: song),
+                            );
+                          },
+                        );
+                      },
+                      childCount: allSongs.length,
+                      addAutomaticKeepAlives: true,
+                      addRepaintBoundaries: true,
+                    ),
+                  );
+                },
+              ),
+
+              // Bottom padding for MiniPlayer + BottomNav
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 100),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickCard({
+    required String title,
+    required String count,
+    required IconData icon,
+    required Gradient gradient,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.divider, width: 0.8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(7),
+              decoration: BoxDecoration(
+                gradient: gradient,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, color: Colors.white, size: 18),
+            ),
+            const SizedBox(height: 8),
+            Text(title, style: AppTypography.title.copyWith(fontSize: 13)),
+            Text(count, style: AppTypography.caption.copyWith(fontSize: 10.5)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSongCard(
+    BuildContext context,
+    Song song,
+    List<Song> queue,
+    AudioPlayerService playerService,
+  ) {
+    final assetPath = AppUrls.getLocalAssetCoverPath(song.thumbnailUrl);
+    final resolvedUrl = AppUrls.resolveThumbnailUrl(song.thumbnailUrl);
+
+    Widget artwork;
+    if (assetPath != null) {
+      artwork = Image.asset(
+        assetPath,
+        fit: BoxFit.cover,
+        cacheWidth: 200,
+        cacheHeight: 200,
+        errorBuilder: (_, __, ___) => resolvedUrl != null
+            ? CachedNetworkImage(
+                imageUrl: resolvedUrl,
+                fit: BoxFit.cover,
+                memCacheWidth: 200,
+                memCacheHeight: 200,
+                maxWidthDiskCache: 250,
+                maxHeightDiskCache: 250,
+                errorWidget: (_, __, ___) => const Center(
+                  child: Icon(Icons.music_note_rounded, color: Colors.white, size: 40),
+                ),
+              )
+            : const Center(
+                child: Icon(Icons.music_note_rounded, color: Colors.white, size: 40),
+              ),
+      );
+    } else if (resolvedUrl != null) {
+      artwork = CachedNetworkImage(
+        imageUrl: resolvedUrl,
+        fit: BoxFit.cover,
+        memCacheWidth: 200,
+        memCacheHeight: 200,
+        maxWidthDiskCache: 250,
+        maxHeightDiskCache: 250,
+        errorWidget: (_, __, ___) => const Center(
+          child: Icon(Icons.music_note_rounded, color: Colors.white, size: 40),
+        ),
+      );
+    } else {
+      artwork = const Center(
+        child: Icon(Icons.music_note_rounded, color: Colors.white, size: 40),
+      );
+    }
+
+    return RepaintBoundary(
+      child: GestureDetector(
+        onTap: () => playerService.playSong(song, queue: queue),
+        child: Container(
+          width: 120,
+          margin: const EdgeInsets.only(right: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Artwork
+              Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: Container(
+                    decoration: const BoxDecoration(gradient: AppColors.waveGradient),
+                    child: artwork,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              // Title
+              Text(
+                song.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.title.copyWith(fontSize: 13),
+              ),
+
+              // Artist
+              Text(
+                song.artist,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.caption,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
