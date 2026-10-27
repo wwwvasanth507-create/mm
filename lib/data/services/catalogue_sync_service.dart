@@ -21,11 +21,13 @@ class CatalogueSyncService {
               BaseOptions(
                 connectTimeout: const Duration(seconds: 15),
                 receiveTimeout: const Duration(seconds: 20),
-                headers: {
-                  'Accept': 'application/json',
-                  'Cache-Control': 'no-cache, no-store, must-revalidate',
-                  'Pragma': 'no-cache',
-                },
+                headers: kIsWeb
+                    ? null
+                    : {
+                        'Accept': 'application/json',
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                      },
               ),
             );
 
@@ -34,12 +36,12 @@ class CatalogueSyncService {
     try {
       final jsonString = await rootBundle.loadString('assets/data/music.json');
       final dynamic decoded = jsonDecode(jsonString);
-      final songs = _parseSongsFromJson(decoded);
-      if (songs.isNotEmpty) {
+      final songs = parseSongsFromJson(decoded);
+      if (!kIsWeb && songs.isNotEmpty) {
         await _db.upsertSongs(songs);
       }
       final playlists = parsePlaylistsFromJson(decoded);
-      if (playlists.isNotEmpty) {
+      if (!kIsWeb && playlists.isNotEmpty) {
         await _db.upsertPlaylistsWithTrackIds(playlists);
       }
       return songs;
@@ -64,14 +66,14 @@ class CatalogueSyncService {
           if (data is String) {
             data = jsonDecode(data);
           }
-          final songs = _parseSongsFromJson(data);
-          if (songs.isNotEmpty) {
+          final songs = parseSongsFromJson(data);
+          if (!kIsWeb && songs.isNotEmpty) {
             await _db.upsertSongs(songs);
             debugPrint('[CatalogueSyncService] Synced ${songs.length} songs from $candidateUrl');
           }
 
           final playlists = parsePlaylistsFromJson(data);
-          if (playlists.isNotEmpty) {
+          if (!kIsWeb && playlists.isNotEmpty) {
             await _db.upsertPlaylistsWithTrackIds(playlists);
             debugPrint('[CatalogueSyncService] Synced ${playlists.length} playlists from $candidateUrl');
           }
@@ -87,7 +89,7 @@ class CatalogueSyncService {
     return [];
   }
 
-  List<Song> _parseSongsFromJson(dynamic decoded) {
+  List<Song> parseSongsFromJson(dynamic decoded) {
     List<dynamic> rawList = [];
     if (decoded is List) {
       rawList = decoded;

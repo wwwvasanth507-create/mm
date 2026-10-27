@@ -11,6 +11,7 @@ class CoverCacheService {
 
   /// Initialize the local covers cache directory on the Android filesystem
   static Future<void> init() async {
+    if (kIsWeb) return;
     try {
       final appSupportDir = await getApplicationSupportDirectory();
       final dir = Directory('${appSupportDir.path}/media_covers');
@@ -35,6 +36,14 @@ class CoverCacheService {
   /// Otherwise, falls back to resolved HTTPS URI.
   static Uri? getMediaItemArtUri(String? thumbnailUrl) {
     if (thumbnailUrl == null || thumbnailUrl.trim().isEmpty) return null;
+
+    if (kIsWeb) {
+      final resolvedUrl = AppUrls.resolveThumbnailUrl(thumbnailUrl);
+      if (resolvedUrl != null && resolvedUrl.isNotEmpty) {
+        return Uri.tryParse(resolvedUrl);
+      }
+      return null;
+    }
 
     // Check if thumbnailUrl is already a direct local file
     if (File(thumbnailUrl).existsSync()) {
@@ -61,6 +70,7 @@ class CoverCacheService {
 
   /// Ensure a single cover asset is extracted to disk
   static Future<String?> ensureCoverExtracted(String? thumbnailUrl) async {
+    if (kIsWeb) return null;
     if (thumbnailUrl == null || thumbnailUrl.trim().isEmpty) return null;
     final localAsset = AppUrls.getLocalAssetCoverPath(thumbnailUrl);
     if (localAsset == null) return null;

@@ -17,15 +17,17 @@ enum AppRepeatMode {
 
 class AudioPlayerService extends ChangeNotifier {
   late final AudioPlayer _player = AudioPlayer(
-    audioLoadConfiguration: const AudioLoadConfiguration(
-      androidLoadControl: AndroidLoadControl(
-        minBufferDuration: Duration(seconds: 15),
-        maxBufferDuration: Duration(seconds: 50),
-        bufferForPlaybackDuration: Duration(milliseconds: 1500),
-        bufferForPlaybackAfterRebufferDuration: Duration(milliseconds: 3000),
-        prioritizeTimeOverSizeThresholds: true,
-      ),
-    ),
+    audioLoadConfiguration: kIsWeb
+        ? null
+        : const AudioLoadConfiguration(
+            androidLoadControl: AndroidLoadControl(
+              minBufferDuration: Duration(seconds: 15),
+              maxBufferDuration: Duration(seconds: 50),
+              bufferForPlaybackDuration: Duration(milliseconds: 1500),
+              bufferForPlaybackAfterRebufferDuration: Duration(milliseconds: 3000),
+              prioritizeTimeOverSizeThresholds: true,
+            ),
+          ),
   );
   final MusicRepository _repository;
 
@@ -190,21 +192,23 @@ class AudioPlayerService extends ChangeNotifier {
     // Dynamic resolution of downloaded file:
     // Check direct path or latest repository status
     String? localPath = song.localFilePath;
-    if (localPath == null || !File(localPath).existsSync()) {
-      final repoSong = _repository.songs.firstWhere(
-        (s) => s.id == song.id,
-        orElse: () => song,
-      );
-      if (repoSong.isDownloaded && repoSong.localFilePath != null && File(repoSong.localFilePath!).existsSync()) {
-        localPath = repoSong.localFilePath;
+    if (!kIsWeb) {
+      if (localPath == null || !File(localPath).existsSync()) {
+        final repoSong = _repository.songs.firstWhere(
+          (s) => s.id == song.id,
+          orElse: () => song,
+        );
+        if (repoSong.isDownloaded && repoSong.localFilePath != null && File(repoSong.localFilePath!).existsSync()) {
+          localPath = repoSong.localFilePath;
+        }
       }
-    }
 
-    if (localPath != null && File(localPath).existsSync()) {
-      return AudioSource.file(
-        localPath,
-        tag: mediaItem,
-      );
+      if (localPath != null && File(localPath).existsSync()) {
+        return AudioSource.file(
+          localPath,
+          tag: mediaItem,
+        );
+      }
     }
 
     return AudioSource.uri(

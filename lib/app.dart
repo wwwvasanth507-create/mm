@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -72,7 +73,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
 
   Future<void> _requestNotificationPermission() async {
     try {
-      if (Platform.isAndroid) {
+      if (!kIsWeb && Platform.isAndroid) {
         var status = await Permission.notification.status;
         if (!status.isGranted) {
           status = await Permission.notification.request();
@@ -90,7 +91,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && Platform.isAndroid) {
+    if (state == AppLifecycleState.resumed && !kIsWeb && Platform.isAndroid) {
       Permission.notification.status.then((status) {
         if (mounted && _notificationDenied != !status.isGranted) {
           setState(() {

@@ -44,6 +44,7 @@ class DownloadService extends ChangeNotifier {
 
   /// Start downloading a song from its audioUrl
   Future<void> startDownload(Song song) async {
+    if (kIsWeb) return;
     if (isDownloading(song.id)) return;
 
     final cancelToken = CancelToken();
@@ -136,6 +137,7 @@ class DownloadService extends ChangeNotifier {
 
   /// Delete a downloaded audio file
   Future<void> deleteDownload(Song song) async {
+    if (kIsWeb) return;
     cancelDownload(song.id);
 
     if (song.localFilePath != null) {

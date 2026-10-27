@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import '../database/app_database.dart';
 import '../models/song_model.dart';
 import '../models/playlist_model.dart';
@@ -16,6 +18,7 @@ class MusicRepository extends ChangeNotifier {
   List<Song> _downloadedSongs = [];
   List<Song> _recentSongs = [];
   List<Playlist> _playlists = [];
+  final Map<String, List<String>> _webPlaylistTrackIds = {};
   bool _isLoading = false;
   String? _error;
 
@@ -41,6 +44,16 @@ class MusicRepository extends ChangeNotifier {
   /// 3. Parallel async database loading via Future.wait.
   /// 4. Defer remote GitHub sync to not block UI rendering.
   Future<void> initializeAndSync() async {
+    if (kIsWeb) {
+      await _loadWebCatalogue();
+      Future.delayed(const Duration(seconds: 3), () {
+        syncWithRemoteCatalogue().catchError((e) {
+          debugPrint('[MusicRepository] Background remote sync notice: $e');
+        });
+      });
+      return;
+    }
+
     try {
       final count = await _db.getSongCount();
       final totalPlaylistSongs = await _db.getTotalPlaylistSongsCount();
@@ -71,13 +84,79 @@ class MusicRepository extends ChangeNotifier {
 
   /// Explicitly sync with remote repository (e.g. on pull-to-refresh)
   Future<void> syncWithRemoteCatalogue() async {
+    if (kIsWeb) {
+      final remoteSongs = await _syncService.fetchRemoteCatalogue();
+      if (remoteSongs.isNotEmpty) {
+        _songs = remoteSongs;
+        _shuffledSongs = List<Song>.from(_songs)..shuffle(Random());
+        _favoriteSongs = _songs.where((s) => _favoriteIds.contains(s.id)).toList();
+        notifyListeners();
+      }
+      return;
+    }
+
     await _db.removeTempTestSongs();
     await _syncService.fetchRemoteCatalogue();
     await loadCatalogue();
   }
 
+  /// Web catalogue loader (reads bundled assets/data/music.json directly without SQLite)
+  Future<void> _loadWebCatalogue() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final jsonString = await rootBundle.loadString('assets/data/music.json');
+      final dynamic decoded = jsonDecode(jsonString);
+      final songs = _syncService.parseSongsFromJson(decoded);
+      final rawPlaylists = _syncService.parsePlaylistsFromJson(decoded);
+
+      _songs = songs;
+      _shuffledSongs = List<Song>.from(_songs)..shuffle(Random());
+
+      final List<Playlist> playlists = [];
+      _webPlaylistTrackIds.clear();
+
+      for (final p in rawPlaylists) {
+        final id = p['id']?.toString() ?? '';
+        final name = (p['name'] ?? p['title'] ?? 'Playlist').toString();
+        final desc = p['description']?.toString();
+        final coverUrl = (p['thumbnail_url'] ?? p['coverUrl'])?.toString();
+        final trackIds = (p['trackIds'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [];
+
+        _webPlaylistTrackIds[id] = trackIds;
+        final playlistSongs = _songs.where((s) => trackIds.contains(s.id)).toList();
+
+        playlists.add(Playlist(
+          id: id,
+          name: name,
+          description: desc,
+          thumbnailUrl: coverUrl ?? (playlistSongs.isNotEmpty ? playlistSongs.first.thumbnailUrl : null),
+          createdAt: DateTime.now(),
+          songCount: playlistSongs.length,
+        ));
+      }
+
+      _playlists = playlists;
+      _favoriteSongs = _songs.where((s) => _favoriteIds.contains(s.id)).toList();
+      _downloadedSongs = [];
+      _recentSongs = [];
+    } catch (e) {
+      _error = 'Failed to load music catalogue: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   /// Load all catalogue data from database using parallel execution
   Future<void> loadCatalogue() async {
+    if (kIsWeb) {
+      await _loadWebCatalogue();
+      return;
+    }
+
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -123,6 +202,7 @@ class MusicRepository extends ChangeNotifier {
   }
 
   void _verifyDownloadedFilesAsync() {
+    if (kIsWeb) return;
     Future.microtask(() async {
       bool changed = false;
       for (final song in _downloadedSongs) {
@@ -142,6 +222,12 @@ class MusicRepository extends ChangeNotifier {
   }
 
   Future<void> addSong(Song song) async {
+    if (kIsWeb) {
+      _songs.insert(0, song);
+      _shuffledSongs.insert(0, song);
+      notifyListeners();
+      return;
+    }
     try {
       await _db.insertSong(song);
       await loadCatalogue();
@@ -153,6 +239,14 @@ class MusicRepository extends ChangeNotifier {
   }
 
   Future<void> updateSong(Song song) async {
+    if (kIsWeb) {
+      final idx = _songs.indexWhere((s) => s.id == song.id);
+      if (idx != -1) {
+        _songs[idx] = song;
+        notifyListeners();
+      }
+      return;
+    }
     try {
       await _db.updateSong(song);
       await loadCatalogue();
@@ -164,6 +258,14 @@ class MusicRepository extends ChangeNotifier {
   }
 
   Future<void> deleteSong(String songId, {bool deleteLocalFile = true}) async {
+    if (kIsWeb) {
+      _songs.removeWhere((s) => s.id == songId);
+      _shuffledSongs.removeWhere((s) => s.id == songId);
+      _favoriteSongs.removeWhere((s) => s.id == songId);
+      _recentSongs.removeWhere((s) => s.id == songId);
+      notifyListeners();
+      return;
+    }
     try {
       final song = await _db.getSongById(songId);
       if (song != null && deleteLocalFile && song.localFilePath != null) {
@@ -213,7 +315,8 @@ class MusicRepository extends ChangeNotifier {
 
     notifyListeners();
 
-    // 2. Persist to SQLite database
+    // 2. Persist to SQLite database on mobile
+    if (kIsWeb) return;
     try {
       await _db.toggleFavorite(songId, newStatus);
       final refreshedFavs = await _db.getFavoriteSongs();
@@ -369,20 +472,38 @@ class MusicRepository extends ChangeNotifier {
 
   Future<List<Song>> search(String query) async {
     if (query.trim().isEmpty) return _songs;
+    if (kIsWeb) {
+      final q = query.toLowerCase().trim();
+      return _songs.where((s) {
+        return s.title.toLowerCase().contains(q) ||
+            s.artist.toLowerCase().contains(q) ||
+            s.album.toLowerCase().contains(q) ||
+            (s.genre?.toLowerCase().contains(q) ?? false);
+      }).toList();
+    }
     return await _db.searchSongs(query);
   }
 
   // ==================== PLAYLISTS ====================
 
   Future<void> createPlaylist(String name, {String? description, String? thumbnailUrl}) async {
+    final id = 'pl-${DateTime.now().millisecondsSinceEpoch}';
+    final playlist = Playlist(
+      id: id,
+      name: name.trim(),
+      description: description?.trim(),
+      thumbnailUrl: thumbnailUrl,
+      createdAt: DateTime.now(),
+    );
+
+    if (kIsWeb) {
+      _playlists.add(playlist);
+      _webPlaylistTrackIds[id] = [];
+      notifyListeners();
+      return;
+    }
+
     try {
-      final playlist = Playlist(
-        id: 'pl-${DateTime.now().millisecondsSinceEpoch}',
-        name: name.trim(),
-        description: description?.trim(),
-        thumbnailUrl: thumbnailUrl,
-        createdAt: DateTime.now(),
-      );
       await _db.insertPlaylist(playlist);
       await loadCatalogue();
     } catch (e) {
@@ -393,6 +514,15 @@ class MusicRepository extends ChangeNotifier {
   }
 
   Future<void> renamePlaylist(String playlistId, String newName) async {
+    if (kIsWeb) {
+      final idx = _playlists.indexWhere((p) => p.id == playlistId);
+      if (idx != -1) {
+        _playlists[idx] = _playlists[idx].copyWith(name: newName.trim());
+        notifyListeners();
+      }
+      return;
+    }
+
     try {
       final playlist = _playlists.firstWhere((p) => p.id == playlistId);
       final updated = playlist.copyWith(name: newName.trim());
@@ -406,6 +536,13 @@ class MusicRepository extends ChangeNotifier {
   }
 
   Future<void> deletePlaylist(String playlistId) async {
+    if (kIsWeb) {
+      _playlists.removeWhere((p) => p.id == playlistId);
+      _webPlaylistTrackIds.remove(playlistId);
+      notifyListeners();
+      return;
+    }
+
     try {
       await _db.deletePlaylist(playlistId);
       await loadCatalogue();
@@ -417,10 +554,28 @@ class MusicRepository extends ChangeNotifier {
   }
 
   Future<List<Song>> getPlaylistSongs(String playlistId) async {
+    if (kIsWeb) {
+      final trackIds = _webPlaylistTrackIds[playlistId] ?? [];
+      return _songs.where((s) => trackIds.contains(s.id)).toList();
+    }
     return await _db.getPlaylistSongs(playlistId);
   }
 
   Future<void> addSongToPlaylist(String playlistId, String songId) async {
+    if (kIsWeb) {
+      final trackIds = _webPlaylistTrackIds[playlistId] ?? [];
+      if (!trackIds.contains(songId)) {
+        trackIds.add(songId);
+        _webPlaylistTrackIds[playlistId] = trackIds;
+        final idx = _playlists.indexWhere((p) => p.id == playlistId);
+        if (idx != -1) {
+          _playlists[idx] = _playlists[idx].copyWith(songCount: trackIds.length);
+        }
+        notifyListeners();
+      }
+      return;
+    }
+
     try {
       await _db.addSongToPlaylist(playlistId, songId);
       await loadCatalogue();
@@ -432,6 +587,18 @@ class MusicRepository extends ChangeNotifier {
   }
 
   Future<void> removeSongFromPlaylist(String playlistId, String songId) async {
+    if (kIsWeb) {
+      final trackIds = _webPlaylistTrackIds[playlistId] ?? [];
+      trackIds.remove(songId);
+      _webPlaylistTrackIds[playlistId] = trackIds;
+      final idx = _playlists.indexWhere((p) => p.id == playlistId);
+      if (idx != -1) {
+        _playlists[idx] = _playlists[idx].copyWith(songCount: trackIds.length);
+      }
+      notifyListeners();
+      return;
+    }
+
     try {
       await _db.removeSongFromPlaylist(playlistId, songId);
       await loadCatalogue();
@@ -443,6 +610,12 @@ class MusicRepository extends ChangeNotifier {
   }
 
   Future<void> reorderPlaylist(String playlistId, List<String> songIds) async {
+    if (kIsWeb) {
+      _webPlaylistTrackIds[playlistId] = List<String>.from(songIds);
+      notifyListeners();
+      return;
+    }
+
     try {
       await _db.reorderPlaylistSongs(playlistId, songIds);
       await loadCatalogue();
@@ -456,6 +629,19 @@ class MusicRepository extends ChangeNotifier {
   // ==================== HISTORY ====================
 
   Future<void> recordPlayback(String songId) async {
+    if (kIsWeb) {
+      final matches = _songs.where((s) => s.id == songId);
+      if (matches.isNotEmpty) {
+        final song = matches.first;
+        _recentSongs = [song, ..._recentSongs.where((s) => s.id != songId)];
+        if (_recentSongs.length > 50) {
+          _recentSongs = _recentSongs.sublist(0, 50);
+        }
+        notifyListeners();
+      }
+      return;
+    }
+
     try {
       await _db.recordPlayback(songId);
       _recentSongs = await _db.getRecentlyPlayed();
@@ -466,6 +652,12 @@ class MusicRepository extends ChangeNotifier {
   }
 
   Future<void> clearHistory() async {
+    if (kIsWeb) {
+      _recentSongs = [];
+      notifyListeners();
+      return;
+    }
+
     try {
       await _db.clearHistory();
       _recentSongs = [];

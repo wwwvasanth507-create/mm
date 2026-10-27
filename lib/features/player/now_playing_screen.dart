@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -1188,7 +1189,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
     }
 
     // 3. Local downloaded / cached file
-    if (song.thumbnailUrl != null && song.thumbnailUrl!.isNotEmpty) {
+    if (!kIsWeb && song.thumbnailUrl != null && song.thumbnailUrl!.isNotEmpty) {
       final file = File(song.thumbnailUrl!);
       if (file.existsSync()) {
         return Image.file(file, fit: BoxFit.cover);

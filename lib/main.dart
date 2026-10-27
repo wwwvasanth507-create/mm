@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -25,18 +26,20 @@ Future<void> main() async {
     ),
   );
 
-  // Initialize background audio playback service with custom notification channel
-  try {
-    await JustAudioBackground.init(
-      androidNotificationChannelId: 'in.wavemusic.premium.playback_v3',
-      androidNotificationChannelName: 'Jalra Music Playback',
-      androidNotificationChannelDescription: 'Music playback controls on Lock Screen, Notification Shade & Bluetooth',
-      androidNotificationOngoing: true,
-      androidNotificationIcon: 'drawable/ic_stat_music',
-      androidStopForegroundOnPause: false,
-    );
-  } catch (e, st) {
-    debugPrint('JustAudioBackground init note: $e\n$st');
+  // Initialize background audio playback service with custom notification channel on mobile
+  if (!kIsWeb) {
+    try {
+      await JustAudioBackground.init(
+        androidNotificationChannelId: 'in.wavemusic.premium.playback_v3',
+        androidNotificationChannelName: 'Jalra Music Playback',
+        androidNotificationChannelDescription: 'Music playback controls on Lock Screen, Notification Shade & Bluetooth',
+        androidNotificationOngoing: true,
+        androidNotificationIcon: 'drawable/ic_stat_music',
+        androidStopForegroundOnPause: false,
+      );
+    } catch (e, st) {
+      debugPrint('JustAudioBackground init note: $e\n$st');
+    }
   }
 
   runApp(const WaveMusicApp());

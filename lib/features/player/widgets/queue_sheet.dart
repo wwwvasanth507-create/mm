@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
@@ -198,7 +199,7 @@ class QueueSheet extends StatelessWidget {
       );
     }
 
-    if (song.thumbnailUrl != null && song.thumbnailUrl!.isNotEmpty) {
+    if (!kIsWeb && song.thumbnailUrl != null && song.thumbnailUrl!.isNotEmpty) {
       final file = File(song.thumbnailUrl!);
       if (file.existsSync()) {
         return Image.file(file, fit: BoxFit.cover);
