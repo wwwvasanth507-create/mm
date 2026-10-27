@@ -6,7 +6,9 @@ import '../../data/models/playlist_model.dart';
 import '../../data/models/song_model.dart';
 import '../../data/repositories/music_repository.dart';
 import '../../data/services/audio_player_service.dart';
+import '../../data/services/download_service.dart';
 import '../../shared/widgets/empty_state.dart';
+import '../../shared/widgets/mini_player.dart';
 import '../../shared/widgets/playlist_artwork.dart';
 import '../../shared/widgets/song_tile.dart';
 
@@ -31,6 +33,25 @@ class _PlaylistDetailsScreenState extends State<PlaylistDetailsScreen> {
 
   Future<void> _loadPlaylistSongs() async {
     final repo = context.read<MusicRepository>();
+    if (widget.playlist.id == 'liked-songs') {
+      if (mounted) {
+        setState(() {
+          _songs = repo.favoriteSongs;
+          _isLoading = false;
+        });
+      }
+      return;
+    }
+    if (widget.playlist.id == 'downloaded-songs') {
+      if (mounted) {
+        setState(() {
+          _songs = repo.downloadedSongs;
+          _isLoading = false;
+        });
+      }
+      return;
+    }
+
     var songs = await repo.getPlaylistSongs(widget.playlist.id);
     if (songs.isEmpty) {
       // Re-query catalogue if songs were populated in background
@@ -94,12 +115,19 @@ class _PlaylistDetailsScreenState extends State<PlaylistDetailsScreen> {
       appBar: AppBar(
         title: Text(currentPlaylist.name, style: AppTypography.heading3),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit_outlined),
-            tooltip: 'Rename Playlist',
-            onPressed: () => _showRenameDialog(context, repo),
-          ),
+          if (!widget.playlist.id.contains('liked') &&
+              !widget.playlist.id.contains('download') &&
+              !widget.playlist.id.startsWith('playlist-'))
+            IconButton(
+              icon: const Icon(Icons.edit_outlined),
+              tooltip: 'Rename Playlist',
+              onPressed: () => _showRenameDialog(context, repo),
+            ),
         ],
+      ),
+      bottomNavigationBar: const SafeArea(
+        top: false,
+        child: MiniPlayer(),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
@@ -130,7 +158,7 @@ class _PlaylistDetailsScreenState extends State<PlaylistDetailsScreen> {
                             Text(currentPlaylist.name, style: AppTypography.heading3),
                             const SizedBox(height: 4),
                             Text(
-                              '${_songs.length} tracks • Custom Playlist',
+                              '${_songs.length} tracks',
                               style: AppTypography.caption,
                             ),
                             if (currentPlaylist.description != null &&
@@ -202,16 +230,19 @@ class _PlaylistDetailsScreenState extends State<PlaylistDetailsScreen> {
                           itemExtent: 68.0,
                           cacheExtent: 250.0,
                           itemCount: _songs.length,
-                          padding: const EdgeInsets.only(bottom: 90),
+                          padding: const EdgeInsets.only(bottom: 24),
                           onReorder: (oldIndex, newIndex) async {
                             if (oldIndex < newIndex) newIndex -= 1;
                             final song = _songs.removeAt(oldIndex);
                             _songs.insert(newIndex, song);
                             setState(() {});
-                            await repo.reorderPlaylist(
-                              widget.playlist.id,
-                              _songs.map((s) => s.id).toList(),
-                            );
+                            if (!widget.playlist.id.contains('liked') &&
+                                !widget.playlist.id.contains('download')) {
+                              await repo.reorderPlaylist(
+                                widget.playlist.id,
+                                _songs.map((s) => s.id).toList(),
+                              );
+                            }
                           },
                           itemBuilder: (context, index) {
                             final song = _songs[index];
@@ -225,9 +256,15 @@ class _PlaylistDetailsScreenState extends State<PlaylistDetailsScreen> {
                                 child: const Icon(Icons.delete_rounded, color: Colors.white),
                               ),
                               onDismissed: (_) async {
-                                _songs.removeAt(index);
+                                final removedSong = _songs.removeAt(index);
                                 setState(() {});
-                                await repo.removeSongFromPlaylist(widget.playlist.id, song.id);
+                                if (widget.playlist.id == 'liked-songs') {
+                                  await repo.toggleFavorite(removedSong.id);
+                                } else if (widget.playlist.id == 'downloaded-songs') {
+                                  await context.read<DownloadService>().deleteDownload(removedSong);
+                                } else {
+                                  await repo.removeSongFromPlaylist(widget.playlist.id, removedSong.id);
+                                }
                               },
                               child: SongTile(
                                 song: song,

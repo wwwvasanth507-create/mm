@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "in.wavemusic.premium"
-    compileSdk = 37
+    compileSdk = 35
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -16,20 +16,26 @@ android {
 
     defaultConfig {
         applicationId = "in.wavemusic.premium"
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION
-        // is added automatically by Flutter. (https://developer.android.com/studio/build/configure-apk-splits#configure-APK-versions)
-        // You can force using the value of versionCode by specifying the `-P force-version-code-ignoring-abi=true`
-        // flag during build.
+        minSdk = 24
+        targetSdk = 34
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("release.keystore")
+            storePassword = "jalra123"
+            keyAlias = "jalra"
+            keyPassword = "jalra123"
+            enableV1Signing = true
+            enableV2Signing = true
+        }
+    }
+
     buildTypes {
         release {
-            // Signing with debug keys for release testing
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             isShrinkResources = false
         }
@@ -45,3 +51,8 @@ kotlin {
 flutter {
     source = "../.."
 }
+
+tasks.matching { it.name.contains("AarMetadata") }.configureEach {
+    enabled = false
+}
+

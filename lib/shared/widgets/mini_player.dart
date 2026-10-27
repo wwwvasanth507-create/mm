@@ -118,7 +118,7 @@ class MiniPlayer extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).push(
                             PageRouteBuilder(
-                              pageBuilder: (_, __, ___) => const NowPlayingScreen(),
+                              pageBuilder: (_, __, ___) => const NowPlayingScreen(initialVideoMode: true),
                               transitionsBuilder: (_, animation, __, child) {
                                 return SlideTransition(
                                   position: Tween<Offset>(
