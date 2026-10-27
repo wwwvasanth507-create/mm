@@ -52,7 +52,11 @@
       "description": "Soundtrack and songs from Ayothi composed by N.R. Raghunanthan",
       "coverUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/kaatrodu-pattam-pola.jpg",
       "trackIds": [
-        "song-kaatrodu-pattam-pola"
+        "song-kaatrodu-pattam-pola",
+        "song-araro-ariraaro",
+        "song-chalthi-hai",
+        "song-sethupathi-naattukulle",
+        "song-thiruttu-payale"
       ],
       "createdAt": "2025-01-01"
     }
@@ -1933,6 +1937,62 @@
       "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/ayothi/Kaatrodu-Pattam-Pola-MassTamilan.dev.mp3",
       "thumbnailUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/kaatrodu-pattam-pola.jpg",
       "description": "Kaatrodu Pattam Pola from Ayothi composed by N.R. Raghunanthan",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-araro-ariraaro",
+      "title": "Araro Ariraaro",
+      "artist": "N.R. Raghunanthan, Sai Vignesh",
+      "album": "Ayothi",
+      "genre": "Soulful Melody",
+      "year": 2023,
+      "duration": 132,
+      "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/ayothi/Araro-Ariraaro-MassTamilan.dev.mp3",
+      "thumbnailUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/kaatrodu-pattam-pola.jpg",
+      "description": "Araro Ariraaro from Ayothi composed by N.R. Raghunanthan",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-chalthi-hai",
+      "title": "Chalthi Hai",
+      "artist": "N.R. Raghunanthan, Pratap Bhattarai",
+      "album": "Ayothi",
+      "genre": "Soundtrack",
+      "year": 2023,
+      "duration": 126,
+      "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/ayothi/Chalthi-Hai-MassTamilan.dev.mp3",
+      "thumbnailUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/kaatrodu-pattam-pola.jpg",
+      "description": "Chalthi Hai from Ayothi composed by N.R. Raghunanthan",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-sethupathi-naattukulle",
+      "title": "Sethupathi Naattukulle",
+      "artist": "N.R. Raghunanthan, Mathichiyam Bala",
+      "album": "Ayothi",
+      "genre": "Rural Folk",
+      "year": 2023,
+      "duration": 231,
+      "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/ayothi/Sethupathi-Naattukulle-MassTamilan.dev.mp3",
+      "thumbnailUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/kaatrodu-pattam-pola.jpg",
+      "description": "Sethupathi Naattukulle from Ayothi composed by N.R. Raghunanthan",
+      "language": "Tamil",
+      "isExplicit": false
+    },
+    {
+      "id": "song-thiruttu-payale",
+      "title": "Thiruttu Payale",
+      "artist": "N.R. Raghunanthan, Mathichiyam Bala",
+      "album": "Ayothi",
+      "genre": "Rural Folk",
+      "year": 2023,
+      "duration": 204,
+      "audioUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/ayothi/Thiruttu-Payale-MassTamilan.dev.mp3",
+      "thumbnailUrl": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/kaatrodu-pattam-pola.jpg",
+      "description": "Thiruttu Payale from Ayothi composed by N.R. Raghunanthan",
       "language": "Tamil",
       "isExplicit": false
     }
