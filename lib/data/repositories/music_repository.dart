@@ -44,8 +44,13 @@ class MusicRepository extends ChangeNotifier {
   /// 3. Parallel async database loading via Future.wait.
   /// 4. Defer remote GitHub sync to not block UI rendering.
   Future<void> initializeAndSync() async {
-    if (kIsWeb) {
+    // 1. Immediately pre-load bundled catalogue into memory so that UI renders all
+    // songs, playlists, and artworks on the very first frame without waiting for SQLite.
+    if (_songs.isEmpty) {
       await _loadWebCatalogue();
+    }
+
+    if (kIsWeb) {
       Future.delayed(const Duration(seconds: 3), () {
         syncWithRemoteCatalogue().catchError((e) {
           debugPrint('[MusicRepository] Background remote sync notice: $e');
@@ -195,6 +200,11 @@ class MusicRepository extends ChangeNotifier {
       _verifyDownloadedFilesAsync();
     } catch (e) {
       _error = 'Failed to load music catalogue: $e';
+      if (_songs.isEmpty) {
+        try {
+          await _loadWebCatalogue();
+        } catch (_) {}
+      }
     } finally {
       _isLoading = false;
       notifyListeners();

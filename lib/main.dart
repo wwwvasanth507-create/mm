@@ -36,6 +36,11 @@ Future<void> main() async {
         androidNotificationOngoing: true,
         androidNotificationIcon: 'drawable/ic_stat_music',
         androidStopForegroundOnPause: false,
+      ).timeout(
+        const Duration(milliseconds: 1500),
+        onTimeout: () {
+          debugPrint('[JustAudioBackground] init timed out - proceeding to runApp');
+        },
       );
     } catch (e, st) {
       debugPrint('JustAudioBackground init note: $e\n$st');

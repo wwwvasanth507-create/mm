@@ -1,19 +1,20 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'core/cache/cache_config.dart';
-import 'core/constants/app_colors.dart';
-import 'core/constants/app_typography.dart';
 import 'core/theme/app_theme.dart';
 import 'data/repositories/music_repository.dart';
+import 'data/services/app_update_service.dart';
 import 'data/services/audio_player_service.dart';
 import 'data/services/download_service.dart';
 import 'features/home/home_screen.dart';
 import 'features/library/library_screen.dart';
 import 'features/profile/profile_screen.dart';
 import 'features/search/search_screen.dart';
+import 'shared/widgets/in_app_update_sheet.dart';
 import 'shared/widgets/mini_player.dart';
 
 class WaveMusicApp extends StatelessWidget {
@@ -39,6 +40,11 @@ class WaveMusicApp extends StatelessWidget {
           ),
           update: (ctx, repository, previous) =>
               previous ?? DownloadService(repository: repository),
+        ),
+        ChangeNotifierProvider<AppUpdateService>(
+          create: (_) => AppUpdateService()
+            ..startPeriodicChecks()
+            ..checkForUpdates(silent: true),
         ),
       ],
       child: MaterialApp(
@@ -74,6 +80,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
   Future<void> _requestNotificationPermission() async {
     try {
       if (!kIsWeb && Platform.isAndroid) {
+        await Future.delayed(const Duration(milliseconds: 600));
+        if (!mounted) return;
         var status = await Permission.notification.status;
         if (!status.isGranted) {
           status = await Permission.notification.request();
@@ -91,14 +99,19 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && !kIsWeb && Platform.isAndroid) {
-      Permission.notification.status.then((status) {
-        if (mounted && _notificationDenied != !status.isGranted) {
-          setState(() {
-            _notificationDenied = !status.isGranted;
-          });
-        }
-      }).catchError((_) {});
+    if (state == AppLifecycleState.resumed) {
+      if (!kIsWeb && Platform.isAndroid) {
+        Permission.notification.status.then((status) {
+          if (mounted && _notificationDenied != !status.isGranted) {
+            setState(() {
+              _notificationDenied = !status.isGranted;
+            });
+          }
+        }).catchError((_) {});
+      }
+      try {
+        context.read<AppUpdateService>().checkForUpdates(silent: true);
+      } catch (_) {}
     }
   }
 
@@ -197,6 +210,14 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
                 ),
               ),
 
+            // In-app live update banner (gracefully floats at the top while playing songs)
+            Positioned(
+              top: MediaQuery.of(context).padding.top + 8,
+              left: 14,
+              right: 14,
+              child: const InAppUpdateBanner(),
+            ),
+
             // Persistent MiniPlayer & Bottom Nav
             Positioned(
               left: 0,
@@ -218,47 +239,52 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
 
   Widget _buildBottomNavigationBar() {
     return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.96),
-        border: const Border(
+      decoration: const BoxDecoration(
+        color: Color(0xFF0F131D), // 100% Solid Dark Obsidian, zero glass/translucency
+        border: Border(
           top: BorderSide(
-            color: AppColors.divider,
-            width: 0.8,
+            color: Color(0xFF222B3D), // High-definition crisp top divider
+            width: 1.5,
           ),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            blurRadius: 16,
-            offset: const Offset(0, -4),
+            color: Colors.black,
+            blurRadius: 20,
+            offset: Offset(0, -6),
           ),
         ],
       ),
       child: SafeArea(
         top: false,
+        bottom: true,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(
                 index: 0,
                 icon: Icons.home_rounded,
+                unselectedIcon: Icons.home_outlined,
                 label: 'Home',
               ),
               _buildNavItem(
                 index: 1,
                 icon: Icons.search_rounded,
+                unselectedIcon: Icons.search_rounded,
                 label: 'Search',
               ),
               _buildNavItem(
                 index: 2,
                 icon: Icons.library_music_rounded,
+                unselectedIcon: Icons.library_music_outlined,
                 label: 'Library',
               ),
               _buildNavItem(
                 index: 3,
                 icon: Icons.person_rounded,
+                unselectedIcon: Icons.person_outline_rounded,
                 label: 'Profile',
               ),
             ],
@@ -271,6 +297,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
   Widget _buildNavItem({
     required int index,
     required IconData icon,
+    required IconData unselectedIcon,
     required String label,
   }) {
     final isSelected = _currentIndex == index;
@@ -279,34 +306,47 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
       behavior: HitTestBehavior.opaque,
       onTap: () {
         if (_currentIndex != index) {
+          HapticFeedback.selectionClick();
           setState(() {
             _currentIndex = index;
           });
         }
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+        padding: isSelected
+            ? const EdgeInsets.symmetric(horizontal: 18, vertical: 8)
+            : const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primary.withOpacity(0.12)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
+          color: isSelected ? const Color(0xFF00E676) : Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFF00E676).withOpacity(0.38),
+                    blurRadius: 12,
+                    offset: const Offset(0, 3),
+                  ),
+                ]
+              : null,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              icon,
-              size: 24,
-              color: isSelected ? AppColors.primary : AppColors.textMuted,
+              isSelected ? icon : unselectedIcon,
+              size: isSelected ? 22 : 24,
+              color: isSelected ? Colors.black : const Color(0xFFCBD4E1),
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 2),
             Text(
               label,
-              style: AppTypography.caption.copyWith(
-                color: isSelected ? AppColors.primary : AppColors.textMuted,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+              style: TextStyle(
+                color: isSelected ? Colors.black : const Color(0xFFCBD4E1),
+                fontSize: 11.5,
+                fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+                letterSpacing: isSelected ? 0.2 : 0,
               ),
             ),
           ],
