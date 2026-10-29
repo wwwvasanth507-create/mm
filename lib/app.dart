@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'core/cache/cache_config.dart';
+import 'core/constants/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'data/repositories/music_repository.dart';
 import 'data/services/app_update_service.dart';
@@ -240,18 +241,18 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
   Widget _buildBottomNavigationBar() {
     return Container(
       decoration: const BoxDecoration(
-        color: Color(0xFF0F131D), // 100% Solid Dark Obsidian, zero glass/translucency
+        color: Color(0xFF0B0F14), // Sleek, modern dark surface
         border: Border(
           top: BorderSide(
-            color: Color(0xFF222B3D), // High-definition crisp top divider
-            width: 1.5,
+            color: Color(0xFF1B2330), // Delicate hairline divider
+            width: 1.0,
           ),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black,
-            blurRadius: 20,
-            offset: Offset(0, -6),
+            color: Colors.black54,
+            blurRadius: 16,
+            offset: Offset(0, -4),
           ),
         ],
       ),
@@ -259,7 +260,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
         top: false,
         bottom: true,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -313,20 +314,21 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
         }
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
+        duration: const Duration(milliseconds: 200),
         curve: Curves.easeOutCubic,
         padding: isSelected
-            ? const EdgeInsets.symmetric(horizontal: 18, vertical: 8)
-            : const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            ? const EdgeInsets.symmetric(horizontal: 14, vertical: 5)
+            : const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF00E676) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+          gradient: isSelected ? AppColors.cuteDockActive : null,
+          color: isSelected ? null : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: const Color(0xFF00E676).withOpacity(0.38),
-                    blurRadius: 12,
-                    offset: const Offset(0, 3),
+                    color: const Color(0xFF76E035).withOpacity(0.35),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
                   ),
                 ]
               : null,
@@ -336,16 +338,16 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
           children: [
             Icon(
               isSelected ? icon : unselectedIcon,
-              size: isSelected ? 22 : 24,
-              color: isSelected ? Colors.black : const Color(0xFFCBD4E1),
+              size: isSelected ? 19 : 20,
+              color: isSelected ? const Color(0xFF070B0E) : const Color(0xFF94A3B8),
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 1.5),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? Colors.black : const Color(0xFFCBD4E1),
-                fontSize: 11.5,
-                fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+                color: isSelected ? const Color(0xFF070B0E) : const Color(0xFF94A3B8),
+                fontSize: 9.8,
+                fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                 letterSpacing: isSelected ? 0.2 : 0,
               ),
             ),

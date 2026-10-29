@@ -19,9 +19,9 @@ class HomeScreen extends StatelessWidget {
 
   String _getGreeting() {
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good morning';
-    if (hour < 17) return 'Good afternoon';
-    return 'Good evening';
+    if (hour < 12) return 'Good morning ✨';
+    if (hour < 17) return 'Good afternoon ☀️';
+    return 'Good evening 🌙';
   }
 
   @override
@@ -41,20 +41,20 @@ class HomeScreen extends StatelessWidget {
               // Top Bar
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const BrandLogo(size: 34),
                       IconButton(
                         icon: Container(
-                          padding: const EdgeInsets.all(6),
+                          padding: const EdgeInsets.all(7),
                           decoration: BoxDecoration(
-                            color: AppColors.surface,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: AppColors.divider),
+                            color: const Color(0xFF131A15),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: const Color(0xFF223226)),
                           ),
-                          child: const Icon(Icons.sync_rounded, color: AppColors.textSecondary, size: 22),
+                          child: const Icon(Icons.sync_rounded, color: AppColors.cuteMint, size: 20),
                         ),
                         tooltip: 'Sync Songs from Repo',
                         onPressed: () async {
@@ -83,25 +83,50 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
 
-              // Greeting
+              // Cute Greeting Header
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                  padding: const EdgeInsets.fromLTRB(16, 6, 16, 14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(_getGreeting(), style: AppTypography.heading1),
-                      const SizedBox(height: 2),
-                      Text(
-                        'Stream high-fidelity music & offline downloads',
-                        style: AppTypography.bodySecondary,
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                            decoration: BoxDecoration(
+                              color: AppColors.cuteMint.withOpacity(0.14),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: AppColors.cuteMint.withOpacity(0.35),
+                                width: 0.8,
+                              ),
+                            ),
+                            child: const Text(
+                              'STUDIO HI-FI',
+                              style: TextStyle(
+                                color: AppColors.cuteMint,
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 0.6,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Pure lossless sound & offline vibes',
+                            style: AppTypography.caption.copyWith(color: AppColors.textSecondary),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
               ),
 
-              // Quick Category Shortcuts (Liked, Downloads, Playlists)
+              // Cute Quick Category Shortcuts (Liked, Downloads, Playlists)
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -121,9 +146,9 @@ class HomeScreen extends StatelessWidget {
                           Expanded(
                             child: _buildQuickCard(
                               title: 'Liked',
-                              count: '$favCount songs',
+                              count: '$favCount tracks',
                               icon: Icons.favorite_rounded,
-                              gradient: AppColors.primaryGradient,
+                              gradient: AppColors.cutePinkLavender,
                               onTap: () {
                                 Navigator.push(
                                   context,
@@ -146,11 +171,9 @@ class HomeScreen extends StatelessWidget {
                           Expanded(
                             child: _buildQuickCard(
                               title: 'Offline',
-                              count: '$dlCount songs',
+                              count: '$dlCount tracks',
                               icon: Icons.offline_pin_rounded,
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFF00B09B), Color(0xFF96C93D)],
-                              ),
+                              gradient: AppColors.cuteMintCyan,
                               onTap: () {
                                 Navigator.push(
                                   context,
@@ -173,9 +196,9 @@ class HomeScreen extends StatelessWidget {
                           Expanded(
                             child: _buildQuickCard(
                               title: 'Playlists',
-                              count: '${playlists.length} lists',
+                              count: '${playlists.length} mixes',
                               icon: Icons.queue_music_rounded,
-                              gradient: AppColors.waveGradient,
+                              gradient: AppColors.cuteSunset,
                               onTap: () {
                                 if (playlists.isNotEmpty) {
                                   Navigator.push(
@@ -479,25 +502,39 @@ class HomeScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.divider, width: 0.8),
+          color: const Color(0xFF111713),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFF1E2D22), width: 0.9),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: const EdgeInsets.all(7),
+              padding: const EdgeInsets.all(7.5),
               decoration: BoxDecoration(
                 gradient: gradient,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.25),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
-              child: Icon(icon, color: Colors.white, size: 18),
+              child: Icon(icon, color: Colors.white, size: 17),
             ),
             const SizedBox(height: 8),
-            Text(title, style: AppTypography.title.copyWith(fontSize: 13)),
-            Text(count, style: AppTypography.caption.copyWith(fontSize: 10.5)),
+            Text(title, style: AppTypography.title.copyWith(fontSize: 13, fontWeight: FontWeight.w700)),
+            Text(count, style: AppTypography.caption.copyWith(fontSize: 10.5, color: const Color(0xFF94A3B8))),
           ],
         ),
       ),
@@ -628,12 +665,12 @@ class HomeScreen extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: AppColors.primary,
+                          gradient: AppColors.cuteDockActive,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withOpacity(0.5),
-                              blurRadius: 8,
+                              color: const Color(0xFF76E035).withOpacity(0.45),
+                              blurRadius: 10,
                               offset: const Offset(0, 3),
                             ),
                           ],

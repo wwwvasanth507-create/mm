@@ -63,9 +63,9 @@ class AppUpdateService extends ChangeNotifier {
   static const String defaultVersionUrl =
       'https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/app/version.json';
 
-  /// Current installed app version (corresponds to pubspec.yaml version: 1.0.2+3)
-  static const int currentVersionCode = 3;
-  static const String currentVersionName = '1.0.2';
+  /// Current installed app version (corresponds to pubspec.yaml version: 1.0.4+5)
+  static const int currentVersionCode = 5;
+  static const String currentVersionName = '1.0.4';
 
   final Dio _dio;
   Timer? _periodicTimer;

@@ -64,4 +64,36 @@ class AppColors {
   static const Color warning = Color(0xFFFFB300);
   static const Color error = Color(0xFFFF4D4D);
   static const Color divider = Color(0xFF1C281F);
+
+  // Cute & Creative Aesthetic Tokens
+  static const Color cutePink = Color(0xFFFF6584); // Sweet Strawberry Pink
+  static const Color cuteLavender = Color(0xFFA78BFA); // Dreamy Lavender
+  static const Color cuteMint = Color(0xFF34D399); // Soft Cute Mint
+  static const Color cutePeach = Color(0xFFFB923C); // Warm Peach
+  static const Color cuteSky = Color(0xFF38BDF8); // Cute Sky Blue
+  static const Color cuteSoftSurface = Color(0xFF131A15);
+
+  static const LinearGradient cutePinkLavender = LinearGradient(
+    colors: [Color(0xFFFF6584), Color(0xFFA78BFA)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const LinearGradient cuteMintCyan = LinearGradient(
+    colors: [Color(0xFF34D399), Color(0xFF00E5FF)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const LinearGradient cuteSunset = LinearGradient(
+    colors: [Color(0xFFFF6584), Color(0xFFFFB800)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const LinearGradient cuteDockActive = LinearGradient(
+    colors: [Color(0xFF76E035), Color(0xFF00E5FF)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 }

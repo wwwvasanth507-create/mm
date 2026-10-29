@@ -15,9 +15,9 @@ class FakeDownloadService extends ChangeNotifier implements DownloadService {
 
 void main() {
   group('Profile Screen & WhatsApp Feedback Tests', () {
-    test('App version matches 1.0.2+3', () {
-      expect(AppUpdateService.currentVersionName, '1.0.2');
-      expect(AppUpdateService.currentVersionCode, 3);
+    test('App version matches 1.0.4+5', () {
+      expect(AppUpdateService.currentVersionName, '1.0.4');
+      expect(AppUpdateService.currentVersionCode, 5);
     });
 
     test('WhatsApp URL and pre-filled message template validation', () {

@@ -1123,14 +1123,10 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
               height: 66,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryDark],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                gradient: AppColors.cuteDockActive,
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primary.withOpacity(0.55),
+                    color: const Color(0xFF76E035).withOpacity(0.55),
                     blurRadius: 24,
                     offset: const Offset(0, 4),
                   ),

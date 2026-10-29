@@ -35,26 +35,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Text('Profile & Settings', style: AppTypography.heading1),
               const SizedBox(height: 20),
 
-              // Premium Profile Card
+              // Cute & Premium Profile Card
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  gradient: AppColors.cardGlowGradient,
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 1.2),
+                  color: const Color(0xFF11171E),
+                  borderRadius: BorderRadius.circular(22),
+                  border: Border.all(color: const Color(0xFF1E293B), width: 1.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Row(
                   children: [
                     Container(
-                      width: 60,
-                      height: 60,
-                      decoration: const BoxDecoration(
-                        gradient: AppColors.primaryGradient,
+                      width: 58,
+                      height: 58,
+                      decoration: BoxDecoration(
+                        gradient: AppColors.cutePinkLavender,
                         shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFFF6584).withOpacity(0.35),
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
                       ),
                       child: const Center(
-                        child: Icon(Icons.person_rounded, size: 36, color: Colors.white),
+                        child: Icon(Icons.person_rounded, size: 34, color: Colors.white),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -67,24 +80,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Text('Jalra User', style: AppTypography.heading3),
                               const SizedBox(width: 8),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
                                 decoration: BoxDecoration(
-                                  gradient: AppColors.neonCyanViolet,
-                                  borderRadius: BorderRadius.circular(4),
+                                  gradient: AppColors.cuteDockActive,
+                                  borderRadius: BorderRadius.circular(6),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(0xFF76E035).withOpacity(0.3),
+                                      blurRadius: 6,
+                                      offset: const Offset(0, 1),
+                                    ),
+                                  ],
                                 ),
                                 child: const Text(
-                                  'PRO',
+                                  'PRO ✨',
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 9,
+                                    fontSize: 9.5,
                                     fontWeight: FontWeight.w900,
+                                    letterSpacing: 0.4,
                                   ),
                                 ),
                               ),
                             ],
                           ),
                           const SizedBox(height: 4),
-                          Text('Offline & Streaming Enabled', style: AppTypography.caption),
+                          Text('Offline & Lossless Streaming Active', style: AppTypography.caption.copyWith(color: const Color(0xFF94A3B8))),
                         ],
                       ),
                     ),
@@ -116,6 +137,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Audio stream quality is determined directly by source URL.'),
+                            backgroundColor: AppColors.surfaceHighlight,
+                          ),
+                        );
+                      },
+                    ),
+                    const Divider(color: AppColors.divider, height: 1),
+                    ListTile(
+                      leading: const Icon(Icons.graphic_eq_rounded, color: AppColors.accentEmerald),
+                      title: const Text('Studio Clarity Engine™'),
+                      subtitle: const Text('Built-in auto equalizer & anti-clipping headroom active'),
+                      trailing: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: AppColors.accentEmerald.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: AppColors.accentEmerald.withOpacity(0.3)),
+                        ),
+                        child: const Text(
+                          'ACTIVE',
+                          style: TextStyle(
+                            color: AppColors.accentEmerald,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Jalra Audio Clarity Engine™ permanently optimizes every track with balanced acoustics and anti-clipping headroom.'),
                             backgroundColor: AppColors.surfaceHighlight,
                           ),
                         );

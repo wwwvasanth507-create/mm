@@ -109,21 +109,37 @@ class _SearchScreenState extends State<SearchScreen> {
                 controller: _searchController,
                 style: AppTypography.body,
                 decoration: InputDecoration(
-                  hintText: 'Search songs, artists, or albums...',
-                  prefixIcon: const Icon(Icons.search_rounded, color: AppColors.textMuted),
+                  filled: true,
+                  fillColor: const Color(0xFF11171E),
+                  hintText: 'Search songs, artists, albums... ✨',
+                  hintStyle: const TextStyle(color: Color(0xFF64748B), fontSize: 13.5),
+                  prefixIcon: const Icon(Icons.search_rounded, color: AppColors.cuteMint, size: 22),
                   suffixIcon: query.isNotEmpty
                       ? IconButton(
-                          icon: const Icon(Icons.clear_rounded, color: AppColors.textMuted),
+                          icon: const Icon(Icons.clear_rounded, color: AppColors.textMuted, size: 20),
                           onPressed: () {
                             _searchController.clear();
                           },
                         )
                       : null,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(22),
+                    borderSide: const BorderSide(color: Color(0xFF1E293B)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(22),
+                    borderSide: const BorderSide(color: Color(0xFF1E293B)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(22),
+                    borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+                  ),
                 ),
               ),
             ),
 
-            // Filter Chips
+            // Cute Filter Chips
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -139,18 +155,19 @@ class _SearchScreenState extends State<SearchScreen> {
                         setState(() => _selectedFilter = filter);
                         if (query.isNotEmpty) _performSearch(query);
                       },
-                      backgroundColor: AppColors.surface,
-                      selectedColor: AppColors.primary.withOpacity(0.2),
+                      backgroundColor: const Color(0xFF11171E),
+                      selectedColor: const Color(0xFF76E035).withOpacity(0.18),
                       checkmarkColor: AppColors.primary,
                       labelStyle: TextStyle(
-                        color: isSelected ? AppColors.primary : AppColors.textSecondary,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
-                        fontSize: 13,
+                        color: isSelected ? AppColors.primary : const Color(0xFF94A3B8),
+                        fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
+                        fontSize: 12.5,
                       ),
                       side: BorderSide(
-                        color: isSelected ? AppColors.primary : AppColors.divider,
+                        color: isSelected ? AppColors.primary : const Color(0xFF1E293B),
+                        width: isSelected ? 1.2 : 0.8,
                       ),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
                     ),
                   );
                 }).toList(),

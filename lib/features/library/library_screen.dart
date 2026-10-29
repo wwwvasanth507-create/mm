@@ -86,23 +86,32 @@ class _LibraryScreenState extends State<LibraryScreen> with SingleTickerProvider
               ),
             ),
 
-            // Tab bar
+            // Cute Floating Tab bar
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.all(3.5),
               decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(14),
+                color: const Color(0xFF11171E),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: const Color(0xFF1E293B), width: 0.8),
               ),
               child: TabBar(
                 controller: _tabController,
                 indicator: BoxDecoration(
-                  gradient: AppColors.primaryGradient,
-                  borderRadius: BorderRadius.circular(12),
+                  gradient: AppColors.cuteDockActive,
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF76E035).withOpacity(0.35),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
-                labelColor: Colors.white,
-                unselectedLabelColor: AppColors.textMuted,
-                labelStyle: AppTypography.caption.copyWith(fontWeight: FontWeight.w700),
+                labelColor: Colors.black,
+                unselectedLabelColor: const Color(0xFF94A3B8),
+                labelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 11.5),
                 dividerColor: Colors.transparent,
                 tabs: const [
                   Tab(text: 'Playlists'),

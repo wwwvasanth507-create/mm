@@ -7,6 +7,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import '../models/song_model.dart';
 import '../repositories/music_repository.dart';
+import 'audio_clarity_engine.dart';
 import 'cover_cache_service.dart';
 
 enum AppRepeatMode {
@@ -16,16 +17,22 @@ enum AppRepeatMode {
 }
 
 class AudioPlayerService extends ChangeNotifier {
+  final AndroidEqualizer? _equalizer = AudioClarityEngine.isPlatformEqualizerSupported
+      ? AndroidEqualizer()
+      : null;
+
   late final AudioPlayer _player = AudioPlayer(
+    audioPipeline: _equalizer != null ? AudioPipeline(androidAudioEffects: [_equalizer!]) : null,
     audioLoadConfiguration: kIsWeb
         ? null
         : const AudioLoadConfiguration(
             androidLoadControl: AndroidLoadControl(
-              minBufferDuration: Duration(seconds: 4),
-              maxBufferDuration: Duration(seconds: 20),
-              bufferForPlaybackDuration: Duration(milliseconds: 150),
-              bufferForPlaybackAfterRebufferDuration: Duration(milliseconds: 300),
+              minBufferDuration: Duration(seconds: 8),
+              maxBufferDuration: Duration(seconds: 30),
+              bufferForPlaybackDuration: Duration(milliseconds: 250),
+              bufferForPlaybackAfterRebufferDuration: Duration(milliseconds: 500),
               prioritizeTimeOverSizeThresholds: true,
+              backBufferDuration: Duration(seconds: 15),
             ),
           ),
   );
@@ -46,6 +53,8 @@ class AudioPlayerService extends ChangeNotifier {
   StreamSubscription? _playerStateSubscription;
   StreamSubscription? _durationSubscription;
   StreamSubscription? _currentIndexSubscription;
+  StreamSubscription? _becomingNoisySubscription;
+  StreamSubscription? _interruptionSubscription;
 
   bool get isVideoMode => _isVideoMode;
 
@@ -70,11 +79,49 @@ class AudioPlayerService extends ChangeNotifier {
     try {
       final session = await AudioSession.instance;
       await session.configure(const AudioSessionConfiguration.music());
+
+      // Auto-pause when headphones or Bluetooth audio device is disconnected
+      _becomingNoisySubscription = session.becomingNoisyEventStream.listen((_) {
+        if (_player.playing) {
+          pause();
+        }
+      });
+
+      // Handle transient audio focus interruptions (phone calls, alarms, etc.)
+      _interruptionSubscription = session.interruptionEventStream.listen((event) {
+        if (event.begin) {
+          switch (event.type) {
+            case AudioInterruptionType.duck:
+              _player.setVolume(AudioClarityEngine.kDigitalHeadroomVolume * 0.4);
+              break;
+            case AudioInterruptionType.pause:
+            case AudioInterruptionType.unknown:
+              if (_player.playing) {
+                pause();
+              }
+              break;
+          }
+        } else {
+          switch (event.type) {
+            case AudioInterruptionType.duck:
+              _player.setVolume(AudioClarityEngine.kDigitalHeadroomVolume);
+              break;
+            case AudioInterruptionType.pause:
+              break;
+            case AudioInterruptionType.unknown:
+              break;
+          }
+        }
+      });
+
+      // Initialize the built-in acoustic clarity equalizer tuning & digital headroom
+      unawaited(AudioClarityEngine.instance.applyBuiltInTuning(_equalizer, _player));
     } catch (e) {
       debugPrint('[AudioPlayerService] AudioSession note: $e');
     }
   }
 
+  AndroidEqualizer? get equalizer => _equalizer;
   AudioPlayer get player => _player;
   List<Song> get queue => _queue;
   int get currentIndex => _currentIndex;
@@ -664,6 +711,8 @@ class AudioPlayerService extends ChangeNotifier {
 
   @override
   void dispose() {
+    _becomingNoisySubscription?.cancel();
+    _interruptionSubscription?.cancel();
     _playerStateSubscription?.cancel();
     _durationSubscription?.cancel();
     _currentIndexSubscription?.cancel();
