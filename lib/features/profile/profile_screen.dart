@@ -27,13 +27,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Profile & Settings', style: AppTypography.heading1),
-              const SizedBox(height: 20),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 860),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Profile & Settings', style: AppTypography.heading1),
+                  const SizedBox(height: 20),
 
               // Cute & Premium Profile Card
               Container(
@@ -217,13 +220,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Row(
-                              children: [
-                                Icon(Icons.storage_rounded, color: AppColors.accentEmerald, size: 24),
-                                SizedBox(width: 12),
-                                Text('Local Offline Storage'),
-                              ],
+                            const Expanded(
+                              child: Row(
+                                children: [
+                                  Icon(Icons.storage_rounded, color: AppColors.accentEmerald, size: 24),
+                                  SizedBox(width: 12),
+                                  Flexible(
+                                    child: Text('Local Offline Storage', overflow: TextOverflow.ellipsis),
+                                  ),
+                                ],
+                              ),
                             ),
+                            const SizedBox(width: 8),
                             Text(
                               AppFormatters.formatFileSize(totalSize),
                               style: AppTypography.title.copyWith(color: AppColors.accentEmerald),
@@ -283,6 +291,91 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               const SizedBox(height: 24),
 
+              // Permanent Android APK Download Card
+              Container(
+                margin: const EdgeInsets.only(bottom: 24),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF14241B), Color(0xFF101924)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.cuteMint.withOpacity(0.4)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.cuteMint.withOpacity(0.08),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: AppColors.cuteMint.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: const Icon(Icons.android_rounded, color: AppColors.cuteMint, size: 24),
+                        ),
+                        const SizedBox(width: 14),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Jalra for Android',
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15),
+                              ),
+                              SizedBox(height: 2),
+                              Text(
+                                'Permanent Official APK (v1.0.4)',
+                                style: TextStyle(color: AppColors.cuteMint, fontSize: 12, fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Experience continuous background playback, native Android lock screen controls, and lossless offline downloads.',
+                      style: TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.4),
+                    ),
+                    const SizedBox(height: 14),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.cuteMint,
+                          foregroundColor: const Color(0xFF070B0E),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                          elevation: 0,
+                        ),
+                        onPressed: () {
+                          launchUrl(
+                            Uri.parse(AppUpdateService.permanentApkUrl),
+                            mode: LaunchMode.externalApplication,
+                          );
+                        },
+                        icon: const Icon(Icons.download_rounded, size: 18),
+                        label: const Text(
+                          'Download APK (Permanent Link)',
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w900),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
               // In-App Updates Tile
               Consumer<AppUpdateService>(
                 builder: (context, updateService, _) {
@@ -326,9 +419,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       title: Row(
                         children: [
-                          const Text(
-                            'Check for Updates',
-                            style: TextStyle(fontWeight: FontWeight.w600),
+                          const Flexible(
+                            child: Text(
+                              'Check for Updates',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           if (hasUpdate) ...[
                             const SizedBox(width: 8),
@@ -623,9 +719,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ],
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+                          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
                                 padding: const EdgeInsets.all(4),
@@ -639,14 +736,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: Color(0xFF25D366),
                                 ),
                               ),
-                              const SizedBox(width: 12),
-                              const Text(
-                                'Chat on WhatsApp',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  letterSpacing: 0.3,
+                              const SizedBox(width: 10),
+                              const Flexible(
+                                child: Text(
+                                  'Chat on WhatsApp',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    letterSpacing: 0.3,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               const SizedBox(width: 6),
@@ -698,7 +798,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-    );
+    ),
+  ),
+);
   }
 
   Widget _buildTemplateChip({

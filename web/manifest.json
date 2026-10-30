@@ -1,12 +1,12 @@
 {
-    "name": "Jalra",
+    "name": "Jalra - High Quality Tamil Music",
     "short_name": "Jalra",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0A0A0C",
-    "theme_color": "#0A0A0C",
-    "description": "Jalra - High quality Tamil music streaming experience.",
-    "orientation": "portrait-primary",
+    "background_color": "#070B0E",
+    "theme_color": "#070B0E",
+    "description": "Jalra - Pure lossless Tamil music streaming and offline vibes.",
+    "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
         {

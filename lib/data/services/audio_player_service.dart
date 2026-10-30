@@ -22,7 +22,7 @@ class AudioPlayerService extends ChangeNotifier {
       : null;
 
   late final AudioPlayer _player = AudioPlayer(
-    audioPipeline: _equalizer != null ? AudioPipeline(androidAudioEffects: [_equalizer!]) : null,
+    audioPipeline: _equalizer != null ? AudioPipeline(androidAudioEffects: [_equalizer]) : null,
     audioLoadConfiguration: kIsWeb
         ? null
         : const AudioLoadConfiguration(
@@ -143,6 +143,12 @@ class AudioPlayerService extends ChangeNotifier {
 
   Duration get currentPosition => _player.position;
   Duration get currentDuration => _player.duration ?? Duration.zero;
+  Duration get position => currentPosition;
+  Duration get duration => currentDuration;
+  bool get isLooping => _repeatMode != AppRepeatMode.off;
+
+  void toggleLoop() => cycleRepeatMode();
+  Future<void> setVolume(double vol) => _player.setVolume(vol.clamp(0.0, 1.0));
 
   void _initPlayerListeners() {
     bool? lastPlaying;

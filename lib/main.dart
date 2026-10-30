@@ -47,5 +47,5 @@ Future<void> main() async {
     }
   }
 
-  runApp(const WaveMusicApp());
+  runApp(const JalraApp());
 }

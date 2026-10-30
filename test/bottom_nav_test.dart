@@ -11,6 +11,13 @@ import 'package:wavemusic_premium/data/services/download_service.dart';
 
 void main() {
   testWidgets('Bottom navigation bar renders solid high-visibility items and changes tab on tap', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(400, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
     final musicRepo = MusicRepository(db: AppDatabase.instance);
     final audioService = AudioPlayerService(repository: musicRepo);
     final downloadService = DownloadService(repository: musicRepo);

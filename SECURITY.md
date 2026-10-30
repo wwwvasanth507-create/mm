@@ -8,7 +8,7 @@
 
 ## Reporting a Vulnerability
 
-The WaveMusic team takes security seriously. If you discover a security vulnerability or sensitive information exposure within this repository, please do not disclose it publicly.
+The Jalra team takes security seriously. If you discover a security vulnerability or sensitive information exposure within this repository, please do not disclose it publicly.
 
 Instead, please report the vulnerability by:
 1. Opening a private security advisory through the GitHub repository's **Security** tab, or

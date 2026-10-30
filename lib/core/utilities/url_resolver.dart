@@ -82,3 +82,6 @@ class AppUrls {
     return null;
   }
 }
+
+/// Backwards compatibility alias
+typedef UrlResolver = AppUrls;

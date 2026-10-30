@@ -1,8 +1,6 @@
-name: Build Android APK
+name: Build Android APK (Manual)
 
 on:
-  push:
-    branches: [ main, master, feature/native-android-audio-and-catalogue ]
   workflow_dispatch:
 
 permissions:

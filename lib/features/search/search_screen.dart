@@ -94,9 +94,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1280),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
             // Search Input Header
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -213,7 +216,9 @@ class _SearchScreenState extends State<SearchScreen> {
           ],
         ),
       ),
-    );
+    ),
+  ),
+);
   }
 
   Widget _buildSuggestions(AudioPlayerService player) {

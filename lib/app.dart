@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'core/cache/cache_config.dart';
 import 'core/constants/app_colors.dart';
 import 'core/theme/app_theme.dart';
@@ -15,11 +16,13 @@ import 'features/home/home_screen.dart';
 import 'features/library/library_screen.dart';
 import 'features/profile/profile_screen.dart';
 import 'features/search/search_screen.dart';
+import 'shared/widgets/desktop_player_bar.dart';
+import 'shared/widgets/desktop_sidebar.dart';
 import 'shared/widgets/in_app_update_sheet.dart';
 import 'shared/widgets/mini_player.dart';
 
-class WaveMusicApp extends StatelessWidget {
-  const WaveMusicApp({super.key});
+class JalraApp extends StatelessWidget {
+  const JalraApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +52,7 @@ class WaveMusicApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Jalra',
+        title: 'Jalra 🎵 - High Quality Tamil Music Streaming',
         theme: AppTheme.darkTheme,
         debugShowCheckedModeBanner: false,
         home: const MainNavigationScreen(),
@@ -57,6 +60,9 @@ class WaveMusicApp extends StatelessWidget {
     );
   }
 }
+
+/// Backwards compatibility alias for tests and existing references
+typedef WaveMusicApp = JalraApp;
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -68,6 +74,7 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> with WidgetsBindingObserver {
   int _currentIndex = 0;
   bool _notificationDenied = false;
+  bool _mobileWebBannerDismissed = false;
 
   @override
   void initState() {
@@ -135,8 +142,129 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
     ProfileScreen(),
   ];
 
+  Widget _buildMobileWebApkBanner() {
+    if (_mobileWebBannerDismissed) return const SizedBox.shrink();
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFF101923),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.cuteMint.withOpacity(0.35)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.4),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: AppColors.cuteMint.withOpacity(0.18),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(Icons.android_rounded, color: AppColors.cuteMint, size: 18),
+          ),
+          const SizedBox(width: 10),
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Get Jalra Android App',
+                  style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '24/7 background audio & offline downloads',
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 10),
+                ),
+              ],
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.cuteMint,
+              foregroundColor: const Color(0xFF070B0E),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            onPressed: () {
+              launchUrl(
+                Uri.parse(AppUpdateService.permanentApkUrl),
+                mode: LaunchMode.externalApplication,
+              );
+            },
+            child: const Text('APK', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+          ),
+          const SizedBox(width: 4),
+          GestureDetector(
+            onTap: () => setState(() => _mobileWebBannerDismissed = true),
+            child: const Padding(
+              padding: EdgeInsets.all(4),
+              child: Icon(Icons.close_rounded, color: Colors.white54, size: 16),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth >= 800;
+
+    // Desktop & PC Wide Layout
+    if (isDesktop) {
+      return Scaffold(
+        body: Column(
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  DesktopSidebar(
+                    selectedIndex: _currentIndex,
+                    onDestinationSelected: (idx) {
+                      setState(() {
+                        _currentIndex = idx;
+                      });
+                    },
+                  ),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        IndexedStack(
+                          index: _currentIndex,
+                          children: _screens,
+                        ),
+                        // In-app live update banner if any
+                        Positioned(
+                          top: 16,
+                          left: 24,
+                          right: 24,
+                          child: const InAppUpdateBanner(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const DesktopPlayerBar(),
+          ],
+        ),
+      );
+    }
+
+    // Mobile & Phone Layout
     return PopScope(
       canPop: _currentIndex == 0,
       onPopInvokedWithResult: (didPop, _) {
@@ -157,10 +285,19 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
               ),
             ),
 
+            // Web APK direct download banner on mobile web
+            if (kIsWeb)
+              Positioned(
+                top: MediaQuery.of(context).padding.top + 6,
+                left: 12,
+                right: 12,
+                child: _buildMobileWebApkBanner(),
+              ),
+
             // Notification permission banner if disabled on Android
             if (_notificationDenied)
               Positioned(
-                top: MediaQuery.of(context).padding.top + 8,
+                top: MediaQuery.of(context).padding.top + (kIsWeb ? 54 : 8),
                 left: 16,
                 right: 16,
                 child: Container(

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -19,6 +20,7 @@ class MusicRepository extends ChangeNotifier {
   List<Song> _recentSongs = [];
   List<Playlist> _playlists = [];
   final Map<String, List<String>> _webPlaylistTrackIds = {};
+  Timer? _periodicSyncTimer;
   bool _isLoading = false;
   String? _error;
 
@@ -50,8 +52,10 @@ class MusicRepository extends ChangeNotifier {
       await _loadWebCatalogue();
     }
 
+    startPeriodicSync();
+
     if (kIsWeb) {
-      Future.delayed(const Duration(seconds: 3), () {
+      Future.delayed(const Duration(seconds: 2), () {
         syncWithRemoteCatalogue().catchError((e) {
           debugPrint('[MusicRepository] Background remote sync notice: $e');
         });
@@ -87,7 +91,17 @@ class MusicRepository extends ChangeNotifier {
     });
   }
 
-  /// Explicitly sync with remote repository (e.g. on pull-to-refresh)
+  /// Live periodic background sync every 5 minutes so web & app have fresh songs automatically
+  void startPeriodicSync({Duration interval = const Duration(minutes: 5)}) {
+    _periodicSyncTimer?.cancel();
+    _periodicSyncTimer = Timer.periodic(interval, (_) {
+      syncWithRemoteCatalogue().catchError((e) {
+        debugPrint('[MusicRepository] Periodic auto-sync notice: $e');
+      });
+    });
+  }
+
+  /// Explicitly sync with remote repository (e.g. on pull-to-refresh or live update)
   Future<void> syncWithRemoteCatalogue() async {
     if (kIsWeb) {
       final remoteSongs = await _syncService.fetchRemoteCatalogue();
@@ -95,7 +109,35 @@ class MusicRepository extends ChangeNotifier {
         _songs = remoteSongs;
         _shuffledSongs = List<Song>.from(_songs)..shuffle(Random());
         _favoriteSongs = _songs.where((s) => _favoriteIds.contains(s.id)).toList();
+
+        final rawPlaylists = _syncService.lastFetchedPlaylists;
+        if (rawPlaylists.isNotEmpty) {
+          final List<Playlist> playlists = [];
+          _webPlaylistTrackIds.clear();
+          for (final p in rawPlaylists) {
+            final id = p['id']?.toString() ?? '';
+            final name = (p['name'] ?? p['title'] ?? 'Playlist').toString();
+            final desc = p['description']?.toString();
+            final coverUrl = (p['thumbnail_url'] ?? p['coverUrl'])?.toString();
+            final trackIds = (p['trackIds'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [];
+
+            _webPlaylistTrackIds[id] = trackIds;
+            final playlistSongs = _songs.where((s) => trackIds.contains(s.id)).toList();
+
+            playlists.add(Playlist(
+              id: id,
+              name: name,
+              description: desc,
+              thumbnailUrl: coverUrl ?? (playlistSongs.isNotEmpty ? playlistSongs.first.thumbnailUrl : null),
+              createdAt: DateTime.now(),
+              songCount: playlistSongs.length,
+            ));
+          }
+          _playlists = playlists;
+        }
+
         notifyListeners();
+        debugPrint('[MusicRepository] Web synced: ${_songs.length} songs & ${_playlists.length} playlists');
       }
       return;
     }
@@ -103,6 +145,12 @@ class MusicRepository extends ChangeNotifier {
     await _db.removeTempTestSongs();
     await _syncService.fetchRemoteCatalogue();
     await loadCatalogue();
+  }
+
+  @override
+  void dispose() {
+    _periodicSyncTimer?.cancel();
+    super.dispose();
   }
 
   /// Web catalogue loader (reads bundled assets/data/music.json directly without SQLite)

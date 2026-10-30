@@ -31,10 +31,13 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: RefreshIndicator(
-          color: AppColors.primary,
-          onRefresh: () => repository.syncWithRemoteCatalogue(),
-          child: CustomScrollView(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1280),
+            child: RefreshIndicator(
+              color: AppColors.primary,
+              onRefresh: () => repository.syncWithRemoteCatalogue(),
+              child: CustomScrollView(
             cacheExtent: 300.0,
             physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             slivers: [
@@ -115,9 +118,12 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text(
-                            'Pure lossless sound & offline vibes',
-                            style: AppTypography.caption.copyWith(color: AppColors.textSecondary),
+                          Expanded(
+                            child: Text(
+                              'Pure lossless sound & offline vibes',
+                              style: AppTypography.caption.copyWith(color: AppColors.textSecondary),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),
@@ -487,7 +493,9 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),
+  ),
+);
   }
 
   Widget _buildQuickCard({

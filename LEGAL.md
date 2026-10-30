@@ -1,11 +1,11 @@
 # Legal Disclaimer, Terms of Use & DMCA Policy ⚖️
 
-This document outlines the legal principles, terms of service compliance, and copyright policies governing the **WaveMusic** repository and application.
+This document outlines the legal principles, terms of service compliance, and copyright policies governing the **Jalra** repository and application.
 
 ---
 
 ## 1. Educational & Non-Commercial Demonstration Purpose
-WaveMusic is an open-source, non-commercial software application developed strictly for educational, research, and technical demonstration purposes. Its objective is to demonstrate modern web audio engineering, responsive user interface architecture (React 19, TypeScript, Tailwind CSS, Vite), Progressive Web App (PWA) development, and Capacitor mobile integration.
+Jalra is an open-source, non-commercial software application developed strictly for educational, research, and technical demonstration purposes. Its objective is to demonstrate modern cross-platform audio engineering, responsive Flutter web architecture, Progressive Web App (PWA) development, and Android audio integration.
 
 This project does not monetize, sell, license, or profit from any third-party media or intellectual property.
 

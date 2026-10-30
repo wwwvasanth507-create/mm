@@ -39,9 +39,12 @@ class _LibraryScreenState extends State<LibraryScreen> with SingleTickerProvider
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1280),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
             // Header with Remote Sync Action
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -137,7 +140,9 @@ class _LibraryScreenState extends State<LibraryScreen> with SingleTickerProvider
           ],
         ),
       ),
-    );
+    ),
+  ),
+);
   }
 }
 

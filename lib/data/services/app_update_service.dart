@@ -63,6 +63,10 @@ class AppUpdateService extends ChangeNotifier {
   static const String defaultVersionUrl =
       'https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/app/version.json';
 
+  /// Permanent direct download link for Jalra Android APK
+  static const String permanentApkUrl =
+      'https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/app/Jalra.apk';
+
   /// Current installed app version (corresponds to pubspec.yaml version: 1.0.4+5)
   static const int currentVersionCode = 5;
   static const String currentVersionName = '1.0.4';

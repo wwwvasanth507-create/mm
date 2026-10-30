@@ -1,8 +1,8 @@
-# WaveMusic Premium 🎵
-> **Complete Native Android Music Streaming & Offline Player**
-> Built with Flutter & Dart | Package: `in.wavemusic.premium`
+# Jalra 🎵
+> **Studio Hi-Fi Tamil Music Streaming & Offline Player for Web & Android**
+> Web: [https://music.jalra.workers.dev](https://music.jalra.workers.dev) | Permanent Android APK: [https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/app/Jalra.apk](https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/app/Jalra.apk)
 
-WaveMusic Premium is a standalone, production-oriented native Android music streaming and offline player application featuring deep midnight aesthetics, neon coral accents, persistent SQLite storage, background playback with media notification controls, and offline audio downloads.
+Jalra is a standalone, production-oriented music streaming platform available as a responsive web app (mobile + desktop) and native Android app featuring cute & modern aesthetic styling, 400+ lossless Tamil tracks, real-time GitHub catalogue sync, Dolby Atmos sound engine, and offline downloads.
 
 ---
 

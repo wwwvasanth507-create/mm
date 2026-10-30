@@ -7,12 +7,15 @@ import '../models/song_model.dart';
 
 class CatalogueSyncService {
   static const List<String> defaultRemoteUrls = [
-    'https://raw.githubusercontent.com/wwwvasanth507-create/mm/feature/native-android-audio-and-catalogue/src/data/music.json',
+    'https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/assets/data/music.json',
     'https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/src/data/music.json',
   ];
 
   final AppDatabase _db;
   final Dio _dio;
+  List<Map<String, dynamic>> _lastFetchedPlaylists = [];
+
+  List<Map<String, dynamic>> get lastFetchedPlaylists => _lastFetchedPlaylists;
 
   CatalogueSyncService({AppDatabase? db, Dio? dio})
       : _db = db ?? AppDatabase.instance,
@@ -73,6 +76,7 @@ class CatalogueSyncService {
           }
 
           final playlists = parsePlaylistsFromJson(data);
+          _lastFetchedPlaylists = playlists;
           if (!kIsWeb && playlists.isNotEmpty) {
             await _db.upsertPlaylistsWithTrackIds(playlists);
             debugPrint('[CatalogueSyncService] Synced ${playlists.length} playlists from $candidateUrl');
