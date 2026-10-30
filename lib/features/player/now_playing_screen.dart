@@ -21,7 +21,11 @@ import '../playlists/widgets/add_to_playlist_dialog.dart';
 
 class NowPlayingScreen extends StatefulWidget {
   final bool initialVideoMode;
-  const NowPlayingScreen({super.key, this.initialVideoMode = false});
+
+  const NowPlayingScreen({
+    super.key,
+    this.initialVideoMode = false,
+  });
 
   @override
   State<NowPlayingScreen> createState() => _NowPlayingScreenState();
@@ -37,7 +41,12 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
   String? _loadedVideoUrl;
   String? _lastSongId;
   bool _hasHandledVideoCompletion = false;
+  bool _userPaused = false;
+  bool _hasHandledScreenExit = false;
   int _videoSessionId = 0;
+
+  // Cached AudioPlayerService to avoid deactivated context lookup in dispose()
+  late AudioPlayerService _audioPlayerService;
 
   // Audio Real-time Position ValueNotifier to isolate slider rebuilds
   final ValueNotifier<Duration> _positionNotifier = ValueNotifier<Duration>(Duration.zero);
@@ -50,19 +59,26 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
   @override
   void initState() {
     super.initState();
+    _isVideoMode = widget.initialVideoMode;
     WidgetsBinding.instance.addObserver(this);
     if (widget.initialVideoMode) {
-      final playerService = Provider.of<AudioPlayerService>(context, listen: false);
-      if (playerService.currentSong?.hasVideo == true) {
-        _isVideoMode = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final playerService = context.read<AudioPlayerService>();
         playerService.setVideoMode(true);
-      }
+        final song = playerService.currentSong;
+        if (song != null && song.hasVideo && song.videoUrl != null) {
+          _lastSongId = song.id;
+          _initVideo(song.videoUrl!, startPosition: playerService.currentPosition);
+        }
+      });
     }
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _audioPlayerService = Provider.of<AudioPlayerService>(context, listen: false);
     _subscribePosition();
   }
 
@@ -71,20 +87,19 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
     if (state == AppLifecycleState.inactive ||
         state == AppLifecycleState.paused ||
         state == AppLifecycleState.hidden) {
-      // Screen turned off or user exited/backgrounded app during video
+      // Screen turned off, power button pressed, or app minimized/backgrounded
       if (_isVideoMode && _videoController != null && _videoController!.value.isInitialized) {
-        if (_videoController!.value.isPlaying) {
+        if (!_userPaused) {
           debugPrint('[NowPlaying] Screen off or app backgrounded: seamlessly continuing playback via background audio');
-          _switchToAudio(preservePosition: true);
+          _switchToAudio(preservePosition: true, forcePlay: true);
         }
       }
     }
   }
 
   void _subscribePosition() {
-    final playerService = Provider.of<AudioPlayerService>(context, listen: false);
     _positionSubscription?.cancel();
-    _positionSubscription = playerService.positionStream.listen((pos) {
+    _positionSubscription = _audioPlayerService.positionStream.listen((pos) {
       if (!_isVideoMode && _dragPositionSeconds == null) {
         _positionNotifier.value = pos;
       }
@@ -97,68 +112,67 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
     _positionSubscription?.cancel();
     _positionNotifier.dispose();
     ScreenKeeper.setKeepScreenOn(false);
-    try {
-      context.read<AudioPlayerService>().setVideoMode(false);
-    } catch (_) {}
-    _cleanupVideoOnExit();
+    _handleScreenExit();
     super.dispose();
   }
 
-  void _cleanupVideoOnExit() {
+  void _stopAndDisposeVideoController() {
+    if (_videoController != null) {
+      _videoController!.removeListener(_onVideoControllerTick);
+      final old = _videoController!;
+      _videoController = null;
+      _loadedVideoUrl = null;
+      try {
+        old.pause();
+        old.dispose();
+      } catch (_) {}
+    }
+  }
+
+  void _handleScreenExit() {
+    if (_hasHandledScreenExit) return;
+    _hasHandledScreenExit = true;
+
     ScreenKeeper.setKeepScreenOn(false);
-    final controller = _videoController;
-    _videoController = null;
-    if (controller != null) {
-      if (_isVideoMode && mounted) {
-        final vPos = controller.value.position;
-        final wasPlaying = controller.value.isPlaying;
-        try {
-          final playerService = context.read<AudioPlayerService>();
-          playerService.setVideoMode(false);
-          playerService.seek(vPos);
-          if (wasPlaying) {
-            playerService.play();
-          }
-        } catch (_) {}
+
+    if (_isVideoMode) {
+      final vPos = _videoController?.value.position ?? Duration.zero;
+      final shouldPlay = !_userPaused;
+
+      _stopAndDisposeVideoController();
+      _isVideoMode = false;
+
+      _audioPlayerService.setVideoMode(false);
+      if (vPos > Duration.zero) {
+        _audioPlayerService.seek(vPos);
       }
-      controller.removeListener(_onVideoControllerTick);
-      controller.pause();
-      controller.dispose();
+      if (shouldPlay) {
+        _audioPlayerService.play();
+      }
     }
   }
 
   Future<void> _initVideo(String videoUrl, {Duration startPosition = Duration.zero}) async {
-    final sessionId = ++_videoSessionId;
-    final playerService = context.read<AudioPlayerService>();
-    playerService.setVideoMode(true);
-    playerService.pause();
+    final currentSession = ++_videoSessionId;
+
+    if (mounted) {
+      context.read<AudioPlayerService>().setVideoMode(true);
+    }
 
     if (_loadedVideoUrl == videoUrl && _videoController != null && _videoController!.value.isInitialized) {
       if (startPosition > Duration.zero) {
         await _videoController!.seekTo(startPosition);
       }
-      if (!_videoController!.value.isPlaying) {
-        await _videoController!.play();
-      }
+      await _videoController!.play();
       ScreenKeeper.setKeepScreenOn(true);
       if (mounted) setState(() {});
       return;
     }
 
-    // Immediately stop and dispose existing controller to free native player and eliminate overlapping audio
-    final oldController = _videoController;
-    _videoController = null;
-    if (oldController != null) {
-      oldController.removeListener(_onVideoControllerTick);
-      try {
-        await oldController.pause();
-        await oldController.dispose();
-      } catch (e) {
-        debugPrint('[NowPlaying] Error disposing old video controller: $e');
-      }
-    }
+    _stopAndDisposeVideoController();
 
-    _loadedVideoUrl = videoUrl;
+    if (currentSession != _videoSessionId) return;
+
     if (mounted) {
       setState(() {
         _isVideoBuffering = true;
@@ -168,22 +182,17 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
     try {
       final controller = VideoPlayerController.networkUrl(
         Uri.parse(videoUrl),
-        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: false),
       );
-
       await controller.initialize();
 
-      // If a newer video request was triggered or widget unmounted or mode changed during async init, discard this controller
-      if (!mounted || sessionId != _videoSessionId || !_isVideoMode) {
-        debugPrint('[NowPlaying] Discarding stale video controller for session $sessionId');
-        try {
-          await controller.pause();
-          await controller.dispose();
-        } catch (_) {}
+      if (!mounted || currentSession != _videoSessionId) {
+        await controller.dispose();
         return;
       }
 
       _videoController = controller;
+      _loadedVideoUrl = videoUrl;
       controller.addListener(_onVideoControllerTick);
 
       if (startPosition > Duration.zero) {
@@ -191,25 +200,22 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
       }
       await controller.setVolume(_isMuted ? 0.0 : _volume);
       await controller.play();
+      _userPaused = false;
       ScreenKeeper.setKeepScreenOn(true);
 
-      if (mounted) {
+      if (mounted && currentSession == _videoSessionId) {
         setState(() {
           _isVideoBuffering = false;
         });
         _preWarmNextVideo();
       }
     } catch (e) {
+      if (currentSession != _videoSessionId) return;
       debugPrint('[NowPlaying] Failed to initialize video: $e');
-      if (sessionId != _videoSessionId) return;
       ScreenKeeper.setKeepScreenOn(false);
+      _stopAndDisposeVideoController();
       if (mounted) {
-        setState(() {
-          _isVideoMode = false;
-          _isVideoBuffering = false;
-        });
-        playerService.setVideoMode(false);
-        playerService.play();
+        _switchToAudio(preservePosition: false);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Video could not be loaded. Playing high-quality audio.'),
@@ -268,15 +274,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
     if (value.duration > Duration.zero && value.position >= value.duration) {
       if (!_hasHandledVideoCompletion) {
         _hasHandledVideoCompletion = true;
-        // Pause current video immediately so it doesn't continue ticking or playing
-        _videoController?.pause();
+        _stopAndDisposeVideoController();
         _onNextTrack();
       }
     } else {
-      // Only reset completion flag when track is actively playing before the end
-      if (_hasHandledVideoCompletion &&
-          value.duration > const Duration(seconds: 1) &&
-          value.position < value.duration - const Duration(seconds: 1)) {
+      if (_hasHandledVideoCompletion && value.position < value.duration) {
         _hasHandledVideoCompletion = false;
       }
       if (_dragPositionSeconds == null) {
@@ -289,15 +291,18 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
     final playerService = context.read<AudioPlayerService>();
     if (playerService.repeatMode == AppRepeatMode.one) {
       if (_isVideoMode && _videoController != null) {
+        _hasHandledVideoCompletion = false;
         _videoController!.seekTo(Duration.zero);
         _videoController!.play();
-        _hasHandledVideoCompletion = false;
       } else {
         playerService.seek(Duration.zero);
         playerService.play();
       }
       return;
     }
+
+    _stopAndDisposeVideoController();
+    _hasHandledVideoCompletion = false;
 
     final nextIndex = playerService.currentIndex + 1;
     final queue = playerService.queue;
@@ -309,25 +314,25 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
     }
 
     if (nextSong == null) {
-      if (_isVideoMode && _videoController != null) {
-        _videoController!.pause();
-        ScreenKeeper.setKeepScreenOn(false);
-      }
+      ScreenKeeper.setKeepScreenOn(false);
       return;
     }
 
+    _lastSongId = nextSong.id;
+
     if (_isVideoMode) {
-      if (nextSong.hasVideo) {
-        // Next song has video: maintain video mode and switch to next track without auto-playing background audio
-        // The track change is detected by build() which calls _initVideo exactly once
+      if (nextSong.hasVideo && nextSong.videoUrl != null) {
         playerService.next(autoPlay: false);
+        _initVideo(nextSong.videoUrl!, startPosition: Duration.zero);
       } else {
-        // Next song does not have video: automatically switch to audio mode
-        _switchToAudio(preservePosition: false);
+        _isVideoMode = false;
+        ScreenKeeper.setKeepScreenOn(false);
+        playerService.setVideoMode(false);
         playerService.next(autoPlay: true);
+        setState(() {});
       }
     } else {
-      playerService.next(autoPlay: true);
+      playerService.next();
     }
   }
 
@@ -339,6 +344,9 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
       return;
     }
 
+    _stopAndDisposeVideoController();
+    _hasHandledVideoCompletion = false;
+
     final prevIndex = playerService.currentIndex - 1;
     final queue = playerService.queue;
     Song? prevSong;
@@ -349,66 +357,72 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
     }
 
     if (prevSong == null) {
-      if (_isVideoMode && _videoController != null) {
-        _videoController!.seekTo(Duration.zero);
-      } else {
-        playerService.seek(Duration.zero);
-      }
       return;
     }
 
+    _lastSongId = prevSong.id;
+
     if (_isVideoMode) {
-      if (prevSong.hasVideo) {
+      if (prevSong.hasVideo && prevSong.videoUrl != null) {
         playerService.previous(autoPlay: false);
+        _initVideo(prevSong.videoUrl!, startPosition: Duration.zero);
       } else {
-        _switchToAudio(preservePosition: false);
+        _isVideoMode = false;
+        ScreenKeeper.setKeepScreenOn(false);
+        playerService.setVideoMode(false);
         playerService.previous(autoPlay: true);
+        setState(() {});
       }
     } else {
-      playerService.previous(autoPlay: true);
+      playerService.previous();
     }
   }
 
   void _switchToVideo(Song song) {
-    if (!song.hasVideo) return;
+    if (!song.hasVideo || song.videoUrl == null) return;
     final playerService = context.read<AudioPlayerService>();
     final curPos = playerService.currentPosition;
     playerService.setVideoMode(true);
-    playerService.pause();
 
     setState(() {
       _isVideoMode = true;
       _hasHandledVideoCompletion = false;
     });
 
+    _lastSongId = song.id;
     _initVideo(song.videoUrl!, startPosition: curPos);
   }
 
-  void _switchToAudio({bool preservePosition = true}) {
+  void _switchToAudio({bool preservePosition = true, bool forcePlay = false}) {
     Duration audioPos = Duration.zero;
-    bool wasPlaying = true;
+    bool shouldPlay = forcePlay || !_userPaused;
 
     if (_videoController != null) {
       if (preservePosition && _videoController!.value.isInitialized) {
         audioPos = _videoController!.value.position;
-        wasPlaying = _videoController!.value.isPlaying;
+        if (!forcePlay) {
+          shouldPlay = _videoController!.value.isPlaying || !_userPaused;
+        }
       }
-      _videoController!.pause();
+      _stopAndDisposeVideoController();
     }
 
     ScreenKeeper.setKeepScreenOn(false);
 
-    setState(() {
+    if (mounted) {
+      setState(() {
+        _isVideoMode = false;
+      });
+    } else {
       _isVideoMode = false;
-    });
-
-    final playerService = context.read<AudioPlayerService>();
-    playerService.setVideoMode(false);
-    if (preservePosition) {
-      playerService.seek(audioPos);
     }
-    if (wasPlaying) {
-      playerService.play();
+
+    _audioPlayerService.setVideoMode(false);
+    if (preservePosition && audioPos > Duration.zero) {
+      _audioPlayerService.seek(audioPos);
+    }
+    if (shouldPlay) {
+      _audioPlayerService.play();
     }
   }
 
@@ -457,18 +471,19 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
       _lastSongId = song.id;
       _hasHandledVideoCompletion = false;
       if (_isVideoMode) {
-        if (song.hasVideo) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) {
-              playerService.setVideoMode(true);
-              playerService.pause();
-              _initVideo(song.videoUrl!, startPosition: Duration.zero);
-            }
-          });
+        if (song.hasVideo && song.videoUrl != null) {
+          if (_loadedVideoUrl != song.videoUrl) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted && _isVideoMode) {
+                playerService.pause();
+                _initVideo(song.videoUrl!, startPosition: Duration.zero);
+              }
+            });
+          }
         } else {
           // Song doesn't have video, fall back to audio automatically
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) {
+            if (mounted && _isVideoMode) {
               _switchToAudio(preservePosition: false);
             }
           });
@@ -493,7 +508,14 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
 
     final double maxSec = duration.inSeconds.toDouble() > 0 ? duration.inSeconds.toDouble() : 1.0;
 
-    return Scaffold(
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) {
+          _handleScreenExit();
+        }
+      },
+      child: Scaffold(
       backgroundColor: AppColors.background,
       body: Container(
         decoration: const BoxDecoration(
@@ -608,7 +630,8 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 
   // ==================== TOP BAR ====================
@@ -624,7 +647,10 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
         children: [
           IconButton(
             icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 30),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              _handleScreenExit();
+              Navigator.pop(context);
+            },
             visualDensity: VisualDensity.compact,
           ),
           Expanded(
@@ -924,36 +950,33 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
               aspectRatio: 16 / 9,
               child: Stack(
                 alignment: Alignment.center,
+                fit: StackFit.expand,
                 children: [
+                  _buildArtwork(song),
                   if (_videoController != null && _videoController!.value.isInitialized)
                     GestureDetector(
                       onTap: () {
-                        final playerService = context.read<AudioPlayerService>();
                         if (_videoController!.value.isPlaying) {
                           _videoController!.pause();
-                          playerService.pause();
+                          _userPaused = true;
+                          ScreenKeeper.setKeepScreenOn(false);
                         } else {
-                          playerService.setVideoMode(true);
-                          playerService.pause();
                           _videoController!.play();
+                          _userPaused = false;
+                          ScreenKeeper.setKeepScreenOn(true);
                         }
                         setState(() {});
                       },
                       child: VideoPlayer(_videoController!),
-                    )
-                  else
-                    const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                        strokeWidth: 2.8,
-                      ),
                     ),
-
-                  if (_isVideoBuffering)
-                    const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                        strokeWidth: 2.8,
+                  if (_videoController == null || !_videoController!.value.isInitialized || _isVideoBuffering)
+                    Container(
+                      color: Colors.black.withOpacity(0.45),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                          strokeWidth: 2.8,
+                        ),
                       ),
                     ),
                 ],
@@ -1083,12 +1106,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
               if (_isVideoMode && _videoController != null) {
                 if (_videoController!.value.isPlaying) {
                   _videoController!.pause();
-                  playerService.pause();
+                  _userPaused = true;
                   ScreenKeeper.setKeepScreenOn(false);
                 } else {
-                  playerService.setVideoMode(true);
-                  playerService.pause();
                   _videoController!.play();
+                  _userPaused = false;
                   ScreenKeeper.setKeepScreenOn(true);
                 }
                 setState(() {});
@@ -1101,14 +1123,10 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
               height: 66,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryDark],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                gradient: AppColors.cuteDockActive,
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primary.withOpacity(0.55),
+                    color: const Color(0xFF76E035).withOpacity(0.55),
                     blurRadius: 24,
                     offset: const Offset(0, 4),
                   ),

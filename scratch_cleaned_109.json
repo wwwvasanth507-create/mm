@@ -1,0 +1,983 @@
+[
+  {
+    "idx": 1,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Chal-Chakka-MassTamilan.dev.mp3",
+    "title": "Chal Chakka",
+    "album": "Gatta Kusthi",
+    "artist": "Justin Prabhakaran, Benny Dayal",
+    "year": 2022,
+    "duration": 190
+  },
+  {
+    "idx": 2,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Chittu-Kuruvi-MassTamilan.so.mp3",
+    "title": "Chittu Kuruvi",
+    "album": "Maaran",
+    "artist": "Dhanush",
+    "year": 2022,
+    "duration": 173
+  },
+  {
+    "idx": 3,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Chola-Chola-MassTamilan.dev.mp3",
+    "title": "Chola Chola",
+    "album": "Ponniyin Selvan Part-1 (PS1)",
+    "artist": "A.R. Rahman, Sathyaprakash, VM Mahalingam, Nakul Abhyankar",
+    "year": 2022,
+    "duration": 223
+  },
+  {
+    "idx": 4,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Devaralan-Aattam-MassTamilan.dev.mp3",
+    "title": "Devaralan Aattam",
+    "album": "Ponniyin Selvan Part-1 (PS1)",
+    "artist": "A.R. Rahman, Yogisekar",
+    "year": 2022,
+    "duration": 277
+  },
+  {
+    "idx": 5,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Dippam-Dappam-MassTamilan.so.mp3",
+    "title": "Dippam Dappam",
+    "album": "Kaathuvaakula Rendu Kaadhal",
+    "artist": "Anirudh Ravichander, Anthony Daasan",
+    "year": 2022,
+    "duration": 172
+  },
+  {
+    "idx": 6,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Enna-Kurai-MassTamilan.fm.mp3",
+    "title": "Enna Kurai",
+    "album": "Valimai",
+    "artist": "Yuvanshankar Raja,Nandini Srikar,Sriram Parthasarathy,Thamarai",
+    "year": 2022,
+    "duration": 157
+  },
+  {
+    "idx": 7,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Ennai-Vittu-(Yuvanshankar-Raja-Version)-MassTamilan.dev.mp3",
+    "title": "Ennai Vittu (Yuvanshankar Raja Version)",
+    "album": "Love Today",
+    "artist": "Yuvan Shankar Raja",
+    "year": 2022,
+    "duration": 175
+  },
+  {
+    "idx": 8,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Ennai-Vittu-MassTamilan.dev.mp3",
+    "title": "Ennai Vittu",
+    "album": "Love Today",
+    "artist": "Yuvan Shankar Raja, Sid Sriram",
+    "year": 2022,
+    "duration": 185
+  },
+  {
+    "idx": 9,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Etharkkum-Thunindhavan-MassTamilan.so.mp3",
+    "title": "Etharkkum Thunindhavan",
+    "album": "Etharkkum Thunindhavan",
+    "artist": "Mc Rude",
+    "year": 2022,
+    "duration": 98
+  },
+  {
+    "idx": 10,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Evanda-Enakku-Custody-MassTamilan.fm.mp3",
+    "title": "Evanda Enakku Custody",
+    "album": "Mahaan",
+    "artist": "Santhosh Narayanan",
+    "year": 2022,
+    "duration": 162
+  },
+  {
+    "idx": 11,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/He-Semmandha-Azhage-MassTamilan.dev.mp3",
+    "title": "He Semmandha Azhage",
+    "album": "Kantara",
+    "artist": "B. Ajaneesh Loknath, Haricharan, Chinmayi Sripada",
+    "year": 2022,
+    "duration": 215
+  },
+  {
+    "idx": 12,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Hey-Sita-Hey-Rama-MassTamilan.dev.mp3",
+    "title": "Hey Sita Hey Rama",
+    "album": "Sita Ramam",
+    "artist": "Vishal Chandrashekhar, S.P.B. Charan, Sinduri Vishal",
+    "year": 2022,
+    "duration": 197
+  },
+  {
+    "idx": 13,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Inky-Pinky-Ponky-MassTamilan.dev.mp3",
+    "title": "Inky Pinky Ponky",
+    "album": "Sardar",
+    "artist": "G.V. Prakash Kumar, Santosh Hariharan, Arivu",
+    "year": 2022,
+    "duration": 168
+  },
+  {
+    "idx": 14,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Jalabulajangu-MassTamilan.dev.mp3",
+    "title": "Jalabulajangu",
+    "album": "Don",
+    "artist": "Anirudh Ravichander, Rokesh",
+    "year": 2022,
+    "duration": 161
+  },
+  {
+    "idx": 15,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Jolly-O-Gymkhana-MassTamilan.so.mp3",
+    "title": "Jolly O Gymkhana",
+    "album": "Beast",
+    "artist": "Vijay, Anirudh Ravichander",
+    "year": 2022,
+    "duration": 176
+  },
+  {
+    "idx": 16,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Kaalangal-Thaandi-MassTamilan.dev.mp3",
+    "title": "Kaalangal Thaandi",
+    "album": "Sita Ramam",
+    "artist": "Vishal Chandrashekhar, Sinduri Vishal",
+    "year": 2022,
+    "duration": 124
+  },
+  {
+    "idx": 17,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Kaalathukkum-Nee-Venum-MassTamilan.dev.mp3",
+    "title": "Kaalathukkum Nee Venum",
+    "album": "Vendhu Thanindhathu Kaadu",
+    "artist": "A.R. Rahman",
+    "year": 2022,
+    "duration": 229
+  },
+  {
+    "idx": 18,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Kaathu-Vaakula-Rendu-MassTamilan.so.mp3",
+    "title": "Kaathu Vaakula Rendu",
+    "album": "Kaathuvaakula Rendu Kaadhal",
+    "artist": "Anirudh Ravichander, Santhosh Narayanan",
+    "year": 2022,
+    "duration": 194
+  },
+  {
+    "idx": 19,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Kanja-Poovu-Kannala-MassTamilan.dev.mp3",
+    "title": "Kanja Poovu Kannala",
+    "album": "Viruman",
+    "artist": "Yuvan Shankar Raja, Sid Sriram",
+    "year": 2022,
+    "duration": 195
+  },
+  {
+    "idx": 20,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Kanne-Kanmaniyae-MassTamilan.so.mp3",
+    "title": "Kanne Kanmaniyae",
+    "album": "Kaathuvaakula Rendu Kaadhal",
+    "artist": "Anirudh Ravichander",
+    "year": 2022,
+    "duration": 101
+  },
+  {
+    "idx": 21,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Kanneer-Sindha-MassTamilan.dev.mp3",
+    "title": "Kanneer Sindha",
+    "album": "Thiruchitrambalam",
+    "artist": "Vijay Yesudas, Dhanush",
+    "year": 2022,
+    "duration": 182
+  },
+  {
+    "idx": 22,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Kannoram-MassTamilan.dev-Naam%202%20-%20Kannoram%202022%20tamil.mp3",
+    "title": "Kannoram",
+    "album": "Naam 2 - Kannoram",
+    "artist": "Stephen Zechariah",
+    "year": 2022,
+    "duration": 260
+  },
+  {
+    "idx": 23,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Kannukkulle-MassTamilan.dev.mp3",
+    "title": "Kannukkulle",
+    "album": "Sita Ramam",
+    "artist": "Vishal Chandrashekhar, Haricharan, Sinduri Vishal",
+    "year": 2022,
+    "duration": 187
+  },
+  {
+    "idx": 24,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Koelae-MassTamilan.so.mp3",
+    "title": "Koelae",
+    "album": "RRR",
+    "artist": "Vishal Mishra, Benny Dayal, Sahithi Chaganti, Harika Narayan",
+    "year": 2022,
+    "duration": 212
+  },
+  {
+    "idx": 25,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Kombaa-Un-Kaadaa-MassTamilan.so.mp3",
+    "title": "Kombaa Un Kaadaa",
+    "album": "RRR",
+    "artist": "Prakruthi Reddy",
+    "year": 2022,
+    "duration": 228
+  },
+  {
+    "idx": 26,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Komuram-Beemano-MassTamilan.so.mp3",
+    "title": "Komuram Beemano",
+    "album": "RRR",
+    "artist": "Kaala Bhairava",
+    "year": 2022,
+    "duration": 195
+  },
+  {
+    "idx": 27,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Kurumugil-MassTamilan.dev.mp3",
+    "title": "Kurumugil",
+    "album": "Sita Ramam",
+    "artist": "Vishal Chandrashekhar, Sai Vignesh",
+    "year": 2022,
+    "duration": 170
+  },
+  {
+    "idx": 28,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Kurunchiragu-MassTamilan.dev.mp3",
+    "title": "Kurunchiragu",
+    "album": "Sita Ramam",
+    "artist": "Vishal Chandrashekhar, Aravind Annest",
+    "year": 2022,
+    "duration": 117
+  },
+  {
+    "idx": 29,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Life-of-Pazham-MassTamilan.dev.mp3",
+    "title": "Life of Pazham",
+    "album": "Thiruchitrambalam",
+    "artist": "Anirudh Ravichander, Vivek",
+    "year": 2022,
+    "duration": 185
+  },
+  {
+    "idx": 30,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Madura-Veeran-MassTamilan.dev.mp3",
+    "title": "Madura Veeran",
+    "album": "Viruman",
+    "artist": "Aditi Shankar, Yuvan Shankar Raja",
+    "year": 2022,
+    "duration": 186
+  },
+  {
+    "idx": 31,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Mallipoo-MassTamilan.dev.mp3",
+    "title": "Mallipoo",
+    "album": "Vendhu Thanindhathu Kaadu",
+    "artist": "Madhushree",
+    "year": 2022,
+    "duration": 216
+  },
+  {
+    "idx": 32,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Mamakutty-MassTamilan.dev.mp3",
+    "title": "Mamakutty",
+    "album": "Love Today",
+    "artist": "Pradeep Ranganathan, Yuvan Shankar Raja, Savitha Reddy, A.U. Navin Krubhakar",
+    "year": 2022,
+    "duration": 124
+  },
+  {
+    "idx": 33,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Manidhanin-Payanathil-MassTamilan.dev.mp3",
+    "title": "Manidhanin Payanathil",
+    "album": "Kantara",
+    "artist": "B. Ajaneesh Loknath, Venky DC",
+    "year": 2022,
+    "duration": 134
+  },
+  {
+    "idx": 34,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Marakkuma-Nenjam-MassTamilan.dev.mp3",
+    "title": "Marakkuma Nenjam",
+    "album": "Vendhu Thanindhathu Kaadu",
+    "artist": "A.R. Rahman",
+    "year": 2022,
+    "duration": 207
+  },
+  {
+    "idx": 35,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Maranthana-MassTamilan.dev.mp3",
+    "title": "Maranthana",
+    "album": "Gatta Kusthi",
+    "artist": "Justin Prabhakaran, Saindhavi",
+    "year": 2022,
+    "duration": 194
+  },
+  {
+    "idx": 36,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Mayakkama-Kalakkama-MassTamilan.dev.mp3",
+    "title": "Mayakkama Kalakkama",
+    "album": "Thiruchitrambalam",
+    "artist": "Dhanush, Anirudh Ravichander",
+    "year": 2022,
+    "duration": 123
+  },
+  {
+    "idx": 37,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Medha-Medhappa-MassTamilan.dev.mp3",
+    "title": "Medha Medhappa",
+    "album": "Gatta Kusthi",
+    "artist": "Justin Prabhakaran, Rahul Sipligunj, Diwakar",
+    "year": 2022,
+    "duration": 177
+  },
+  {
+    "idx": 38,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Megham-Karukatha-MassTamilan.dev.mp3",
+    "title": "Megham Karukatha",
+    "album": "Thiruchitrambalam",
+    "artist": "Dhanush, Anirudh Ravichander",
+    "year": 2022,
+    "duration": 243
+  },
+  {
+    "idx": 39,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Mehabooba-MassTamilan.so.mp3",
+    "title": "Mehabooba",
+    "album": "KGF Chapter 2",
+    "artist": "Ananya Bhat",
+    "year": 2022,
+    "duration": 172
+  },
+  {
+    "idx": 40,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Mere-Jaan-MassTamilan.dev.mp3",
+    "title": "Mere Jaan",
+    "album": "Sardar",
+    "artist": "G.V. Prakash Kumar, Nakash Aziz",
+    "year": 2022,
+    "duration": 218
+  },
+  {
+    "idx": 41,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Mike-Tyson-MassTamilan.dev.mp3",
+    "title": "Mike Tyson",
+    "album": "Gatta Kusthi",
+    "artist": "Justin Prabhakaran, MC Vickey, Anthony Daasan",
+    "year": 2022,
+    "duration": 132
+  },
+  {
+    "idx": 42,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Missing-Me-MassTamilan.fm.mp3",
+    "title": "Missing Me",
+    "album": "Mahaan",
+    "artist": "Dhruv Vikram, Santhosh Narayanan",
+    "year": 2022,
+    "duration": 147
+  },
+  {
+    "idx": 43,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Mother-Song-MassTamilan.fm.mp3",
+    "title": "Mother Song",
+    "album": "Valimai",
+    "artist": "Yuvanshankar Raja,Sid Sriram,Vignesh ShivN",
+    "year": 2022,
+    "duration": 193
+  },
+  {
+    "idx": 44,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Mudhal-Naayagan-MassTamilan.dev.mp3",
+    "title": "Mudhal Naayagan",
+    "album": "Don",
+    "artist": "Anirudh Ravichander, Ananthakrrishnan",
+    "year": 2022,
+    "duration": 116
+  },
+  {
+    "idx": 45,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Muthu's-Journey-MassTamilan.dev.mp3",
+    "title": "Muthu's Journey",
+    "album": "Vendhu Thanindhathu Kaadu",
+    "artist": "A.R. Rahman",
+    "year": 2022,
+    "duration": 63
+  },
+  {
+    "idx": 46,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Naan-Naan-MassTamilan.fm.mp3",
+    "title": "Naan Naan",
+    "album": "Mahaan",
+    "artist": "Santhosh Narayanan",
+    "year": 2022,
+    "duration": 192
+  },
+  {
+    "idx": 47,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Naan-Pizhai-MassTamilan.so.mp3",
+    "title": "Naan Pizhai",
+    "album": "Kaathuvaakula Rendu Kaadhal",
+    "artist": "Anirudh Ravichander, Ravi G, Shashaa Tirupati",
+    "year": 2022,
+    "duration": 192
+  },
+  {
+    "idx": 48,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Naanga-Vera-Maari-MassTamilan.fm.mp3",
+    "title": "Naanga Vera Maari",
+    "album": "Valimai",
+    "artist": "Yuvanshankar Raja,Anurag Kulkarni",
+    "year": 2022,
+    "duration": 210
+  },
+  {
+    "idx": 49,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Naattu-Koothu-MassTamilan.so.mp3",
+    "title": "Naattu Koothu",
+    "album": "RRR",
+    "artist": "Rahul Sipligunj, Yazin Nizar",
+    "year": 2022,
+    "duration": 179
+  },
+  {
+    "idx": 50,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Natpu-MassTamilan.so.mp3",
+    "title": "Natpu",
+    "album": "RRR",
+    "artist": "Anirudh Ravichander",
+    "year": 2022,
+    "duration": 280
+  },
+  {
+    "idx": 51,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Once-Upon-a-Time-MassTamilan.so.mp3",
+    "title": "Once Upon a Time",
+    "album": "Vikram",
+    "artist": "Anirudh Ravichander",
+    "year": 2022,
+    "duration": 145
+  },
+  {
+    "idx": 52,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Otha-Thamarai-(Original-Soundtrack)-MassTamilan.dev.mp3",
+    "title": "Otha Thamarai (Original Soundtrack)",
+    "album": "Otha Thamarai (Indie)",
+    "artist": "Bala, Nixen, Sandy",
+    "year": 2022,
+    "duration": 181
+  },
+  {
+    "idx": 53,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Pacha-Elai-MassTamilan.dev.mp3",
+    "title": "Pacha Elai",
+    "album": "Love Today",
+    "artist": "Yuvan Shankar Raja, Mathichiyam Bala",
+    "year": 2022,
+    "duration": 177
+  },
+  {
+    "idx": 54,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Pathala-Pathala-MassTamilan.so.mp3",
+    "title": "Pathala Pathala",
+    "album": "Vikram",
+    "artist": "Anirudh Ravichander, Kamal Haasan",
+    "year": 2022,
+    "duration": 213
+  },
+  {
+    "idx": 55,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Piriyadhey-MassTamilan.dev.mp3",
+    "title": "Piriyadhey",
+    "album": "Sita Ramam",
+    "artist": "Vishal Chandrashekhar, Kapil Kapilan, Chinmayi Sripada",
+    "year": 2022,
+    "duration": 172
+  },
+  {
+    "idx": 56,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Polladha-Ulagam-MassTamilan.so.mp3",
+    "title": "Polladha Ulagam",
+    "album": "Maaran",
+    "artist": "Dhanush, Arivu",
+    "year": 2022,
+    "duration": 202
+  },
+  {
+    "idx": 57,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Pona-Povura-MassTamilan.fm.mp3",
+    "title": "Pona Povura",
+    "album": "Mahaan",
+    "artist": "Santhosh Narayanan, Gana Muthu, Asal Kolaar",
+    "year": 2022,
+    "duration": 150
+  },
+  {
+    "idx": 58,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Ponni-Nadhi-MassTamilan.dev.mp3",
+    "title": "Ponni Nadhi",
+    "album": "Ponniyin Selvan Part-1 (PS1)",
+    "artist": "A.R. Rahman, A.R. Reihana, Bamba Bakya",
+    "year": 2022,
+    "duration": 294
+  },
+  {
+    "idx": 59,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Porattam-MassTamilan.dev.mp3",
+    "title": "Porattam",
+    "album": "Vendhu Thanindhathu Kaadu",
+    "artist": "A.R. Rahman",
+    "year": 2022,
+    "duration": 97
+  },
+  {
+    "idx": 60,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Porkanda-Singam-MassTamilan.so.mp3",
+    "title": "Porkanda Singam",
+    "album": "Vikram",
+    "artist": "Anirudh Ravichander, Ravi G",
+    "year": 2022,
+    "duration": 200
+  },
+  {
+    "idx": 61,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Private-Party-MassTamilan.dev.mp3",
+    "title": "Private Party",
+    "album": "Don",
+    "artist": "Anirudh Ravichander, Jonita Gandhi",
+    "year": 2022,
+    "duration": 184
+  },
+  {
+    "idx": 62,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Raamam-Raaghavam-MassTamilan.so.mp3",
+    "title": "Raamam Raaghavam",
+    "album": "RRR",
+    "artist": "Vijay Prakash, Chandana Bala Kalyan, Charu Hariharan",
+    "year": 2022,
+    "duration": 184
+  },
+  {
+    "idx": 63,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Ratchasa-Maamaney-MassTamilan.dev.mp3",
+    "title": "Ratchasa Maamaney",
+    "album": "Ponniyin Selvan Part-1 (PS1)",
+    "artist": "A.R. Rahman, Shreya Ghoshal, Palakad Sreeram, Mahesh Vinayakram",
+    "year": 2022,
+    "duration": 293
+  },
+  {
+    "idx": 64,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Rendu-Kaadhal-MassTamilan.so.mp3",
+    "title": "Rendu Kaadhal",
+    "album": "Kaathuvaakula Rendu Kaadhal",
+    "artist": "Anirudh Ravichander, Shakthisree Gopalan, Aishwarya Suresh Bindra",
+    "year": 2022,
+    "duration": 205
+  },
+  {
+    "idx": 65,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Rich-Rich-MassTamilan.fm.mp3",
+    "title": "Rich Rich",
+    "album": "Mahaan",
+    "artist": "Santhosh Narayanan, Durai, OfRO",
+    "year": 2022,
+    "duration": 147
+  },
+  {
+    "idx": 66,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Saachitale-MassTamilan.dev.mp3",
+    "title": "Saachitale",
+    "album": "Love Today",
+    "artist": "Yuvan Shankar Raja",
+    "year": 2022,
+    "duration": 191
+  },
+  {
+    "idx": 67,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Sanda-Veerachi-MassTamilan.dev.mp3",
+    "title": "Sanda Veerachi",
+    "album": "Gatta Kusthi",
+    "artist": "Justin Prabhakaran, Kidakuzhi Mariyammal",
+    "year": 2022,
+    "duration": 159
+  },
+  {
+    "idx": 68,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Sita-Ramam-Theme-(Tamil)-MassTamilan.dev.mp3",
+    "title": "Sita Ramam Theme (Tamil)",
+    "album": "Sita Ramam",
+    "artist": "Vishal Chandrashekhar",
+    "year": 2022,
+    "duration": 164
+  },
+  {
+    "idx": 69,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Siva-Sivayam-MassTamilan.dev-Bakasuran%202022%20tamil.mp3",
+    "title": "Siva Sivayam",
+    "album": "Bakasuran",
+    "artist": "C.S.Sam",
+    "year": 2022,
+    "duration": 234
+  },
+  {
+    "idx": 70,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Sol-MassTamilan.dev.mp3",
+    "title": "Sol",
+    "album": "Ponniyin Selvan Part-1 (PS1)",
+    "artist": "A.R. Rahman, Rakshita Suresh",
+    "year": 2022,
+    "duration": 138
+  },
+  {
+    "idx": 71,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Soorayaatam-MassTamilan.fm.mp3",
+    "title": "Soorayaatam",
+    "album": "Mahaan",
+    "artist": "Santhosh Narayanan, V.M. Mahalingam, Muthamil",
+    "year": 2022,
+    "duration": 242
+  },
+  {
+    "idx": 72,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Soraka-Poove-MassTamilan.dev.mp3",
+    "title": "Soraka Poove",
+    "album": "Sardar",
+    "artist": "G.V. Prakash Kumar, Adithya RK, Bhadra Rajin",
+    "year": 2022,
+    "duration": 185
+  },
+  {
+    "idx": 73,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Sulthana-MassTamilan.so.mp3",
+    "title": "Sulthana",
+    "album": "KGF Chapter 2",
+    "artist": "Deepak Blue, Govind Prasad, Yogisekar, Mohan Krishna, Santhosh, Sachin Basrur, Ravi Basrur, Puneeth Rudranag, Manish Dinakar, VAISH",
+    "year": 2022,
+    "duration": 186
+  },
+  {
+    "idx": 74,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Summa-Surrunu-MassTamilan.so.mp3",
+    "title": "Summa Surrunu",
+    "album": "Etharkkum Thunindhavan",
+    "artist": "Armaan Malik, Nikhita Gandhi, D. Imman",
+    "year": 2022,
+    "duration": 181
+  },
+  {
+    "idx": 75,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Thaai-Kelavi-MassTamilan.dev.mp3",
+    "title": "Thaai Kelavi",
+    "album": "Thiruchitrambalam",
+    "artist": "Dhanush, Anirudh Ravichander",
+    "year": 2022,
+    "duration": 221
+  },
+  {
+    "idx": 76,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Tharangini-MassTamilan.dev-%20Cobra%202022%20tamil.mp3",
+    "title": "Tharangini",
+    "album": "Cobra",
+    "artist": "A.R. Rahman, Sarthak Kalyani",
+    "year": 2022,
+    "duration": 172
+  },
+  {
+    "idx": 77,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/The-Intense-of-Fire-(Theme)-MassTamilan.fm.mp3",
+    "title": "The Intense of Fire (Theme)",
+    "album": "Valimai",
+    "artist": "Yuvanshankar Raja,Arivu",
+    "year": 2022,
+    "duration": 131
+  },
+  {
+    "idx": 78,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/The-Monster-Song-MassTamilan.so.mp3",
+    "title": "The Monster Song",
+    "album": "KGF Chapter 2",
+    "artist": "Adithi Sagar",
+    "year": 2022,
+    "duration": 128
+  },
+  {
+    "idx": 79,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Thenmozhi-MassTamilan.dev.mp3",
+    "title": "Thenmozhi",
+    "album": "Thiruchitrambalam",
+    "artist": "Santhosh Narayanan, Dhanush",
+    "year": 2022,
+    "duration": 152
+  },
+  {
+    "idx": 80,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Thoodha-MassTamilan.dev.mp3",
+    "title": "Thoodha",
+    "album": "Sita Ramam",
+    "artist": "Vishal Chandrashekhar, Hariharan, K. S. Chithra, Sinduri Vishal",
+    "year": 2022,
+    "duration": 189
+  },
+  {
+    "idx": 81,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Thumbi-Thullal-MassTamilan.dev-%20Cobra%202022%20tamil.mp3",
+    "title": "Thumbi Thullal",
+    "album": "Cobra",
+    "artist": "A.R. Rahman, Nakul Abhyankar, Shreya Ghoshal",
+    "year": 2022,
+    "duration": 231
+  },
+  {
+    "idx": 82,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Toofan-MassTamilan.so.mp3",
+    "title": "Toofan",
+    "album": "KGF Chapter 2",
+    "artist": "Deepak Blue, Govind Prasad, Yogisekar, Mohan Krishna, Santhosh, Sachin Basrur, Ravi Basrur, Puneeth Rudranag, VAISH",
+    "year": 2022,
+    "duration": 172
+  },
+  {
+    "idx": 83,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Two-Two-Two-MassTamilan.so.mp3",
+    "title": "Two Two Two",
+    "album": "Kaathuvaakula Rendu Kaadhal",
+    "artist": "Anirudh Ravichander, Sunidhi Chauhan, Sanjana Kalmanje",
+    "year": 2022,
+    "duration": 148
+  },
+  {
+    "idx": 84,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Ullam-Urugudhaiya-MassTamilan.so.mp3",
+    "title": "Ullam Urugudhaiya",
+    "album": "Etharkkum Thunindhavan",
+    "artist": "Pradeep Kumar, Vandana Srinivasan, Brindha Manickavasakan, D. Imman",
+    "year": 2022,
+    "duration": 188
+  },
+  {
+    "idx": 85,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Umm-Song-MassTamilan.fm.mp3",
+    "title": "Umm Song",
+    "album": "Mahaan",
+    "artist": "Santhosh Narayanan, Aditya Ravindran",
+    "year": 2022,
+    "duration": 142
+  },
+  {
+    "idx": 86,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Unna-Nenachadhum-MassTamilan.dev.mp3",
+    "title": "Unna Nenachadhum",
+    "album": "Vendhu Thanindhathu Kaadu",
+    "artist": "Shreya Ghoshal",
+    "year": 2022,
+    "duration": 191
+  },
+  {
+    "idx": 87,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Uraiyum-Theeyil-MassTamilan.dev.mp3",
+    "title": "Uraiyum Theeyil",
+    "album": "Sita Ramam",
+    "artist": "Vishal Chandrashekhar, Yazin Nizar",
+    "year": 2022,
+    "duration": 138
+  },
+  {
+    "idx": 88,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Uyir-Urugudhey-MassTamilan.dev-%20Cobra%202022%20tamil.mp3",
+    "title": "Uyir Urugudhey",
+    "album": "Cobra",
+    "artist": "A.R. Rahman",
+    "year": 2022,
+    "duration": 241
+  },
+  {
+    "idx": 89,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Vaa-Poruluya-MassTamilan.dev.mp3",
+    "title": "Vaa Poruluya",
+    "album": "Kantara",
+    "artist": "B. Ajaneesh Loknath, Mime Ramdas",
+    "year": 2022,
+    "duration": 156
+  },
+  {
+    "idx": 90,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Vaada-Thambi-MassTamilan.so.mp3",
+    "title": "Vaada Thambi",
+    "album": "Etharkkum Thunindhavan",
+    "artist": "Anirudh Ravichander, G.V. Prakash Kumar, D. Imman",
+    "year": 2022,
+    "duration": 215
+  },
+  {
+    "idx": 91,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Vaanam-Kidukidunga-MassTamilan.dev.mp3",
+    "title": "Vaanam Kidukidunga",
+    "album": "Viruman",
+    "artist": "Yuvan Shankar Raja, Muthu Sirpi",
+    "year": 2022,
+    "duration": 205
+  },
+  {
+    "idx": 92,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Varaha-Roopam-Daiva-Va-Rishtam-MassTamilan.dev.mp3",
+    "title": "Varaha Roopam Daiva Va Rishtam",
+    "album": "Kantara",
+    "artist": "B. Ajaneesh Loknath, Sai Vignesh",
+    "year": 2022,
+    "duration": 208
+  },
+  {
+    "idx": 93,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Venom-MassTamilan.so.mp3",
+    "title": "Venom",
+    "album": "Etharkkum Thunindhavan",
+    "artist": "Joewin Shamalina",
+    "year": 2022,
+    "duration": 101
+  },
+  {
+    "idx": 94,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Vikram-Title-Track-MassTamilan.so.mp3",
+    "title": "Vikram Title Track",
+    "album": "Vikram",
+    "artist": "Anirudh Ravichander",
+    "year": 2022,
+    "duration": 220
+  },
+  {
+    "idx": 95,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Wasted-MassTamilan.so.mp3",
+    "title": "Wasted",
+    "album": "Vikram",
+    "artist": "Anirudh Ravichander",
+    "year": 2022,
+    "duration": 184
+  },
+  {
+    "idx": 96,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Whistle-Theme-MassTamilan.fm.mp3",
+    "title": "Whistle Theme",
+    "album": "Valimai",
+    "artist": "Yuvanshankar Raja",
+    "year": 2022,
+    "duration": 75
+  },
+  {
+    "idx": 97,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Yaerumayileri-MassTamilan.dev.mp3",
+    "title": "Yaerumayileri",
+    "album": "Sardar",
+    "artist": "Karthi, G.V. Prakash Kumar",
+    "year": 2022,
+    "duration": 204
+  },
+  {
+    "idx": 98,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Yele-Ilanchingamey-MassTamilan.dev-%20Cobra%202022%20tamil.mp3",
+    "title": "Yele Ilanchingamey",
+    "album": "Cobra",
+    "artist": "A.R. Rahman, Rakshita Suresh",
+    "year": 2022,
+    "duration": 163
+  },
+  {
+    "idx": 99,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-2/Aanamale-Kaatukulla-MassTamilan.dev.mp3",
+    "title": "Aanamale Kaatukulla",
+    "album": "Kantara",
+    "artist": "B. Ajaneesh Loknath, Gold Devaraj",
+    "year": 2022,
+    "duration": 157
+  },
+  {
+    "idx": 100,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-2/Adheeraa-MassTamilan.dev-%20Cobra%202022%20tamil.mp3",
+    "title": "Adheeraa",
+    "album": "Cobra",
+    "artist": "A.R. Rahman, Vagu Mazan, Thoughtsfornow",
+    "year": 2022,
+    "duration": 214
+  },
+  {
+    "idx": 101,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-2/Adi-Penne-(Reprise)-MassTamilan.dev.mp3",
+    "title": "Adi Penne (Reprise)",
+    "album": "Naam 2 - Adi Penne Reprise",
+    "artist": "Stephen Zechariah",
+    "year": 2022,
+    "duration": 109
+  },
+  {
+    "idx": 102,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-2/Agilam-Nee-MassTamilan.so.mp3",
+    "title": "Agilam Nee",
+    "album": "KGF Chapter 2",
+    "artist": "Ananya Bhat",
+    "year": 2022,
+    "duration": 132
+  },
+  {
+    "idx": 103,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-2/Alaikadal-MassTamilan.dev.mp3",
+    "title": "Alaikadal",
+    "album": "Ponniyin Selvan Part-1 (PS1)",
+    "artist": "A R Rahman, Antara Nandy",
+    "year": 2022,
+    "duration": 318
+  },
+  {
+    "idx": 104,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-2/Annana-Thaalaattum-MassTamilan.so.mp3",
+    "title": "Annana Thaalaattum",
+    "album": "Maaran",
+    "artist": "Anurag Kulkarni",
+    "year": 2022,
+    "duration": 131
+  },
+  {
+    "idx": 105,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-2/Arabic-Kuthu---Halamithi-Habibo-MassTamilan.so.mp3",
+    "title": "Arabic Kuthu - Halamithi Habibo",
+    "album": "Beast",
+    "artist": "Anirudh Ravichander, Jonita Gandhi",
+    "year": 2022,
+    "duration": 235
+  },
+  {
+    "idx": 106,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-2/Azha-Thonudhe-MassTamilan.so.mp3",
+    "title": "Azha Thonudhe",
+    "album": "Kaathuvaakula Rendu Kaadhal",
+    "artist": "Anirudh Ravichander",
+    "year": 2022,
+    "duration": 103
+  },
+  {
+    "idx": 107,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-2/Azhagin-Azhagu-MassTamilan.dev.mp3",
+    "title": "Azhagin Azhagu",
+    "album": "Sita Ramam",
+    "artist": "Vishal Chandrashekhar, Sinduri Vishal",
+    "year": 2022,
+    "duration": 66
+  },
+  {
+    "idx": 108,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-2/Bae-MassTamilan.dev.mp3",
+    "title": "Bae",
+    "album": "Don",
+    "artist": "Anirudh Ravichander, Adithya RK",
+    "year": 2022,
+    "duration": 195
+  },
+  {
+    "idx": 109,
+    "url": "https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-2/Beast-Mode-MassTamilan.so.mp3",
+    "title": "Beast Mode",
+    "album": "Beast",
+    "artist": "Anirudh Ravichander",
+    "year": 2022,
+    "duration": 188
+  }
+]

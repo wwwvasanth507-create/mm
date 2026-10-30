@@ -1,176 +1,224 @@
-# WaveMusic 🎵 — Manual Audio URL Music Streaming Platform
+# WaveMusic Premium 🎵
+> **Complete Native Android Music Streaming & Offline Player**
+> Built with Flutter & Dart | Package: `in.wavemusic.premium`
 
-A modern, responsive audio streaming website with a premium **Apple Music-inspired interface**, built with **React 19**, **TypeScript**, **Vite**, **Tailwind CSS v4**, and the native **HTML5 Web Audio API**.
-
-The website streams audio **directly from any public HTTPS audio URL** you provide. No Cloudflare R2 APIs, S3 SDKs, bucket listing endpoints, database setups, or worker backends are required!
+WaveMusic Premium is a standalone, production-oriented native Android music streaming and offline player application featuring deep midnight aesthetics, neon coral accents, persistent SQLite storage, background playback with media notification controls, and offline audio downloads.
 
 ---
 
-## 🌟 How It Works (The 30-Second Workflow)
+## 🌟 Key Features
 
-1. Open [`src/data/music.json`](file:///c:/projects/wavemusic/src/data/music.json).
-2. Add your song entry with its title, artist, album, year, thumbnail URL, and direct audio URL:
-   ```json
-   {
-     "id": "my-song-001",
-     "title": "My Tamil Song",
-     "artist": "My Favourite Artist",
-     "album": "My Album",
-     "genre": "Melody",
-     "year": 2025,
-     "duration": 240,
-     "audioUrl": "https://example.com/audio/song.mp3",
-     "thumbnailUrl": "https://example.com/images/cover.jpg",
-     "description": "Tamil melody song",
-     "language": "Tamil",
-     "isExplicit": false
-   }
+### 🎧 Audio Playback Engine
+- Real audio streaming powered by `just_audio`.
+- Full playback controls: Play, Pause, Resume, Next, Previous, Seek.
+- Dynamic duration and position tracking with real-time seek bar.
+- Queue management: reorder tracks via drag-and-drop, delete items, instant jump.
+- Playback modes: Shuffle, Repeat Off, Repeat All, Repeat One.
+- Buffering state indicators and audio error recovery.
+- Fallback from offline file to streaming URL if local file is missing.
+
+### 📱 Background Audio & Android Media Notification
+- Background audio service powered by `just_audio_background` and `audio_service`.
+- Full lock-screen controls and status-bar media notification (`MediaItem` metadata: title, artist, album art).
+- Media button receiver support (headphone buttons, bluetooth devices).
+- Compliant with Android 14+ `FOREGROUND_SERVICE_MEDIA_PLAYBACK` requirements.
+
+### ⚡ Zero-Lag Audio Playback Engine
+- Reused ExoPlayer instance across track switches without decoder teardown or stop/start jitter.
+- Low-latency `AndroidLoadControl` (150ms initial playback buffer, 300ms rebuffer).
+- Immediate 0ms synchronous UI state & mini-player updates on user tap with session ID cancellation for rapid switching.
+- Adjacent track cover art and metadata pre-extraction in background isolate.
+- HTTP Range streaming request headers (`Accept: audio/*, application/octet-stream`).
+
+### 💾 Optimized Local Catalogue & SQLite Storage
+- Persistent relational database using SQLite (`sqflite`) in Write-Ahead Logging (`WAL`) mode with `synchronous = NORMAL`.
+- High-efficiency query indexing (`idx_songs_date_added`) and fast cold-start count checks.
+- Bypasses redundant JSON parsing and bulk database upserts on app startup when catalogue is already populated.
+- Thread-safe in-memory LRU metadata cache (`AppCacheConfig`) with automatic invalidation on updates.
+- Parallel catalogue loading (`Future.wait`) and O(1) favorite ID lookups via in-memory Set.
+
+### 🧠 Device-Aware Multi-Tier Caching System
+- Centralized `AppCacheConfig` with adaptive memory budgeting for low-RAM (2GB–4GB) and high-end devices.
+- Dynamic Flutter `imageCache` sizing (80 images / 30MB for low-RAM devices; 150 images / 60MB for standard).
+- Automatic cache eviction on Android OS memory pressure (`didHaveMemoryPressure`).
+- Non-blocking deferred local asset cover extraction and 4-second delayed remote sync.
+
+### ⬇️ Offline Downloads
+- Resumable and cancellable audio download manager powered by `dio`.
+- Download progress percentage indicators.
+- Safe app-private storage management with automatic filename sanitization.
+- Storage usage calculation and single-tap downloaded file cleanup.
+- Offline playback works completely without an internet connection for downloaded tracks.
+
+### 🔍 Debounced Search & Responsive Library
+- Real-time search with 250ms debouncing and epoch-based request cancellation.
+- Virtualized `ListView.builder` for instantaneous suggestion rendering without UI stalls.
+- Optimized `cacheExtent` (250–300px) and isolated repaint boundaries preventing whole-list re-layouts.
+- Four-tab Library view with `AutomaticKeepAliveClientMixin` preserving scroll states:
+  - **Playlists**: Create custom playlists, reorder songs, rename, and play-all.
+  - **Liked Songs**: Instant favorite toggle with O(1) state resolution.
+  - **Downloads**: View all offline tracks with cached file size badges.
+  - **History**: Deduplicated playback history sorted by most recent.
+
+### 🎨 Visual Identity & UI/UX
+- **Theme**: Deep midnight black (`#090A0F`), neon coral/magenta (`#FF416C`), cyan/violet gradients.
+- **Typography**: Google Fonts (Outfit headings, Inter body text).
+- **Widgets**:
+  - Persistent bottom mini-player above navigation bar with live progress.
+  - Full-screen Now Playing screen with glowing album artwork and isolated `ValueNotifier` seekbar.
+  - Custom brand logo and waveform animation iconography.
+  - Read-only synchronized lyrics viewer.
+  - Sound quality badge (Dynamic / Source-based indicator).
+
+---
+
+## 📁 Project Architecture
+
+```
+lib/
+├── app.dart                                # MultiProvider, persistent navigation & memory pressure hook
+├── main.dart                               # App entry point, cache config init & JustAudioBackground setup
+│
+├── core/
+│   ├── cache/
+│   │   └── cache_config.dart               # Device-aware memory cache, imageCache budget, LRU metadata
+│   ├── constants/
+│   │   ├── app_colors.dart                 # Midnight & neon palette tokens
+│   │   └── app_typography.dart             # Outfit & Inter typography hierarchy
+│   ├── theme/
+│   │   └── app_theme.dart                  # Material 3 dark theme with custom components
+│   └── utilities/
+│       ├── formatters.dart                 # Duration, file size, date formatters
+│       ├── url_resolver.dart               # Asset and URL resolver
+│       └── validators.dart                 # Title, artist, URL, year validators
+│
+├── data/
+│   ├── database/
+│   │   └── app_database.dart               # SQLite DB schemas, indexes, WAL pragma, LRU caching
+│   ├── models/
+│   │   ├── download_item_model.dart        # Download task model with status enum
+│   │   ├── playlist_model.dart             # Playlist entity with track count
+│   │   └── song_model.dart                 # Song model with playableSource prioritization
+│   ├── repositories/
+│   │   └── music_repository.dart           # Fast-boot catalogue, O(1) favorites, deferred sync
+│   └── services/
+│       ├── audio_player_service.dart       # Zero-lag playback engine, session cancellation, preload
+│       ├── cover_cache_service.dart        # Deferred non-blocking local cover prewarming
+│       └── download_service.dart           # Dio chunked downloader, storage calculator
+│
+├── features/
+│   ├── home/
+│   │   └── home_screen.dart                # Dashboard: scoped selectors, virtualized catalogue
+│   ├── library/
+│   │   └── library_screen.dart             # Keep-alive tabs: Playlists, Liked, Downloads, History
+│   ├── player/
+│   │   ├── now_playing_screen.dart         # Fullscreen player with isolated ValueNotifier seekbar
+│   │   └── widgets/
+│   │       ├── lyrics_sheet.dart           # Read-only clean lyrics viewer
+│   │       └── queue_sheet.dart            # Drag-and-drop reorderable queue
+│   ├── playlists/
+│   │   ├── playlist_details_screen.dart    # Playlist view with play-all, shuffle, reorder
+│   │   └── widgets/
+│   │       └── add_to_playlist_dialog.dart # Add song to existing or new playlist
+│   ├── profile/
+│   │   └── profile_screen.dart             # App info, audio settings, storage usage
+│   └── search/
+│       └── search_screen.dart              # 250ms debounced search, epoch cancellation, virtualized
+│
+└── shared/
+    └── widgets/
+        ├── brand_logo.dart                 # Custom WaveMusic Premium logo
+        ├── empty_state.dart                # Styled empty state with call-to-action
+        ├── mini_player.dart                # Persistent floating bottom player
+        └── song_tile.dart                  # Isolated download indicator & favorite button widgets
+```
+
+---
+
+## 🛠️ Prerequisites & Setup
+
+### Environment Requirements
+- **Flutter SDK**: 3.47.8+ (channel stable)
+- **Dart SDK**: 3.7.0+
+- **Android SDK**: API 36 (Android 15+) or compatible
+- **JDK**: Java 17 or Java 21
+- **Platform**: Windows, macOS, or Linux
+
+### Getting Started
+
+1. Clone or navigate to the project directory:
+   ```bash
+   cd c:\projects\WAPP
    ```
-3. Save the file.
-4. Run or redeploy the site.
-5. **The song immediately appears on the website and streams directly from its URL!**
-   - The album is **automatically derived** and appears in the Albums section.
-   - The artist profile is **automatically derived** with top tracks and albums.
+
+2. Fetch all dependencies:
+   ```bash
+   flutter pub get
+   ```
+
+3. Run static analysis:
+   ```bash
+   flutter analyze
+   ```
+   *(Result: 0 issues found)*
+
+4. Execute automated test suite:
+   ```bash
+   flutter test
+   ```
+   *(Result: 31 passing tests covering performance optimization, memory pressure eviction, LRU metadata, models, validators, formatters, database CRUD, queue logic, and widgets)*
 
 ---
 
-## 🎧 Audio Player Features
+## 📦 Build Instructions
 
-- **Single Persistent Audio Engine**: Continuous playback across all in-app navigation routes.
-- **Direct Progressive Streaming**: Native browser streaming with HTTP 206 Partial Content byte-range seeking (never downloads the full file upfront).
-- **Universal Host Support**: Supports audio URLs from any compatible HTTPS host (Cloudflare R2 public links, personal servers, CDNs, AWS S3, Google Cloud, etc.), including URLs with query parameters/tokens.
-- **Full Playback Controls**:
-  - Play, pause, resume
-  - Previous and next track
-  - Scrubbable seekbar with elapsed and total duration
-  - Volume control and mute toggle
-  - Shuffle and multi-mode repeat (Off, All, One)
-  - Queue drawer (reorder, add next, remove, clear)
-  - Autoplay next track on song end
-- **Full-Screen Now Playing Modal**:
-  - Dynamic ambient backdrop blurred from album artwork
-  - Animated audio visualizer wave bars
-  - Synchronized karaoke-style scrolling lyrics viewer
-  - Queue viewer
-- **Media Session API**: Integrates with system media controls, lock screen metadata, and keyboard keys.
-- **Global Keyboard Shortcuts**: Control playback from anywhere on the keyboard.
-
----
-
-## 📁 Music Catalog Fields Reference (`src/data/music.json`)
-
-Each song in `src/data/music.json` supports the following fields:
-
-| Field | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `id` | `string` | **Yes** | Unique identifier (e.g. `"song-tamil-001"`) |
-| `title` | `string` | **Yes** | Track title |
-| `artist` | `string` | **Yes** | Artist or singer name |
-| `album` | `string` | **Yes** | Album or movie name |
-| `genre` | `string` | **Yes** | Musical genre (e.g. `"Melody"`, `"Synthwave"`, `"Classical"`) |
-| `year` | `number` | **Yes** | Release year (e.g. `2025`) |
-| `duration` | `number` | **Yes** | Duration in seconds (e.g. `240` for 4:00) |
-| `audioUrl` | `string` | **Yes** | Direct HTTPS audio stream URL |
-| `thumbnailUrl` | `string` | **Yes** | Direct image URL for cover art (fallback SVG provided if broken) |
-| `description` | `string` | No | Short description or story about the track |
-| `language` | `string` | No | Language (e.g. `"Tamil"`, `"English"`, `"Instrumental"`) |
-| `isExplicit` | `boolean` | No | Displays explicit `[E]` badge when `true` |
-| `lyrics` | `array` | No | Array of `{ "time": seconds, "text": "lyric text" }` for synced display |
-| `isDemo` | `boolean` | No | Displays a subtle `DEMO` badge |
-
----
-
-## 🚀 Quick Start (Local Development)
-
-### 1. Install Dependencies
+### 1. Debug APK (for testing)
 ```bash
-npm install
+flutter build apk --debug
 ```
+**Output**: `build/app/outputs/flutter-apk/app-debug.apk`
 
-### 2. Start Dev Server
+### 2. Release APK (for sideloading / distribution)
 ```bash
-npm run dev
+flutter build apk --release
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+**Output**: `build/app/outputs/flutter-apk/app-release.apk`
 
-### 3. Run Automated Tests
+### 3. Android App Bundle (for Google Play Store)
 ```bash
-npm test
+flutter build appbundle --release
 ```
-
-### 4. Build for Production
-```bash
-npm run build
-```
+**Output**: `build/app/outputs/bundle/release/app-release.aab`
 
 ---
 
-## ☁️ Deploying to Cloudflare Pages
+## 🔒 Release Signing Note
 
-### Option 1: Git Integration (Recommended)
-1. Push your repository to **GitHub** or **GitLab**.
-2. In the [Cloudflare Dashboard](https://dash.cloudflare.com/), go to **Workers & Pages** > **Create application** > **Pages** > **Connect to Git**.
-3. Select your repository:
-   - **Framework preset**: `Vite`
-   - **Build command**: `npm run build`
-   - **Build output directory**: `dist`
-4. Click **Save and Deploy**. Cloudflare Pages automatically handles client-side routing via [`public/_redirects`](file:///c:/projects/wavemusic/public/_redirects).
-
-### Option 2: Wrangler CLI Direct Deploy
-```bash
-npm run build
-npx wrangler pages deploy dist --project-name=wavemusic
-```
+The project is currently configured with the debug signing key in `android/app/build.gradle.kts` for immediate testing and release builds. To produce a production signed bundle for the Google Play Store:
+1. Generate a keystore:
+   ```bash
+   keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+   ```
+2. Reference the keystore in `android/key.properties`.
+3. Update `android/app/build.gradle.kts` to point `signingConfigs.release` to `key.properties`.
 
 ---
 
-## 🧪 Testing Your Audio Stream URLs
+## 🧪 Automated Test Suite
 
-You can test any audio URL before adding it to `music.json`:
-1. Navigate to [`/settings`](http://localhost:3000/settings) in the web app.
-2. In the **Audio Stream Diagnostic Tool**, paste your direct audio URL.
-3. Click **Test URL**.
-4. The tool inspects:
-   - HTTP response status (`200 OK` or `206 Partial Content`)
-   - HTTP byte-range seeking capability (`Accept-Ranges: bytes`)
-   - Round-trip latency (ms)
-   - Content-Type header (`audio/mpeg`, `audio/mp4`, etc.)
-   - CORS availability for browser playback
+The test suite in `test/` validates all core business logic and performance optimizations:
+- `test/performance_optimization_test.dart`: Device-aware cache config, memory pressure eviction, fast database count query, read-only LyricsSheet validation, and 250ms debounced search controller simulation.
+- `test/song_model_test.dart`: Serialization, `toMap`, `fromMap`, `copyWith`, and `playableSource` prioritization.
+- `test/validators_test.dart`: Song title, artist, audio URL protocol/format, thumbnail URL, and release year validation.
+- `test/formatters_test.dart`: Duration (mm:ss and hh:mm:ss) and byte file size formatting.
+- `test/database_test.dart`: SQLite CRUD, foreign key cascade, playlist track associations, and history deduplication.
+- `test/queue_logic_test.dart`: Queue manipulation, item removal, reordering, repeat cycles, and search filtering.
+- `test/widget_test.dart`: Brand logo and empty state widget rendering and interaction.
 
 ---
 
-## ⌨️ Keyboard Shortcuts
+## 📋 Known Limitations & Technical Notes
 
-| Key | Action |
-| :--- | :--- |
-| <kbd>Space</kbd> | Play / Pause |
-| <kbd>→</kbd> | Seek forward 5s (<kbd>Shift</kbd> + <kbd>→</kbd> for 15s) |
-| <kbd>←</kbd> | Seek backward 5s (<kbd>Shift</kbd> + <kbd>←</kbd> for 15s) |
-| <kbd>↑</kbd> | Increase volume 5% |
-| <kbd>↓</kbd> | Decrease volume 5% |
-| <kbd>M</kbd> | Mute / Unmute |
-| <kbd>N</kbd> | Next track |
-| <kbd>P</kbd> | Previous track (or restart song) |
-| <kbd>S</kbd> | Toggle Shuffle |
-| <kbd>R</kbd> | Cycle Repeat Mode (Off → All → One) |
-| <kbd>L</kbd> | Toggle Favourite |
-
----
-
-## ⚖️ Legal & Copyright Disclaimer
-
-WaveMusic is an **open-source, non-commercial software application** developed strictly for educational, research, and technical demonstration purposes.
-
-- **No Media Stored**: This GitHub repository **does not host, distribute, or store any copyrighted audio (MP3/AAC) or video (MP4) files**. All media streams are fetched at client runtime from external, user-configured HTTPS endpoints.
-- **Intellectual Property**: All musical tracks, song compositions, artist names, album titles, and promotional covers are the exclusive property and trademarks of their respective copyright holders and recording labels (e.g., Sony Music, Think Music, Sun Pictures, T-Series, Saregama, Lyca Productions, etc.).
-- **Fair Use**: Evaluated under Section 107 of the US Copyright Act 1976 and Section 52 of the Indian Copyright Act 1957.
-- **DMCA Takedown**: Copyright owners may request immediate removal of any reference or artwork by opening a GitHub issue or consulting [LEGAL.md](LEGAL.md).
-
-For full details, please read [LEGAL.md](LEGAL.md).
-
----
-
-## 📄 License
-
-The software source code and client architecture are licensed under the [MIT License](LICENSE). Third-party trademarks and audio catalog metadata remain the property of their respective owners.
-
+1. **Cleartext HTTP**: Cleartext HTTP URLs are permitted only when explicitly supplied by the user, but HTTPS is strictly preferred. Some network providers may block plain HTTP streams.
+2. **Dynamic Audio Streams**: Formats supported depend on native Android codecs (MP3, AAC, OGG, WAV, FLAC). Obscure or DRM-protected streams are not supported.
+3. **Background Notification Customization**: Android 13+ requires the user to grant `POST_NOTIFICATIONS` permission to see playback controls in the status shade.

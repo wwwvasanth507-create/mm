@@ -7,6 +7,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import '../models/song_model.dart';
 import '../repositories/music_repository.dart';
+import 'audio_clarity_engine.dart';
 import 'cover_cache_service.dart';
 
 enum AppRepeatMode {
@@ -16,16 +17,22 @@ enum AppRepeatMode {
 }
 
 class AudioPlayerService extends ChangeNotifier {
+  final AndroidEqualizer? _equalizer = AudioClarityEngine.isPlatformEqualizerSupported
+      ? AndroidEqualizer()
+      : null;
+
   late final AudioPlayer _player = AudioPlayer(
+    audioPipeline: _equalizer != null ? AudioPipeline(androidAudioEffects: [_equalizer!]) : null,
     audioLoadConfiguration: kIsWeb
         ? null
         : const AudioLoadConfiguration(
             androidLoadControl: AndroidLoadControl(
-              minBufferDuration: Duration(seconds: 15),
-              maxBufferDuration: Duration(seconds: 50),
-              bufferForPlaybackDuration: Duration(milliseconds: 1500),
-              bufferForPlaybackAfterRebufferDuration: Duration(milliseconds: 3000),
+              minBufferDuration: Duration(seconds: 8),
+              maxBufferDuration: Duration(seconds: 30),
+              bufferForPlaybackDuration: Duration(milliseconds: 250),
+              bufferForPlaybackAfterRebufferDuration: Duration(milliseconds: 500),
               prioritizeTimeOverSizeThresholds: true,
+              backBufferDuration: Duration(seconds: 15),
             ),
           ),
   );
@@ -40,12 +47,24 @@ class AudioPlayerService extends ChangeNotifier {
   bool _isShuffle = false;
   bool _isBuffering = false;
   bool _isSettingSource = false;
-  bool _isVideoActive = false;
+  bool _isVideoMode = false;
   String? _errorMessage;
 
   StreamSubscription? _playerStateSubscription;
   StreamSubscription? _durationSubscription;
   StreamSubscription? _currentIndexSubscription;
+  StreamSubscription? _becomingNoisySubscription;
+  StreamSubscription? _interruptionSubscription;
+
+  bool get isVideoMode => _isVideoMode;
+
+  void setVideoMode(bool active) {
+    _isVideoMode = active;
+    if (active) {
+      _player.pause();
+    }
+    notifyListeners();
+  }
 
   AudioPlayerService({required MusicRepository repository})
       : _repository = repository {
@@ -60,11 +79,49 @@ class AudioPlayerService extends ChangeNotifier {
     try {
       final session = await AudioSession.instance;
       await session.configure(const AudioSessionConfiguration.music());
+
+      // Auto-pause when headphones or Bluetooth audio device is disconnected
+      _becomingNoisySubscription = session.becomingNoisyEventStream.listen((_) {
+        if (_player.playing) {
+          pause();
+        }
+      });
+
+      // Handle transient audio focus interruptions (phone calls, alarms, etc.)
+      _interruptionSubscription = session.interruptionEventStream.listen((event) {
+        if (event.begin) {
+          switch (event.type) {
+            case AudioInterruptionType.duck:
+              _player.setVolume(AudioClarityEngine.kDigitalHeadroomVolume * 0.4);
+              break;
+            case AudioInterruptionType.pause:
+            case AudioInterruptionType.unknown:
+              if (_player.playing) {
+                pause();
+              }
+              break;
+          }
+        } else {
+          switch (event.type) {
+            case AudioInterruptionType.duck:
+              _player.setVolume(AudioClarityEngine.kDigitalHeadroomVolume);
+              break;
+            case AudioInterruptionType.pause:
+              break;
+            case AudioInterruptionType.unknown:
+              break;
+          }
+        }
+      });
+
+      // Initialize the built-in acoustic clarity equalizer tuning & digital headroom
+      unawaited(AudioClarityEngine.instance.applyBuiltInTuning(_equalizer, _player));
     } catch (e) {
       debugPrint('[AudioPlayerService] AudioSession note: $e');
     }
   }
 
+  AndroidEqualizer? get equalizer => _equalizer;
   AudioPlayer get player => _player;
   List<Song> get queue => _queue;
   int get currentIndex => _currentIndex;
@@ -75,21 +132,9 @@ class AudioPlayerService extends ChangeNotifier {
 
   bool get isPlaying => _player.playing;
   bool get isBuffering => _isBuffering;
-  bool get isVideoActive => _isVideoActive;
   AppRepeatMode get repeatMode => _repeatMode;
   bool get isShuffle => _isShuffle;
   String? get errorMessage => _errorMessage;
-
-  void setVideoMode(bool active) {
-    if (_isVideoActive == active) return;
-    _isVideoActive = active;
-    if (active) {
-      try {
-        _player.pause();
-      } catch (_) {}
-    }
-    notifyListeners();
-  }
 
   Stream<Duration> get positionStream => _player.positionStream;
   Stream<Duration?> get durationStream => _player.durationStream;
@@ -107,6 +152,12 @@ class AudioPlayerService extends ChangeNotifier {
           state.processingState == ProcessingState.loading;
       final playing = state.playing;
       final procState = state.processingState;
+
+      // Ironclad protection: Never allow audio to play while video mode is active
+      if (_isVideoMode && playing) {
+        _player.pause();
+        return;
+      }
 
       bool stateChanged = false;
       if (procState == ProcessingState.idle || procState == ProcessingState.completed) {
@@ -128,7 +179,7 @@ class AudioPlayerService extends ChangeNotifier {
       if (procState != lastState) {
         lastState = procState;
         stateChanged = true;
-        if (procState == ProcessingState.completed) {
+        if (procState == ProcessingState.completed && !_isSettingSource) {
           _handleTrackCompleted();
         }
       }
@@ -148,7 +199,7 @@ class AudioPlayerService extends ChangeNotifier {
 
     // Automatically sync when user skips songs from Android Lock Screen or Notification Shade
     _currentIndexSubscription = _player.currentIndexStream.listen((index) {
-      if (_isSettingSource) return;
+      if (_isSettingSource || _isVideoMode) return;
       if (index != null && index != _currentIndex && index >= 0 && index < _queue.length) {
         _currentIndex = index;
         final song = currentSong;
@@ -161,7 +212,10 @@ class AudioPlayerService extends ChangeNotifier {
   }
 
   void _handleTrackCompleted() {
-    if (_isVideoActive) return;
+    if (_isVideoMode) {
+      // In video mode, completion and automatic track transition is driven by the video player
+      return;
+    }
     if (_repeatMode == AppRepeatMode.one) {
       seek(Duration.zero);
       _player.play();
@@ -203,23 +257,12 @@ class AudioPlayerService extends ChangeNotifier {
       displayDescription: null,
     );
 
-    // Dynamic resolution of downloaded file:
-    // Check direct path or latest repository status
-    String? localPath = song.localFilePath;
-    if (!kIsWeb) {
-      if (localPath == null || !File(localPath).existsSync()) {
-        final repoSong = _repository.songs.firstWhere(
-          (s) => s.id == song.id,
-          orElse: () => song,
-        );
-        if (repoSong.isDownloaded && repoSong.localFilePath != null && File(repoSong.localFilePath!).existsSync()) {
-          localPath = repoSong.localFilePath;
-        }
-      }
-
-      if (localPath != null && File(localPath).existsSync()) {
+    // Fast check for local downloaded file without redundant scans
+    if (!kIsWeb && song.isDownloaded && song.localFilePath != null) {
+      final file = File(song.localFilePath!);
+      if (file.existsSync()) {
         return AudioSource.file(
-          localPath,
+          file.path,
           tag: mediaItem,
         );
       }
@@ -271,9 +314,9 @@ class AudioPlayerService extends ChangeNotifier {
   }
 
   /// Play a specific song and update queue
-  /// Play a specific song and update queue
-  Future<void> playSong(Song song, {List<Song>? queue}) async {
+  Future<void> playSong(Song song, {List<Song>? queue, bool autoPlay = true}) async {
     _errorMessage = null;
+    _isVideoMode = !autoPlay;
 
     if (queue != null && queue.isNotEmpty) {
       _originalQueue = List.from(queue);
@@ -299,18 +342,19 @@ class AudioPlayerService extends ChangeNotifier {
     }
 
     // Immediate 0ms tap feedback: UI shows track selected immediately
-    _isBuffering = true;
+    _isBuffering = autoPlay;
     notifyListeners();
 
-    // Ensure cover is extracted so Android Notification & Lock Screen have art instantly
-    await CoverCacheService.ensureCoverExtracted(song.thumbnailUrl);
+    // Fire cover extraction in the background without blocking playback
+    unawaited(CoverCacheService.ensureCoverExtracted(song.thumbnailUrl));
 
-    await _updatePlaylistAndPlay(targetIndex: _currentIndex);
+    await _updatePlaylistAndPlay(targetIndex: _currentIndex, autoPlay: autoPlay);
   }
 
   /// Play a full queue starting from index
   Future<void> playQueue(List<Song> songs, {int initialIndex = 0}) async {
     if (songs.isEmpty) return;
+    _isVideoMode = false;
 
     _originalQueue = List.from(songs);
     _queue = List.from(songs);
@@ -325,15 +369,17 @@ class AudioPlayerService extends ChangeNotifier {
     notifyListeners();
 
     if (_currentIndex >= 0 && _currentIndex < _queue.length) {
-      await CoverCacheService.ensureCoverExtracted(_queue[_currentIndex].thumbnailUrl);
+      unawaited(CoverCacheService.ensureCoverExtracted(_queue[_currentIndex].thumbnailUrl));
     }
 
-    await _updatePlaylistAndPlay(targetIndex: _currentIndex);
+    await _updatePlaylistAndPlay(targetIndex: _currentIndex, autoPlay: true);
   }
 
-  Future<void> _updatePlaylistAndPlay({int? targetIndex, bool autoPlay = true}) async {
+  Future<void> _updatePlaylistAndPlay({int? targetIndex, bool? autoPlay}) async {
     final index = targetIndex ?? _currentIndex;
     if (_queue.isEmpty || index < 0 || index >= _queue.length) return;
+
+    final shouldPlay = (autoPlay ?? true) && !_isVideoMode;
 
     final sessionId = ++_currentPlaySessionId;
     _currentIndex = index;
@@ -347,75 +393,59 @@ class AudioPlayerService extends ChangeNotifier {
 
     try {
       _repository.recordPlayback(song.id);
-      await CoverCacheService.ensureCoverExtracted(song.thumbnailUrl);
+      unawaited(CoverCacheService.ensureCoverExtracted(song.thumbnailUrl));
 
-
-      final loadAndPlay = () async {
-        if (_player.audioSource != null && _isSameQueue(_queue, _lastLoadedQueue)) {
-          // Fast instant track switch: 0ms reloading overhead
-          await _player.seek(Duration.zero, index: _currentIndex);
-          if (_currentPlaySessionId != sessionId) return;
-          if (autoPlay && !_isVideoActive) {
-            await _player.play();
-          } else {
-            await _player.pause();
-          }
+      if (_player.audioSource != null && _isSameQueue(_queue, _lastLoadedQueue)) {
+        // Fast instant track switch: 0ms reloading overhead
+        await _player.seek(Duration.zero, index: _currentIndex);
+        if (_currentPlaySessionId != sessionId) return;
+        if (shouldPlay) {
+          unawaited(_player.play());
         } else {
-          _lastLoadedQueue = List.from(_queue);
-
-          final playlist = ConcatenatingAudioSource(
-            useLazyPreparation: true,
-            children: _queue.map((s) => _buildAudioSource(s)).toList(),
-          );
-
-          if (_currentPlaySessionId != sessionId) return;
-
-          await _player.setAudioSource(
-            playlist,
-            initialIndex: _currentIndex,
-            initialPosition: Duration.zero,
-          );
-
-          if (_currentPlaySessionId != sessionId) return;
-
-          if (autoPlay && !_isVideoActive) {
-            await _player.play();
-          } else {
-            await _player.pause();
-          }
+          await _player.pause();
         }
-      }();
+      } else {
+        _lastLoadedQueue = List.from(_queue);
 
-      await loadAndPlay.timeout(const Duration(seconds: 12));
+        final playlist = ConcatenatingAudioSource(
+          useLazyPreparation: true,
+          children: _queue.map((s) => _buildAudioSource(s)).toList(),
+        );
+
+        if (_currentPlaySessionId != sessionId) return;
+
+        // Set audio source with immediate preload
+        await _player.setAudioSource(
+          playlist,
+          initialIndex: _currentIndex,
+          initialPosition: Duration.zero,
+          preload: true,
+        );
+
+        if (_currentPlaySessionId != sessionId) return;
+
+        if (shouldPlay) {
+          unawaited(_player.play());
+        } else {
+          await _player.pause();
+        }
+      }
 
       if (_currentPlaySessionId == sessionId) {
         _isBuffering = false;
         notifyListeners();
         _preloadAdjacentTracks();
       }
-    } on TimeoutException {
-      if (_currentPlaySessionId == sessionId) {
-        debugPrint('[AudioPlayerService] Playback request timed out');
-        _errorMessage = 'Playback timed out. Please check your internet connection.';
-        _isBuffering = false;
-        try {
-          await _player.stop();
-        } catch (_) {}
-        notifyListeners();
-      }
     } catch (e) {
       if (_currentPlaySessionId == sessionId) {
         debugPrint('[AudioPlayerService] Playback error: $e');
         _errorMessage = 'Unable to stream audio: Please verify network ($e)';
         _isBuffering = false;
-        try {
-          await _player.stop();
-        } catch (_) {}
         notifyListeners();
       }
     } finally {
       if (_currentPlaySessionId == sessionId) {
-        Future.delayed(const Duration(milliseconds: 200), () {
+        Future.delayed(const Duration(milliseconds: 150), () {
           _isSettingSource = false;
         });
       }
@@ -431,6 +461,7 @@ class AudioPlayerService extends ChangeNotifier {
   }
 
   Future<void> togglePlayPause() async {
+    if (_isVideoMode) return;
     if (_player.playing) {
       await _player.pause();
     } else {
@@ -442,6 +473,7 @@ class AudioPlayerService extends ChangeNotifier {
   }
 
   Future<void> resume() async {
+    if (_isVideoMode) return;
     await _player.play();
     notifyListeners();
   }
@@ -457,7 +489,8 @@ class AudioPlayerService extends ChangeNotifier {
     await _player.seek(position);
   }
 
-  Future<void> next({bool autoPlay = true}) async {
+  Future<void> next({bool? autoPlay}) async {
+    final shouldPlay = autoPlay ?? !_isVideoMode;
     if (_queue.isEmpty) return;
     int nextIdx = _currentIndex + 1;
     if (nextIdx >= _queue.length) {
@@ -475,24 +508,26 @@ class AudioPlayerService extends ChangeNotifier {
     }
     notifyListeners();
 
-    if (_player.hasNext) {
-      await _player.seekToNext();
-      if (!autoPlay || _isVideoActive) {
-        await _player.pause();
-      }
-    } else if (_player.audioSource != null) {
+    if (!shouldPlay) {
+      await _player.pause();
+    }
+
+    if (_player.audioSource != null && _isSameQueue(_queue, _lastLoadedQueue)) {
       await _player.seek(Duration.zero, index: _currentIndex);
-      if (!autoPlay || _isVideoActive) {
+      if (shouldPlay) {
+        unawaited(_player.play());
+      } else {
         await _player.pause();
       }
     } else {
-      await _updatePlaylistAndPlay(targetIndex: _currentIndex, autoPlay: autoPlay && !_isVideoActive);
+      await _updatePlaylistAndPlay(targetIndex: _currentIndex, autoPlay: shouldPlay);
     }
   }
 
-  Future<void> previous({bool autoPlay = true}) async {
+  Future<void> previous({bool? autoPlay}) async {
+    final shouldPlay = autoPlay ?? !_isVideoMode;
     if (_queue.isEmpty) return;
-    if (!_isVideoActive && _player.position.inSeconds > 3) {
+    if (_player.position.inSeconds > 3) {
       await seek(Duration.zero);
       return;
     }
@@ -514,18 +549,19 @@ class AudioPlayerService extends ChangeNotifier {
     }
     notifyListeners();
 
-    if (_player.hasPrevious) {
-      await _player.seekToPrevious();
-      if (!autoPlay || _isVideoActive) {
-        await _player.pause();
-      }
-    } else if (_player.audioSource != null) {
+    if (!shouldPlay) {
+      await _player.pause();
+    }
+
+    if (_player.audioSource != null && _isSameQueue(_queue, _lastLoadedQueue)) {
       await _player.seek(Duration.zero, index: _currentIndex);
-      if (!autoPlay || _isVideoActive) {
+      if (shouldPlay) {
+        unawaited(_player.play());
+      } else {
         await _player.pause();
       }
     } else {
-      await _updatePlaylistAndPlay(targetIndex: _currentIndex, autoPlay: autoPlay && !_isVideoActive);
+      await _updatePlaylistAndPlay(targetIndex: _currentIndex, autoPlay: shouldPlay);
     }
   }
 
@@ -538,15 +574,19 @@ class AudioPlayerService extends ChangeNotifier {
       }
       notifyListeners();
 
+      if (!autoPlay || _isVideoMode) {
+        await _player.pause();
+      }
+
       if (_player.audioSource != null && _queue.length == _originalQueue.length) {
         await _player.seek(Duration.zero, index: index);
-        if (autoPlay && !_isVideoActive) {
-          await _player.play();
+        if (autoPlay && !_isVideoMode) {
+          unawaited(_player.play());
         } else {
           await _player.pause();
         }
       } else {
-        await _updatePlaylistAndPlay(targetIndex: index, autoPlay: autoPlay && !_isVideoActive);
+        await _updatePlaylistAndPlay(targetIndex: index, autoPlay: autoPlay && !_isVideoMode);
       }
     }
   }
@@ -671,6 +711,8 @@ class AudioPlayerService extends ChangeNotifier {
 
   @override
   void dispose() {
+    _becomingNoisySubscription?.cancel();
+    _interruptionSubscription?.cancel();
     _playerStateSubscription?.cancel();
     _durationSubscription?.cancel();
     _currentIndexSubscription?.cancel();

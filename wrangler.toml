@@ -1,7 +1,7 @@
-name = "mm"
+name = "jalra"
 compatibility_date = "2024-09-23"
 
-# Cloudflare Workers with Static Assets (Single Page Application)
+# Cloudflare Workers / Pages Static Assets configuration for Jalra Web
 [assets]
-directory = "./dist"
+directory = "./build/web"
 not_found_handling = "single-page-application"

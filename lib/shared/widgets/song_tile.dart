@@ -40,7 +40,7 @@ class SongTile extends StatelessWidget {
 
     return RepaintBoundary(
       child: InkWell(
-        onTap: onTap,
+        onTap: onTap ?? () => context.read<AudioPlayerService>().playSong(song),
         borderRadius: BorderRadius.circular(12),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -295,7 +295,8 @@ class SongTile extends StatelessWidget {
   }
 
   void _openVideo(BuildContext context) {
-    context.read<AudioPlayerService>().playSong(song);
+    final playerService = context.read<AudioPlayerService>();
+    playerService.playSong(song, autoPlay: false);
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (_, __, ___) => const NowPlayingScreen(initialVideoMode: true),
