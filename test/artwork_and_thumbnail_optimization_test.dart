@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wavemusic_premium/core/utilities/url_resolver.dart';
@@ -135,5 +137,35 @@ void main() {
       final clipWidget = tester.widget<ClipRRect>(clipFinder);
       expect(clipWidget.borderRadius, equals(BorderRadius.circular(12)));
     });
+
+    test('All songs and playlists in music.json resolve to local bundled assets', () {
+      final file = File('assets/data/music.json');
+      expect(file.existsSync(), isTrue);
+
+      final data = jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
+      final songs = data['songs'] as List<dynamic>;
+      final playlists = data['playlists'] as List<dynamic>;
+
+      expect(songs.length, equals(409));
+      expect(playlists.length, equals(19));
+
+      for (final song in songs) {
+        final url = song['thumbnailUrl'] as String?;
+        expect(url, isNotNull);
+        final localPath = AppUrls.getLocalAssetCoverPath(url);
+        expect(localPath, isNotNull, reason: 'Song ${song['id']} cover failed to resolve locally');
+        expect(File(localPath!).existsSync(), isTrue, reason: 'Asset file $localPath does not exist on disk');
+      }
+
+      for (final playlist in playlists) {
+        final url = playlist['coverUrl'] as String?;
+        expect(url, isNotNull);
+        final localPath = AppUrls.getLocalAssetCoverPath(url);
+        expect(localPath, isNotNull, reason: 'Playlist ${playlist['id']} cover failed to resolve locally');
+        expect(File(localPath!).existsSync(), isTrue, reason: 'Asset file $localPath does not exist on disk');
+      }
+    });
   });
 }
+
+
