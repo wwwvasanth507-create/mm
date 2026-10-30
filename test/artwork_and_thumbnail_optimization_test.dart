@@ -128,8 +128,8 @@ void main() {
       final songs = data['songs'] as List<dynamic>;
       final playlists = data['playlists'] as List<dynamic>;
 
-      expect(songs.length, equals(409));
-      expect(playlists.length, equals(19));
+      expect(songs.length, equals(503));
+      expect(playlists.length, equals(20));
 
       for (final song in songs) {
         final url = song['thumbnailUrl'] as String?;
