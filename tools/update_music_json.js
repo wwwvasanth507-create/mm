@@ -56,7 +56,7 @@ const newPlaylists = [
     id: "playlist-2021-blockbusters",
     name: "2021 Tamil Mega Blockbusters",
     description: "The absolute biggest chartbusters, mass anthems, and viral sensations of 2021 including Master, Doctor, Karnan, Sarpatta Parambarai, Pushpa, Maanaadu & more",
-    coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/44/22/e1/4422e1e0-c3d5-e41c-b258-00a293fcb6eb/190296791166.jpg/600x600bb.jpg",
+    coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/a3/f2/dc/a3f2dc29-fc54-07bb-8f9c-2a3936d21a5d/886448363347.jpg/600x600bb.jpg",
     trackIds: [
       "song-vaathi-coming",
       "song-master-the-blaster",
@@ -113,7 +113,7 @@ const newPlaylists = [
     id: "playlist-sana-rustic-vibes",
     name: "Santhosh Narayanan: Raw, Rustic & Folk Soul",
     description: "Uncompromising folk rhythms, revolutionary anthems, and rustic percussion by Santhosh Narayanan (Karnan, Sarpatta Parambarai, Enjoy Enjaami & Parris Jeyaraj)",
-    coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/05/29/ce/0529ce45-1dd4-fc12-ea82-8bc96d4ce03f/cover.jpg/600x600bb.jpg",
+    coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/16/cd/ef/16cdefbd-aa81-236f-580f-445f08c79759/cover.jpg/600x600bb.jpg",
     trackIds: [
       "song-kandaa-vara-sollunga",
       "song-manjanathi-puranam",
@@ -133,7 +133,7 @@ const newPlaylists = [
     id: "playlist-romantic-escapes",
     name: "Tamil Romantic Escapes & Love Melodies",
     description: "Heartwarming melodies and soulful serenades that capture the tender essence of love",
-    coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/6b/fb/8e/6bfb8e92-36c5-4a62-fa55-1e37bc6bc752/190296531380.jpg/600x600bb.jpg",
+    coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/ee/78/21/ee7821ac-1728-947d-f46f-01f3b750397c/886448717959.jpg/600x600bb.jpg",
     trackIds: [
       "song-bodhai-kaname",
       "song-marandhaye",
@@ -169,7 +169,7 @@ const newPlaylists = [
     id: "playlist-unplugged-karaoke-chill",
     name: "Acoustic, Unplugged & Instrumental Lounge",
     description: "Relaxing acoustic renditions, karaoke versions, soothing instrumental themes, and peaceful background vibes",
-    coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/da/f2/80/daf280df-4a65-188b-dc54-7dc4bcf08cfa/190296684062.jpg/600x600bb.jpg",
+    coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/96/15/7f/96157ff7-780e-4296-95ab-8c1a13d5e317/886449631179.jpg/600x600bb.jpg",
     trackIds: [
       "song-marandhaye-unplugged",
       "song-marandhaye-karaoke",
