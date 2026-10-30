@@ -715,6 +715,14 @@ class AudioPlayerService extends ChangeNotifier {
     notifyListeners();
   }
 
+  @visibleForTesting
+  void setTestQueue(List<Song> songs, {int initialIndex = 0}) {
+    _originalQueue = List.from(songs);
+    _queue = List.from(songs);
+    _currentIndex = songs.isEmpty ? -1 : initialIndex.clamp(0, _queue.length - 1);
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     _becomingNoisySubscription?.cancel();
