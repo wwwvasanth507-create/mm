@@ -46,18 +46,7 @@ class AppUrls {
     return resolved;
   }
 
-  static final Set<String> _bundledCovers = {
-    'playlist-workout-adrenaline.jpg',
-    'playlist-yuvan-drugs.jpg',
-    'ponniyin-selvan-2.jpg',
-    'ponniyin-selvan-part-1-ps1.jpg',
-    'por-veeran-azadi.jpg',
-    'poraen-naa-poraen.jpg',
-    'powerhouse.jpg',
-    'pushpa-pushpa.jpg',
-    'pushpa-the-rise.jpg',
-    'raayan-rumble.jpg',
-  };
+  static final Set<String> _bundledCovers = {};
 
 
   /// Returns the local asset path if a thumbnail exists in bundled assets/covers/

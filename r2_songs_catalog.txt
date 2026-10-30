@@ -12,7 +12,7 @@
 
 4. Aga Naga (Ponniyin Selvan: Part 2)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2023/Aga-Naga-MassTamilan.dev-%20Ponniyin%20Selvan%20Part-2%20(PS2)%202023%20tamil.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ponniyin-selvan-2.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/ponniyin-selvan-2.jpg
 
 5. Aagayam Theepiditha (Madras)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/Agayam-Theepiditha.mp3
@@ -116,7 +116,7 @@
 
 30. Powerhouse (Coolie)
    Audio R2:     https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Powerhouse.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/powerhouse.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/powerhouse.jpg
 
 31. Uyirnaadi Nanbane (Coolie)
    Audio R2:     https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/3%3A19/Uyirnaadi%20Nanbane.mp3
@@ -436,19 +436,19 @@
 
 110. Por Veeran (Azadi) (Amaran)
    Audio R2:     https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Por%20Veeran%20(Azadi).mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/por-veeran-azadi.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/por-veeran-azadi.jpg
 
 111. Poraen Naa Poraen (Meiyazhagan)
    Audio R2:     https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Poraen%20Naa%20Poraen-Meiyazhagan%202024%20tamil.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/poraen-naa-poraen.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/poraen-naa-poraen.jpg
 
 112. Pushpa Pushpa (Pushpa 2: The Rule)
    Audio R2:     https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Pushpa%20Pushpa.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/pushpa-pushpa.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/pushpa-pushpa.jpg
 
 113. Raayan Rumble (Raayan)
    Audio R2:     https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Raayan%20Rumble.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/raayan-rumble.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/raayan-rumble.jpg
 
 114. Sai Pallavi's Intro (Amaran)
    Audio R2:     https://pub-cb5744f7bc244e399af05b93c8aff51d.r2.dev/songs/2025-full-songs/Sai%20Pallavi's%20Intro.mp3
@@ -540,7 +540,7 @@
 
 136. Aazhi Mazhai Kanna (Ponniyin Selvan: Part 2)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2023/Aazhi-Mazhai-Kanna-MassTamilan.dev-%20Ponniyin%20Selvan%20Part-2%20(PS2)%202023%20tamil.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ponniyin-selvan-2.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/ponniyin-selvan-2.jpg
 
 137. Adhirudha (Mark Antony)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2023/Adhirudha-MassTamilan.dev-Mark%20Antony%202023%20tamil.mp3
@@ -576,11 +576,11 @@
 
 145. Chinnanjiru (Marumurai) (Ponniyin Selvan: Part 2)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2023/Chinnanjiru-(Marumurai)-MassTamilan.dev-%20Ponniyin%20Selvan%20Part-2%20(PS2)%202023%20tamil.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ponniyin-selvan-2.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/ponniyin-selvan-2.jpg
 
 146. Chinnanjiru Nilave (Ponniyin Selvan: Part 2)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2023/Chinnanjiru-Nilave-MassTamilan.dev-%20Ponniyin%20Selvan%20Part-2%20(PS2)%202023%20tamil.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ponniyin-selvan-2.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/ponniyin-selvan-2.jpg
 
 147. Culturals Song (Joe)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2023/Culturals%20Song.mp3
@@ -612,7 +612,7 @@
 
 154. Ilaiyor Soodaar (Ponniyin Selvan: Part 2)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2023/Ilaiyor-Soodaar-MassTamilan.dev-%20Ponniyin%20Selvan%20Part-2%20(PS2)%202023%20tamil.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ponniyin-selvan-2.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/ponniyin-selvan-2.jpg
 
 155. Jailer Drill Theme (Instrumental) (Jailer)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2023/Jailer-Drill-Theme-(Instrumental)-MassTamilan.dev.mp3
@@ -748,7 +748,7 @@
 
 188. Shivoham (Ponniyin Selvan: Part 2)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2023/Shivoham-MassTamilan.dev-%20Ponniyin%20Selvan%20Part-2%20(PS2)%202023%20tamil.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ponniyin-selvan-2.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/ponniyin-selvan-2.jpg
 
 189. Soul Of Varisu (Varisu)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2023/Soul-Of-Varisu-MassTamilan.dev.mp3
@@ -784,7 +784,7 @@
 
 197. Veera Raja Veera (Ponniyin Selvan: Part 2)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2023/Veera-Raja-Veera-MassTamilan.dev-%20Ponniyin%20Selvan%20Part-2%20(PS2)%202023%20tamil.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ponniyin-selvan-2.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/ponniyin-selvan-2.jpg
 
 198. Chal Chakka (Gatta Kusthi)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Chal-Chakka-MassTamilan.dev.mp3
@@ -796,11 +796,11 @@
 
 200. Chola Chola (Ponniyin Selvan Part-1 (PS1))
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Chola-Chola-MassTamilan.dev.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ponniyin-selvan-part-1-ps1.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/ponniyin-selvan-part-1-ps1.jpg
 
 201. Devaralan Aattam (Ponniyin Selvan Part-1 (PS1))
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Devaralan-Aattam-MassTamilan.dev.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ponniyin-selvan-part-1-ps1.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/ponniyin-selvan-part-1-ps1.jpg
 
 202. Dippam Dappam (Kaathuvaakula Rendu Kaadhal)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Dippam-Dappam-MassTamilan.so.mp3
@@ -1016,7 +1016,7 @@
 
 255. Ponni Nadhi (Ponniyin Selvan Part-1 (PS1))
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Ponni-Nadhi-MassTamilan.dev.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ponniyin-selvan-part-1-ps1.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/ponniyin-selvan-part-1-ps1.jpg
 
 256. Porattam (Vendhu Thanindhathu Kaadu)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Porattam-MassTamilan.dev.mp3
@@ -1036,7 +1036,7 @@
 
 260. Ratchasa Maamaney (Ponniyin Selvan Part-1 (PS1))
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Ratchasa-Maamaney-MassTamilan.dev.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ponniyin-selvan-part-1-ps1.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/ponniyin-selvan-part-1-ps1.jpg
 
 261. Rendu Kaadhal (Kaathuvaakula Rendu Kaadhal)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Rendu-Kaadhal-MassTamilan.so.mp3
@@ -1064,7 +1064,7 @@
 
 267. Sol (Ponniyin Selvan Part-1 (PS1))
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Sol-MassTamilan.dev.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ponniyin-selvan-part-1-ps1.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/ponniyin-selvan-part-1-ps1.jpg
 
 268. Soorayaatam (Mahaan)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-1/Soorayaatam-MassTamilan.fm.mp3
@@ -1192,7 +1192,7 @@
 
 299. Alaikadal (Ponniyin Selvan Part-1 (PS1))
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-2/Alaikadal-MassTamilan.dev.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/ponniyin-selvan-part-1-ps1.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/ponniyin-selvan-part-1-ps1.jpg
 
 300. Annana Thaalaattum (Maaran)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2022-2/Annana-Thaalaattum-MassTamilan.so.mp3
@@ -1352,23 +1352,23 @@
 
 339. Eyy Beta Idhu En Patta (Pushpa: The Rise)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2021-1/Eyy-Beta-Idhu-En-Patta-MassTamilan.fm-Pushpa%20-%20The%20Rise%202021%20tamil.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/pushpa-the-rise.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/pushpa-the-rise.jpg
 
 340. Odu Odu Aadu (Pushpa: The Rise)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2021-1/Odu-Odu-Aadu-MassTamilan.fm-Pushpa%20-%20The%20Rise%202021%20tamil.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/pushpa-the-rise.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/pushpa-the-rise.jpg
 
 341. Oo Solriya Oo Oo Solriya (Pushpa: The Rise)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2021-1/Oo-Solriya-Oo-Oo-Solriya-MassTamilan.fm-Pushpa%20-%20The%20Rise%202021%20tamil.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/pushpa-the-rise.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/pushpa-the-rise.jpg
 
 342. Saami Saami (Pushpa: The Rise)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2021-1/Saami-Saami-MassTamilan.fm-Pushpa%20-%20The%20Rise%202021%20tamil.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/pushpa-the-rise.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/pushpa-the-rise.jpg
 
 343. Srivalli (Pushpa: The Rise)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2021-1/Srivalli-MassTamilan.fm-Pushpa%20-%20The%20Rise%202021%20tamil.mp3
-   Thumbnail R2: https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/pushpa-the-rise.jpg
+   Thumbnail R2: https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-pending/pushpa-the-rise.jpg
 
 344. Idhuvum Kadandhu Pogum (Reprise) (Netrikann)
    Audio R2:     https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/songs/2021-1/Idhuvum-Kadandhu-Pogum-(Reprise)-MassTamilan.fm-%20Netrikann%202021%20tamil%20movie.mp3

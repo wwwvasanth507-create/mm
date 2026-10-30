@@ -31,54 +31,37 @@ void main() {
       expect(res, equals(r2Url));
     });
 
-    test('AppUrls.getLocalAssetCoverPath resolves bundled covers with 0ms offline path', () {
-      // 1. Direct filename
-      expect(AppUrls.getLocalAssetCoverPath('ponniyin-selvan-2.jpg'), equals('assets/covers/ponniyin-selvan-2.jpg'));
-      expect(AppUrls.getLocalAssetCoverPath('raayan-rumble.jpg'), equals('assets/covers/raayan-rumble.jpg'));
+    test('AppUrls.getLocalAssetCoverPath resolves explicit local asset paths and null for R2 CDN', () {
+      // 1. Explicit asset path
+      expect(AppUrls.getLocalAssetCoverPath('assets/covers/custom.jpg'), equals('assets/covers/custom.jpg'));
 
-      // 2. Relative covers path
-      expect(AppUrls.getLocalAssetCoverPath('covers/pushpa-the-rise.jpg'), equals('assets/covers/pushpa-the-rise.jpg'));
-      expect(AppUrls.getLocalAssetCoverPath('/covers/powerhouse.jpg'), equals('assets/covers/powerhouse.jpg'));
-
-      // 3. Full GitHub raw URL
-      expect(
-        AppUrls.getLocalAssetCoverPath(
-            'https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/pushpa-pushpa.jpg'),
-        equals('assets/covers/pushpa-pushpa.jpg'),
-      );
-
-      // 4. Query params & percent encoded
-      expect(
-        AppUrls.getLocalAssetCoverPath('https://example.com/covers/ponniyin-selvan-part-1-ps1.jpg?v=2#hash'),
-        equals('assets/covers/ponniyin-selvan-part-1-ps1.jpg'),
-      );
-    });
-
-    test('AppUrls.getLocalAssetCoverPath returns null for non-bundled covers', () {
-      expect(
-        AppUrls.getLocalAssetCoverPath(
-            'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ee/dc/5a/eedc5a0e-6653-c941-f1d8-9ba695502e97/8901854085958.jpg/600x600bb.jpg'),
-        isNull,
-      );
-      // R2 hosted cover that is not bundled locally
+      // 2. Cloudflare R2 hosted URLs return null to stream via CachedNetworkImage
       expect(
         AppUrls.getLocalAssetCoverPath(
             'https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-1/aasa-orave.jpg'),
         isNull,
       );
+
+      // 3. Apple Music / non-bundled URLs return null
+      expect(
+        AppUrls.getLocalAssetCoverPath(
+            'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ee/dc/5a/eedc5a0e-6653-c941-f1d8-9ba695502e97/8901854085958.jpg/600x600bb.jpg'),
+        isNull,
+      );
+
       expect(AppUrls.getLocalAssetCoverPath(null), isNull);
       expect(AppUrls.getLocalAssetCoverPath(''), isNull);
     });
   });
 
   group('AppArtworkImage Widget Tests', () {
-    testWidgets('AppArtworkImage renders Image.asset directly when bundled cover is recognized',
+    testWidgets('AppArtworkImage renders Image.asset directly when explicit asset path is passed',
         (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
             body: AppArtworkImage(
-              url: 'covers/ponniyin-selvan-2.jpg',
+              url: 'assets/covers/custom.jpg',
               width: 52,
               height: 52,
             ),
@@ -95,7 +78,7 @@ void main() {
       final resizeImage = imageWidget.image as ResizeImage;
       expect(resizeImage.imageProvider, isA<AssetImage>());
       final assetImage = resizeImage.imageProvider as AssetImage;
-      expect(assetImage.assetName, equals('assets/covers/ponniyin-selvan-2.jpg'));
+      expect(assetImage.assetName, equals('assets/covers/custom.jpg'));
     });
 
     testWidgets('AppArtworkImage renders fallback icon placeholder on null or empty url',
@@ -122,7 +105,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: AppArtworkImage(
-              url: 'covers/raayan-rumble.jpg',
+              url: 'https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-1/aasa-orave.jpg',
               width: 60,
               height: 60,
               borderRadius: BorderRadius.circular(12),
@@ -137,7 +120,7 @@ void main() {
       expect(clipWidget.borderRadius, equals(BorderRadius.circular(12)));
     });
 
-    test('All songs and playlists in music.json resolve to valid covers (bundled assets or R2 CDN)', () {
+    test('All songs and playlists in music.json resolve to 100% Cloudflare R2 CDN URLs', () {
       final file = File('assets/data/music.json');
       expect(file.existsSync(), isTrue);
 
@@ -148,37 +131,25 @@ void main() {
       expect(songs.length, equals(409));
       expect(playlists.length, equals(19));
 
-      int bundledCount = 0;
-      int r2Count = 0;
-
       for (final song in songs) {
         final url = song['thumbnailUrl'] as String?;
         expect(url, isNotNull);
-        final localPath = AppUrls.getLocalAssetCoverPath(url);
-        if (localPath != null) {
-          expect(File(localPath).existsSync(), isTrue, reason: 'Asset file $localPath does not exist on disk');
-          bundledCount++;
-        } else {
-          expect(url!.startsWith('https://'), isTrue, reason: 'Song ${song['id']} must have a valid network URL');
-          r2Count++;
-        }
+        expect(
+          url!.startsWith('https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/'),
+          isTrue,
+          reason: 'Song ${song['id']} must use verified Cloudflare R2 URL, got: $url',
+        );
       }
 
       for (final playlist in playlists) {
         final url = playlist['coverUrl'] as String?;
         expect(url, isNotNull);
-        final localPath = AppUrls.getLocalAssetCoverPath(url);
-        if (localPath != null) {
-          expect(File(localPath).existsSync(), isTrue, reason: 'Asset file $localPath does not exist on disk');
-          bundledCount++;
-        } else {
-          expect(url!.startsWith('https://'), isTrue, reason: 'Playlist ${playlist['id']} must have a valid network URL');
-          r2Count++;
-        }
+        expect(
+          url!.startsWith('https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/'),
+          isTrue,
+          reason: 'Playlist ${playlist['id']} must use verified Cloudflare R2 URL, got: $url',
+        );
       }
-
-      expect(bundledCount, greaterThan(0));
-      expect(r2Count, greaterThan(0));
     });
   });
 }
