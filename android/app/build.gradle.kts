@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "in.wavemusic.premium"
-    compileSdk = 35
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId = "in.wavemusic.premium"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }

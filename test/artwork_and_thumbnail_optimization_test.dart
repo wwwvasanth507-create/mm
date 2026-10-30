@@ -33,31 +33,24 @@ void main() {
 
     test('AppUrls.getLocalAssetCoverPath resolves bundled covers with 0ms offline path', () {
       // 1. Direct filename
-      expect(AppUrls.getLocalAssetCoverPath('achacho.jpg'), equals('assets/covers/achacho.jpg'));
-      expect(AppUrls.getLocalAssetCoverPath('manasilaayo.jpg'), equals('assets/covers/manasilaayo.jpg'));
+      expect(AppUrls.getLocalAssetCoverPath('ponniyin-selvan-2.jpg'), equals('assets/covers/ponniyin-selvan-2.jpg'));
+      expect(AppUrls.getLocalAssetCoverPath('raayan-rumble.jpg'), equals('assets/covers/raayan-rumble.jpg'));
 
       // 2. Relative covers path
-      expect(AppUrls.getLocalAssetCoverPath('covers/spark.jpg'), equals('assets/covers/spark.jpg'));
-      expect(AppUrls.getLocalAssetCoverPath('/covers/whistle-podu.jpg'), equals('assets/covers/whistle-podu.jpg'));
+      expect(AppUrls.getLocalAssetCoverPath('covers/pushpa-the-rise.jpg'), equals('assets/covers/pushpa-the-rise.jpg'));
+      expect(AppUrls.getLocalAssetCoverPath('/covers/powerhouse.jpg'), equals('assets/covers/powerhouse.jpg'));
 
       // 3. Full GitHub raw URL
       expect(
         AppUrls.getLocalAssetCoverPath(
-            'https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/hey-minnale.jpg'),
-        equals('assets/covers/hey-minnale.jpg'),
+            'https://raw.githubusercontent.com/wwwvasanth507-create/mm/main/public/covers/pushpa-pushpa.jpg'),
+        equals('assets/covers/pushpa-pushpa.jpg'),
       );
 
-      // 4. Cloudflare R2 URL
+      // 4. Query params & percent encoded
       expect(
-        AppUrls.getLocalAssetCoverPath(
-            'https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/kaatrodu-pattam-pola.jpg'),
-        equals('assets/covers/kaatrodu-pattam-pola.jpg'),
-      );
-
-      // 5. Query params & percent encoded
-      expect(
-        AppUrls.getLocalAssetCoverPath('https://example.com/covers/oorum-blood.jpg?v=2#hash'),
-        equals('assets/covers/oorum-blood.jpg'),
+        AppUrls.getLocalAssetCoverPath('https://example.com/covers/ponniyin-selvan-part-1-ps1.jpg?v=2#hash'),
+        equals('assets/covers/ponniyin-selvan-part-1-ps1.jpg'),
       );
     });
 
@@ -65,6 +58,12 @@ void main() {
       expect(
         AppUrls.getLocalAssetCoverPath(
             'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ee/dc/5a/eedc5a0e-6653-c941-f1d8-9ba695502e97/8901854085958.jpg/600x600bb.jpg'),
+        isNull,
+      );
+      // R2 hosted cover that is not bundled locally
+      expect(
+        AppUrls.getLocalAssetCoverPath(
+            'https://pub-e756afa74cc047fcaa33b6d2ced3fa04.r2.dev/thumbnalis/30-10-2026-1/aasa-orave.jpg'),
         isNull,
       );
       expect(AppUrls.getLocalAssetCoverPath(null), isNull);
@@ -79,7 +78,7 @@ void main() {
         const MaterialApp(
           home: Scaffold(
             body: AppArtworkImage(
-              url: 'covers/achacho.jpg',
+              url: 'covers/ponniyin-selvan-2.jpg',
               width: 52,
               height: 52,
             ),
@@ -96,7 +95,7 @@ void main() {
       final resizeImage = imageWidget.image as ResizeImage;
       expect(resizeImage.imageProvider, isA<AssetImage>());
       final assetImage = resizeImage.imageProvider as AssetImage;
-      expect(assetImage.assetName, equals('assets/covers/achacho.jpg'));
+      expect(assetImage.assetName, equals('assets/covers/ponniyin-selvan-2.jpg'));
     });
 
     testWidgets('AppArtworkImage renders fallback icon placeholder on null or empty url',
@@ -123,7 +122,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: AppArtworkImage(
-              url: 'covers/spark.jpg',
+              url: 'covers/raayan-rumble.jpg',
               width: 60,
               height: 60,
               borderRadius: BorderRadius.circular(12),
@@ -138,7 +137,7 @@ void main() {
       expect(clipWidget.borderRadius, equals(BorderRadius.circular(12)));
     });
 
-    test('All songs and playlists in music.json resolve to local bundled assets', () {
+    test('All songs and playlists in music.json resolve to valid covers (bundled assets or R2 CDN)', () {
       final file = File('assets/data/music.json');
       expect(file.existsSync(), isTrue);
 
@@ -149,21 +148,37 @@ void main() {
       expect(songs.length, equals(409));
       expect(playlists.length, equals(19));
 
+      int bundledCount = 0;
+      int r2Count = 0;
+
       for (final song in songs) {
         final url = song['thumbnailUrl'] as String?;
         expect(url, isNotNull);
         final localPath = AppUrls.getLocalAssetCoverPath(url);
-        expect(localPath, isNotNull, reason: 'Song ${song['id']} cover failed to resolve locally');
-        expect(File(localPath!).existsSync(), isTrue, reason: 'Asset file $localPath does not exist on disk');
+        if (localPath != null) {
+          expect(File(localPath).existsSync(), isTrue, reason: 'Asset file $localPath does not exist on disk');
+          bundledCount++;
+        } else {
+          expect(url!.startsWith('https://'), isTrue, reason: 'Song ${song['id']} must have a valid network URL');
+          r2Count++;
+        }
       }
 
       for (final playlist in playlists) {
         final url = playlist['coverUrl'] as String?;
         expect(url, isNotNull);
         final localPath = AppUrls.getLocalAssetCoverPath(url);
-        expect(localPath, isNotNull, reason: 'Playlist ${playlist['id']} cover failed to resolve locally');
-        expect(File(localPath!).existsSync(), isTrue, reason: 'Asset file $localPath does not exist on disk');
+        if (localPath != null) {
+          expect(File(localPath).existsSync(), isTrue, reason: 'Asset file $localPath does not exist on disk');
+          bundledCount++;
+        } else {
+          expect(url!.startsWith('https://'), isTrue, reason: 'Playlist ${playlist['id']} must have a valid network URL');
+          r2Count++;
+        }
       }
+
+      expect(bundledCount, greaterThan(0));
+      expect(r2Count, greaterThan(0));
     });
   });
 }
