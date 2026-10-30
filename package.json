@@ -1,0 +1,9 @@
+{
+  "name": "jalra",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Jalra Music Web and Mobile Streaming Platform",
+  "scripts": {
+    "build": "node ./tools/build_cloudflare.js"
+  }
+}
