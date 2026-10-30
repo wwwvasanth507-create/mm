@@ -1,10 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_typography.dart';
 import '../../core/utilities/formatters.dart';
-import '../../core/utilities/url_resolver.dart';
 import '../../data/models/song_model.dart';
+import 'app_artwork_image.dart';
 
 class AboutSongSheet extends StatelessWidget {
   final Song song;
@@ -22,26 +21,15 @@ class AboutSongSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final assetPath = AppUrls.getLocalAssetCoverPath(song.thumbnailUrl);
-    final resolvedUrl = AppUrls.resolveThumbnailUrl(song.thumbnailUrl);
-
-    Widget artwork;
-    if (assetPath != null) {
-      artwork = Image.asset(
-        assetPath,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => _buildPlaceholder(),
-      );
-    } else if (resolvedUrl != null) {
-      artwork = CachedNetworkImage(
-        imageUrl: resolvedUrl,
-        fit: BoxFit.cover,
-        placeholder: (_, __) => _buildPlaceholder(),
-        errorWidget: (_, __, ___) => _buildPlaceholder(),
-      );
-    } else {
-      artwork = _buildPlaceholder();
-    }
+    final artwork = AppArtworkImage(
+      url: song.thumbnailUrl,
+      width: 72,
+      height: 72,
+      borderRadius: BorderRadius.circular(16),
+      cacheSize: 144,
+      placeholder: _buildPlaceholder(),
+      errorWidget: _buildPlaceholder(),
+    );
 
     return Container(
       decoration: BoxDecoration(

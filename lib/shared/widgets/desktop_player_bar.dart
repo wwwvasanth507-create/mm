@@ -1,15 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/utilities/formatters.dart';
-import '../../core/utilities/url_resolver.dart';
 import '../../data/models/song_model.dart';
 import '../../data/repositories/music_repository.dart';
 import '../../data/services/audio_player_service.dart';
 import '../../features/player/now_playing_screen.dart';
 import '../../features/player/widgets/queue_sheet.dart';
 import '../../features/player/widgets/video_player_modal.dart';
+import 'app_artwork_image.dart';
 
 class DesktopPlayerBar extends StatefulWidget {
   const DesktopPlayerBar({super.key});
@@ -24,40 +23,12 @@ class _DesktopPlayerBarState extends State<DesktopPlayerBar> {
   double _previousVolume = 1.0;
 
   Widget _buildArtwork(Song song) {
-    final resolvedUrl = UrlResolver.resolveThumbnailUrl(song.thumbnailUrl);
-    if (resolvedUrl == null || resolvedUrl.isEmpty) {
-      return Container(
-        width: 52,
-        height: 52,
-        decoration: BoxDecoration(
-          color: const Color(0xFF1E293B),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: const Center(
-          child: Icon(Icons.music_note_rounded, color: AppColors.cuteMint, size: 22),
-        ),
-      );
-    }
-    return ClipRRect(
+    return AppArtworkImage(
+      url: song.thumbnailUrl,
+      width: 52,
+      height: 52,
       borderRadius: BorderRadius.circular(10),
-      child: CachedNetworkImage(
-        imageUrl: resolvedUrl,
-        width: 52,
-        height: 52,
-        fit: BoxFit.cover,
-        placeholder: (_, __) => Container(
-          color: const Color(0xFF1E293B),
-          child: const Center(
-            child: Icon(Icons.music_note_rounded, color: AppColors.cuteMint, size: 22),
-          ),
-        ),
-        errorWidget: (_, __, ___) => Container(
-          color: const Color(0xFF1E293B),
-          child: const Center(
-            child: Icon(Icons.music_note_rounded, color: AppColors.cuteMint, size: 22),
-          ),
-        ),
-      ),
+      cacheSize: 104,
     );
   }
 

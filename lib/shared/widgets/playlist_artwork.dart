@@ -1,7 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
-import '../../core/utilities/url_resolver.dart';
+import 'app_artwork_image.dart';
 
 class PlaylistArtwork extends StatelessWidget {
   final String? thumbnailUrl;
@@ -19,49 +18,15 @@ class PlaylistArtwork extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final assetPath = AppUrls.getLocalAssetCoverPath(thumbnailUrl);
-    final resolvedUrl = AppUrls.resolveThumbnailUrl(thumbnailUrl);
-
-    Widget imageContent;
-    if (assetPath != null) {
-      imageContent = Image.asset(
-        assetPath,
-        width: size,
-        height: size,
-        fit: BoxFit.cover,
-        cacheWidth: (size * 2).toInt(),
-        cacheHeight: (size * 2).toInt(),
-        errorBuilder: (_, __, ___) => _buildNetworkOrPlaceholder(resolvedUrl),
-      );
-    } else {
-      imageContent = _buildNetworkOrPlaceholder(resolvedUrl);
-    }
-
-    return ClipRRect(
+    return AppArtworkImage(
+      url: thumbnailUrl,
+      width: size,
+      height: size,
       borderRadius: BorderRadius.circular(borderRadius),
-      child: Container(
-        width: size,
-        height: size,
-        color: AppColors.surfaceLight,
-        child: imageContent,
-      ),
+      placeholderIcon: placeholderIcon,
+      placeholder: _buildPlaceholder(),
+      errorWidget: _buildPlaceholder(),
     );
-  }
-
-  Widget _buildNetworkOrPlaceholder(String? url) {
-    if (url != null && url.isNotEmpty) {
-      return CachedNetworkImage(
-        imageUrl: url,
-        width: size,
-        height: size,
-        fit: BoxFit.cover,
-        memCacheWidth: (size * 2).toInt(),
-        memCacheHeight: (size * 2).toInt(),
-        placeholder: (_, __) => _buildPlaceholder(),
-        errorWidget: (_, __, ___) => _buildPlaceholder(),
-      );
-    }
-    return _buildPlaceholder();
   }
 
   Widget _buildPlaceholder() {

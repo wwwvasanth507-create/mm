@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -10,7 +8,6 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_typography.dart';
 import '../../core/utilities/formatters.dart';
 import '../../core/utilities/screen_keeper.dart';
-import '../../core/utilities/url_resolver.dart';
 import '../../data/models/song_model.dart';
 import '../../data/repositories/music_repository.dart';
 import '../../data/services/audio_player_service.dart';
@@ -18,6 +15,7 @@ import '../../data/services/download_service.dart';
 import 'widgets/lyrics_sheet.dart';
 import 'widgets/queue_sheet.dart';
 import '../../shared/widgets/about_song_sheet.dart';
+import '../../shared/widgets/app_artwork_image.dart';
 import '../playlists/widgets/add_to_playlist_dialog.dart';
 
 class NowPlayingScreen extends StatefulWidget {
@@ -1270,24 +1268,15 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
   }
 
   Widget _buildQueueThumbnail(Song s) {
-    final assetPath = AppUrls.getLocalAssetCoverPath(s.thumbnailUrl);
-    final resolvedUrl = AppUrls.resolveThumbnailUrl(s.thumbnailUrl);
-
-    if (assetPath != null) {
-      return Image.asset(
-        assetPath,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => _buildFallbackQueueThumbnail(),
-      );
-    }
-    if (resolvedUrl != null) {
-      return CachedNetworkImage(
-        imageUrl: resolvedUrl,
-        fit: BoxFit.cover,
-        errorWidget: (_, __, ___) => _buildFallbackQueueThumbnail(),
-      );
-    }
-    return _buildFallbackQueueThumbnail();
+    return AppArtworkImage(
+      url: s.thumbnailUrl,
+      width: 44,
+      height: 44,
+      borderRadius: BorderRadius.circular(8),
+      cacheSize: 96,
+      placeholder: _buildFallbackQueueThumbnail(),
+      errorWidget: _buildFallbackQueueThumbnail(),
+    );
   }
 
   Widget _buildFallbackQueueThumbnail() {
@@ -2011,56 +2000,13 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> with WidgetsBinding
 
   // ==================== ARTWORK BUILDER ====================
   Widget _buildArtwork(Song song) {
-    final assetPath = AppUrls.getLocalAssetCoverPath(song.thumbnailUrl);
-    final resolvedUrl = AppUrls.resolveThumbnailUrl(song.thumbnailUrl);
-
-    // 1. Instant local asset cover (offline, 0 latency)
-    if (assetPath != null) {
-      return Image.asset(
-        assetPath,
-        key: ValueKey('now_playing_art_${song.id}'),
-        fit: BoxFit.cover,
-        cacheWidth: 600,
-        cacheHeight: 600,
-        errorBuilder: (_, __, ___) {
-          if (resolvedUrl != null) {
-            return CachedNetworkImage(
-              key: ValueKey('now_playing_net_art_${song.id}'),
-              imageUrl: resolvedUrl,
-              fit: BoxFit.cover,
-              memCacheWidth: 600,
-              memCacheHeight: 600,
-              placeholder: (_, __) => _buildArtworkPlaceholder(),
-              errorWidget: (_, __, ___) => _buildArtworkPlaceholder(),
-            );
-          }
-          return _buildArtworkPlaceholder();
-        },
-      );
-    }
-
-    // 2. Resolved network URL (GitHub CDN fallback)
-    if (resolvedUrl != null) {
-      return CachedNetworkImage(
-        key: ValueKey('now_playing_net_art_${song.id}'),
-        imageUrl: resolvedUrl,
-        fit: BoxFit.cover,
-        memCacheWidth: 600,
-        memCacheHeight: 600,
-        placeholder: (_, __) => _buildArtworkPlaceholder(),
-        errorWidget: (_, __, ___) => _buildArtworkPlaceholder(),
-      );
-    }
-
-    // 3. Local downloaded / cached file
-    if (!kIsWeb && song.thumbnailUrl != null && song.thumbnailUrl!.isNotEmpty) {
-      final file = File(song.thumbnailUrl!);
-      if (file.existsSync()) {
-        return Image.file(file, fit: BoxFit.cover);
-      }
-    }
-
-    return _buildArtworkPlaceholder();
+    return AppArtworkImage(
+      key: ValueKey('now_playing_art_${song.id}'),
+      url: song.thumbnailUrl,
+      cacheSize: 600,
+      placeholder: _buildArtworkPlaceholder(),
+      errorWidget: _buildArtworkPlaceholder(),
+    );
   }
 
   Widget _buildArtworkPlaceholder() {

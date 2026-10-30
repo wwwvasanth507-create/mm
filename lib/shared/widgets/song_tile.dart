@@ -1,9 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_typography.dart';
-import '../../core/utilities/url_resolver.dart';
 import '../../data/models/song_model.dart';
 import '../../data/repositories/music_repository.dart';
 import '../../data/services/audio_player_service.dart';
@@ -11,6 +9,7 @@ import '../../data/services/download_service.dart';
 import '../../features/player/now_playing_screen.dart';
 import '../../features/playlists/widgets/add_to_playlist_dialog.dart';
 import 'about_song_sheet.dart';
+import 'app_artwork_image.dart';
 
 class SongTile extends StatelessWidget {
   final Song song;
@@ -238,49 +237,14 @@ class SongTile extends StatelessWidget {
   }
 
   Widget _buildThumbnail() {
-    final assetPath = AppUrls.getLocalAssetCoverPath(song.thumbnailUrl);
-    final resolvedUrl = AppUrls.resolveThumbnailUrl(song.thumbnailUrl);
-
-    // 1. Try local bundled asset cover first (instant, 0 latency, 0 stutter)
-    if (assetPath != null) {
-      return Image.asset(
-        assetPath,
-        fit: BoxFit.cover,
-        cacheWidth: 104,
-        cacheHeight: 104,
-        errorBuilder: (_, __, ___) {
-          if (resolvedUrl != null) {
-            return CachedNetworkImage(
-              imageUrl: resolvedUrl,
-              fit: BoxFit.cover,
-              memCacheWidth: 104,
-              memCacheHeight: 104,
-              maxWidthDiskCache: 200,
-              maxHeightDiskCache: 200,
-              placeholder: (_, __) => _buildPlaceholder(),
-              errorWidget: (_, __, ___) => _buildPlaceholder(),
-            );
-          }
-          return _buildPlaceholder();
-        },
-      );
-    }
-
-    // 2. Fallback to cached network image with resolved GitHub URL
-    if (resolvedUrl != null) {
-      return CachedNetworkImage(
-        imageUrl: resolvedUrl,
-        fit: BoxFit.cover,
-        memCacheWidth: 104,
-        memCacheHeight: 104,
-        maxWidthDiskCache: 200,
-        maxHeightDiskCache: 200,
-        placeholder: (_, __) => _buildPlaceholder(),
-        errorWidget: (_, __, ___) => _buildPlaceholder(),
-      );
-    }
-
-    return _buildPlaceholder();
+    return AppArtworkImage(
+      url: song.thumbnailUrl,
+      width: 52,
+      height: 52,
+      cacheSize: 104,
+      placeholder: _buildPlaceholder(),
+      errorWidget: _buildPlaceholder(),
+    );
   }
 
   Widget _buildPlaceholder() {

@@ -1,13 +1,10 @@
-import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
-import '../../../core/utilities/url_resolver.dart';
 import '../../../data/models/song_model.dart';
 import '../../../data/services/audio_player_service.dart';
+import '../../../shared/widgets/app_artwork_image.dart';
 
 class QueueSheet extends StatelessWidget {
   const QueueSheet({super.key});
@@ -165,48 +162,15 @@ class QueueSheet extends StatelessWidget {
   }
 
   Widget _buildThumbnail(Song song) {
-    final assetPath = AppUrls.getLocalAssetCoverPath(song.thumbnailUrl);
-    final resolvedUrl = AppUrls.resolveThumbnailUrl(song.thumbnailUrl);
-
-    if (assetPath != null) {
-      return Image.asset(
-        assetPath,
-        fit: BoxFit.cover,
-        cacheWidth: 88,
-        cacheHeight: 88,
-        errorBuilder: (_, __, ___) {
-          if (resolvedUrl != null) {
-            return CachedNetworkImage(
-              imageUrl: resolvedUrl,
-              fit: BoxFit.cover,
-              memCacheWidth: 88,
-              memCacheHeight: 88,
-              errorWidget: (_, __, ___) => _buildFallback(),
-            );
-          }
-          return _buildFallback();
-        },
-      );
-    }
-
-    if (resolvedUrl != null) {
-      return CachedNetworkImage(
-        imageUrl: resolvedUrl,
-        fit: BoxFit.cover,
-        memCacheWidth: 88,
-        memCacheHeight: 88,
-        errorWidget: (_, __, ___) => _buildFallback(),
-      );
-    }
-
-    if (!kIsWeb && song.thumbnailUrl != null && song.thumbnailUrl!.isNotEmpty) {
-      final file = File(song.thumbnailUrl!);
-      if (file.existsSync()) {
-        return Image.file(file, fit: BoxFit.cover);
-      }
-    }
-
-    return _buildFallback();
+    return AppArtworkImage(
+      url: song.thumbnailUrl,
+      width: 44,
+      height: 44,
+      borderRadius: BorderRadius.circular(8),
+      cacheSize: 96,
+      placeholder: _buildFallback(),
+      errorWidget: _buildFallback(),
+    );
   }
 
   Widget _buildFallback() {

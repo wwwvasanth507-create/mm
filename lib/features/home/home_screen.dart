@@ -1,9 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_typography.dart';
-import '../../core/utilities/url_resolver.dart';
 import '../../data/models/song_model.dart';
 import '../../data/models/playlist_model.dart';
 import '../../data/repositories/music_repository.dart';
@@ -11,6 +9,7 @@ import '../../data/services/audio_player_service.dart';
 import '../../shared/widgets/brand_logo.dart';
 import '../../shared/widgets/empty_state.dart';
 import '../../shared/widgets/song_tile.dart';
+import '../../shared/widgets/app_artwork_image.dart';
 import '../playlists/playlist_details_screen.dart';
 import '../playlists/widgets/add_to_playlist_dialog.dart';
 
@@ -554,49 +553,13 @@ class HomeScreen extends StatelessWidget {
     Playlist playlist,
     AudioPlayerService playerService,
   ) {
-    final assetPath = AppUrls.getLocalAssetCoverPath(playlist.thumbnailUrl);
-    final resolvedUrl = AppUrls.resolveThumbnailUrl(playlist.thumbnailUrl);
-
-    Widget artwork;
-    if (assetPath != null) {
-      artwork = Image.asset(
-        assetPath,
-        fit: BoxFit.cover,
-        cacheWidth: 320,
-        cacheHeight: 320,
-        errorBuilder: (_, __, ___) => resolvedUrl != null
-            ? CachedNetworkImage(
-                imageUrl: resolvedUrl,
-                fit: BoxFit.cover,
-                memCacheWidth: 320,
-                memCacheHeight: 320,
-                maxWidthDiskCache: 350,
-                maxHeightDiskCache: 350,
-                errorWidget: (_, __, ___) => const Center(
-                  child: Icon(Icons.queue_music_rounded, color: Colors.white, size: 40),
-                ),
-              )
-            : const Center(
-                child: Icon(Icons.queue_music_rounded, color: Colors.white, size: 40),
-              ),
-      );
-    } else if (resolvedUrl != null) {
-      artwork = CachedNetworkImage(
-        imageUrl: resolvedUrl,
-        fit: BoxFit.cover,
-        memCacheWidth: 320,
-        memCacheHeight: 320,
-        maxWidthDiskCache: 350,
-        maxHeightDiskCache: 350,
-        errorWidget: (_, __, ___) => const Center(
-          child: Icon(Icons.queue_music_rounded, color: Colors.white, size: 40),
-        ),
-      );
-    } else {
-      artwork = const Center(
-        child: Icon(Icons.queue_music_rounded, color: Colors.white, size: 40),
-      );
-    }
+    final Widget artwork = AppArtworkImage(
+      url: playlist.thumbnailUrl,
+      width: 170,
+      height: 170,
+      cacheSize: 320,
+      placeholderIcon: Icons.queue_music_rounded,
+    );
 
     return RepaintBoundary(
       child: GestureDetector(
@@ -724,49 +687,13 @@ class HomeScreen extends StatelessWidget {
     List<Song> queue,
     AudioPlayerService playerService,
   ) {
-    final assetPath = AppUrls.getLocalAssetCoverPath(song.thumbnailUrl);
-    final resolvedUrl = AppUrls.resolveThumbnailUrl(song.thumbnailUrl);
-
-    Widget artwork;
-    if (assetPath != null) {
-      artwork = Image.asset(
-        assetPath,
-        fit: BoxFit.cover,
-        cacheWidth: 200,
-        cacheHeight: 200,
-        errorBuilder: (_, __, ___) => resolvedUrl != null
-            ? CachedNetworkImage(
-                imageUrl: resolvedUrl,
-                fit: BoxFit.cover,
-                memCacheWidth: 200,
-                memCacheHeight: 200,
-                maxWidthDiskCache: 250,
-                maxHeightDiskCache: 250,
-                errorWidget: (_, __, ___) => const Center(
-                  child: Icon(Icons.music_note_rounded, color: Colors.white, size: 40),
-                ),
-              )
-            : const Center(
-                child: Icon(Icons.music_note_rounded, color: Colors.white, size: 40),
-              ),
-      );
-    } else if (resolvedUrl != null) {
-      artwork = CachedNetworkImage(
-        imageUrl: resolvedUrl,
-        fit: BoxFit.cover,
-        memCacheWidth: 200,
-        memCacheHeight: 200,
-        maxWidthDiskCache: 250,
-        maxHeightDiskCache: 250,
-        errorWidget: (_, __, ___) => const Center(
-          child: Icon(Icons.music_note_rounded, color: Colors.white, size: 40),
-        ),
-      );
-    } else {
-      artwork = const Center(
-        child: Icon(Icons.music_note_rounded, color: Colors.white, size: 40),
-      );
-    }
+    final Widget artwork = AppArtworkImage(
+      url: song.thumbnailUrl,
+      width: 150,
+      height: 150,
+      cacheSize: 250,
+      placeholderIcon: Icons.music_note_rounded,
+    );
 
     return RepaintBoundary(
       child: GestureDetector(

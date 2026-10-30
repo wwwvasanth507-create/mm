@@ -1,12 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_typography.dart';
-import '../../core/utilities/url_resolver.dart';
 import '../../data/models/song_model.dart';
 import '../../data/services/audio_player_service.dart';
 import '../../features/player/now_playing_screen.dart';
+import 'app_artwork_image.dart';
 
 class MiniPlayer extends StatelessWidget {
   const MiniPlayer({super.key});
@@ -276,43 +275,15 @@ class MiniPlayer extends StatelessWidget {
   }
 
   Widget _buildThumbnail(Song song) {
-    final assetPath = AppUrls.getLocalAssetCoverPath(song.thumbnailUrl);
-    final resolvedUrl = AppUrls.resolveThumbnailUrl(song.thumbnailUrl);
-
-    if (assetPath != null) {
-      return Image.asset(
-        assetPath,
-        fit: BoxFit.cover,
-        cacheWidth: 88,
-        cacheHeight: 88,
-        errorBuilder: (_, __, ___) {
-          if (resolvedUrl != null) {
-            return CachedNetworkImage(
-              imageUrl: resolvedUrl,
-              fit: BoxFit.cover,
-              memCacheWidth: 88,
-              memCacheHeight: 88,
-              placeholder: (_, __) => _buildPlaceholder(),
-              errorWidget: (_, __, ___) => _buildPlaceholder(),
-            );
-          }
-          return _buildPlaceholder();
-        },
-      );
-    }
-
-    if (resolvedUrl != null) {
-      return CachedNetworkImage(
-        imageUrl: resolvedUrl,
-        fit: BoxFit.cover,
-        memCacheWidth: 88,
-        memCacheHeight: 88,
-        placeholder: (_, __) => _buildPlaceholder(),
-        errorWidget: (_, __, ___) => _buildPlaceholder(),
-      );
-    }
-
-    return _buildPlaceholder();
+    return AppArtworkImage(
+      url: song.thumbnailUrl,
+      width: 44,
+      height: 44,
+      borderRadius: BorderRadius.circular(8),
+      cacheSize: 96,
+      placeholder: _buildPlaceholder(),
+      errorWidget: _buildPlaceholder(),
+    );
   }
 
   Widget _buildPlaceholder() {

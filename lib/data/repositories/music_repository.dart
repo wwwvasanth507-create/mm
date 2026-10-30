@@ -8,6 +8,7 @@ import '../database/app_database.dart';
 import '../models/song_model.dart';
 import '../models/playlist_model.dart';
 import '../services/catalogue_sync_service.dart';
+import '../services/thumbnail_preload_service.dart';
 
 class MusicRepository extends ChangeNotifier {
   final AppDatabase _db;
@@ -195,6 +196,9 @@ class MusicRepository extends ChangeNotifier {
       _favoriteSongs = _songs.where((s) => _favoriteIds.contains(s.id)).toList();
       _downloadedSongs = [];
       _recentSongs = [];
+
+      // Pre-warm thumbnails in memory for blazing fast 0ms loads
+      ThumbnailPreloadService.prewarmThumbnails(songs: _songs, playlists: _playlists);
     } catch (e) {
       _error = 'Failed to load music catalogue: $e';
     } finally {
@@ -246,6 +250,9 @@ class MusicRepository extends ChangeNotifier {
 
       // Asynchronously verify downloaded files exist on disk without blocking UI
       _verifyDownloadedFilesAsync();
+
+      // Pre-warm thumbnails in memory for blazing fast 0ms loads
+      ThumbnailPreloadService.prewarmThumbnails(songs: _songs, playlists: _playlists);
     } catch (e) {
       _error = 'Failed to load music catalogue: $e';
       if (_songs.isEmpty) {
